@@ -13,6 +13,7 @@ public class MainMenuManager : MonoBehaviour
 
     private void Awake()
     {
+        print("colors");
         Assert.IsNotNull(mainCanvas);
         mainMenuAnimator = mainCanvas.GetComponent<Animator>();
         Assert.IsNotNull(mainMenuAnimator);
