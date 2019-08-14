@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class MotionSystem : MonoBehaviour
+public class MotionSystem : PersistentSingleton<MotionSystem>
 {
-    public static MotionSystem Current { get; private set; }
-
     private Dictionary<Transform, Tuple<Transform, Vector2>> _dummies;
-    
-    void Awake()
+
+    override protected void Awake()
     {
-        if (Current) return;
-        Current = this;
-        DontDestroyOnLoad(Current.gameObject);
+        base.Awake();
     }
 
 
