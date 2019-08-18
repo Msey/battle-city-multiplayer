@@ -5,9 +5,9 @@ using System;
 
 public class MovementSystem : PersistentSingleton<MovementSystem>
 {
-    private List<Transform> _dummies;
+    private List<Dummy> _dummies;
 
-    const float V = 100; // test speed
+    const float V = 100; // скорость надо брать у Dummy
 
     public enum Direction : sbyte
     {
@@ -31,16 +31,17 @@ public class MovementSystem : PersistentSingleton<MovementSystem>
 
     override protected void Awake()
     {
+        _dummies = new List<Dummy>();
         base.Awake();
     }
 
     public void Move(Direction direction)
     {
         foreach (var dummy in _dummies)
-            dummy.position = (Vector2)dummy.position + dxdy[direction] * V;
+            dummy.current.position = (Vector2)dummy.current.position + dxdy[direction] * V;
     }
 
-    public void AddDummy(Transform dummy, Direction direction)
+    public void AddDummy(Dummy dummy, Direction direction)
     {
 
     }
