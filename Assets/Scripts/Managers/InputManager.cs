@@ -5,17 +5,17 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
+
+    KeyBoardEvent kbEvent = new KeyBoardEvent();
+
     private void Start()
     {
         EventManager.StartListening(GameEventBase.EventType.KeyBoardEvent, InputHandler);
         EventManager.StartListening(GameEventBase.EventType.KeyPressEvent, KeyHandler);
-        // TODO: надо добавить функции обратного вызова в конструктор 
-        // событий, чтобы Update() вызывался только в EventManager
     }
 
     void Update()
-    {
-        KeyBoardEvent kbEvent = new KeyBoardEvent();
+    {        
         EventManager.TriggerEvent(kbEvent);
     }
 
@@ -28,14 +28,12 @@ public class InputManager : MonoBehaviour
             Action<string> invokable = print;
             switch ((e as KeyPressEvent).code)
             {
-                case KeyCode.W: invokable("w");break;
+                case KeyCode.W: invokable("w"); break;
                 case KeyCode.A: invokable("a"); break;
                 case KeyCode.S: invokable("s"); break;
                 case KeyCode.D: invokable("d"); break;
                 case KeyCode.Space: invokable("space"); break;
             }
-
-
         }
     }
 
