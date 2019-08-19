@@ -11,22 +11,6 @@ public class PlayerTank : TankBase
     {
     }
 
-    public override void MoveDown()
-    {
-    }
-
-    public override void MoveLeft()
-    {
-    }
-
-    public override void MoveRight()
-    {
-    }
-
-    public override void MoveUp()
-    {
-    }
-
     public override void Shoot()
     {
     }

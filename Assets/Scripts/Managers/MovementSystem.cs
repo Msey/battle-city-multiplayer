@@ -5,9 +5,7 @@ using System;
 
 public class MovementSystem : PersistentSingleton<MovementSystem>
 {
-    private List<Dummy> _dummies;
-
-    const float V = 100; // скорость надо брать у Dummy
+    private List<IMovable> _dummies;
 
     public enum Direction : sbyte
     {
@@ -25,24 +23,44 @@ public class MovementSystem : PersistentSingleton<MovementSystem>
         {Direction.Right, Vector2.right },
         {Direction.Up, Vector2.up },
         {Direction.Down, Vector2.down },
-        {Direction.UpLeft, dxdy[Direction.Up] + dxdy[Direction.Left] } //test 
+        //{Direction.UpLeft, dxdy[Direction.Up] + dxdy[Direction.Left] } //test 
     };
 
 
     override protected void Awake()
     {
-        _dummies = new List<Dummy>();
+        _dummies = new List<IMovable>();
         base.Awake();
     }
 
-    public void Move(Direction direction)
+    void Update()
     {
-        foreach (var dummy in _dummies)
-            dummy.current.position = (Vector2)dummy.current.position + dxdy[direction] * V;
+        Move();
     }
 
-    public void AddDummy(Dummy dummy, Direction direction)
+    public void Move()
     {
+        if (_dummies.Count > 0)
+            print("move in ms; dummies = " + _dummies.Count);
 
+        for (int i = 0; i < _dummies.Count; i++)
+        {
+            Dummy dummy = (_dummies[i] as Dummy);
+            dummy.transform.position = (Vector2)dummy.transform.position + dxdy[dummy.direction] * Time.deltaTime;
+
+            if (!_dummies[i].IsConstantMovement)
+                _dummies.Remove(_dummies[i]);
+            // TODO: inefficiently. Needs to be fixed and optimized
+        }
+    }
+
+    public void AddDummy(IMovable dummy)
+    {
+        print("add dummy");
+        if (!_dummies.Contains(dummy))
+        {
+            _dummies.Add(dummy);
+            print("add dummy successful");
+        }
     }
 }

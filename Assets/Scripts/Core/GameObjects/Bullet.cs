@@ -7,6 +7,8 @@ public class Bullet : Dummy, IMovable
     public override bool isVulnerable { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
     public override bool isAlive { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
+    public bool IsConstantMovement => throw new System.NotImplementedException();
+
     public override void Die()
     {
     }

@@ -2,15 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//[RequireComponent(typeof(MovementSystem))]
 public abstract class TankBase : Dummy, IMovable, ICombat
 {
-    public abstract void MoveDown();
+    public virtual bool IsConstantMovement { get => false; }
 
-    public abstract void MoveLeft();
+    public void MoveDown()
+    {
+        direction = MovementSystem.Direction.Down;
+        Move();
+    }
 
-    public abstract void MoveRight();
+    public void MoveLeft()
+    {
+        direction = MovementSystem.Direction.Left;
+        Move();
+    }
 
-    public abstract void MoveUp();
+    public void MoveRight()
+    {
+        direction = MovementSystem.Direction.Right;
+        Move();
+    }
+
+    public void MoveUp()
+    {
+        direction = MovementSystem.Direction.Up;
+        Move();
+    }
+
+    private void Move()
+    {
+        MovementSystem.s_Instance.AddDummy(this);
+    }
 
     public abstract void Shoot();
 }

@@ -9,4 +9,5 @@ public interface IMovable
     void MoveLeft();
     void MoveRight();
     // gaz, tormoz etc.
+    bool IsConstantMovement { get; }
 }
