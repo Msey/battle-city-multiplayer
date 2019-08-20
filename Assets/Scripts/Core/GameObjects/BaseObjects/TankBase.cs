@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //[RequireComponent(typeof(MovementSystem))]
-public abstract class TankBase : Dummy, IMovable, ICombat
+public abstract class TankBase : GameUnit, IMovable, ICombat
 {
+    public Transform bulletPrefab;
+
     public virtual bool IsConstantMovement { get => false; }
 
     public void MoveDown()
@@ -33,7 +35,7 @@ public abstract class TankBase : Dummy, IMovable, ICombat
 
     private void Move()
     {
-        MovementSystem.s_Instance.AddDummy(this);
+        MovementSystem.s_Instance.AddUnit(this);
     }
 
     public abstract void Shoot();

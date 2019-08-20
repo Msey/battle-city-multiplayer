@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Dummy : MonoBehaviour, IDestructable
+public abstract class GameUnit : MonoBehaviour, IDestructable
 {
+    [HideInInspector]
     public MovementSystem.Direction direction;
 
     public abstract bool isVulnerable { get; set; }

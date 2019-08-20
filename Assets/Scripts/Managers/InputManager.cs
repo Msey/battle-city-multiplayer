@@ -36,7 +36,7 @@ public class InputManager : MonoBehaviour
                 case KeyCode.A: tank1.MoveLeft(); break;
                 case KeyCode.S: tank1.MoveDown(); break;
                 case KeyCode.D: tank1.MoveRight(); break;
-                case KeyCode.Space: invokable("space"); break;
+                case KeyCode.Space: tank1.Shoot(); break;
             }
         }
     }

@@ -13,6 +13,10 @@ public class PlayerTank : TankBase
 
     public override void Shoot()
     {
+       var bullet = Instantiate(bulletPrefab, transform.position, transform.rotation).gameObject.UseComponent<Bullet>();
+        bullet.IsConstantMovement = true;
+        bullet.direction = this.direction;
+        bullet.Move();
     }
 
     public override void TakeDamade(int amount)

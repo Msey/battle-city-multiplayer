@@ -12,8 +12,7 @@ public class MovementSystem : PersistentSingleton<MovementSystem>
         Up,
         Down,
         Left,
-        Right,
-        UpLeft //test
+        Right
     }
 
 
@@ -40,12 +39,12 @@ public class MovementSystem : PersistentSingleton<MovementSystem>
 
     public void Move()
     {
-        if (_dummies.Count > 0)
-            print("move in ms; dummies = " + _dummies.Count);
+        //if (_dummies.Count > 0)
+        //    print("move in ms; dummies = " + _dummies.Count);
 
         for (int i = 0; i < _dummies.Count; i++)
         {
-            Dummy dummy = (_dummies[i] as Dummy);
+            GameUnit dummy = (_dummies[i] as GameUnit);
             dummy.transform.position = (Vector2)dummy.transform.position + dxdy[dummy.direction] * Time.deltaTime;
 
             if (!_dummies[i].IsConstantMovement)
@@ -54,13 +53,13 @@ public class MovementSystem : PersistentSingleton<MovementSystem>
         }
     }
 
-    public void AddDummy(IMovable dummy)
+    public void AddUnit(IMovable dummy)
     {
-        print("add dummy");
+        //print("add dummy");
         if (!_dummies.Contains(dummy))
         {
             _dummies.Add(dummy);
-            print("add dummy successful");
+            //print("add dummy successful");
         }
     }
 }
