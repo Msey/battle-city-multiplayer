@@ -12,7 +12,7 @@ public class InputManager : MonoBehaviour
     private void Start()
     {
         tank1 = FindObjectOfType<PlayerTank>();
-        print(tank1 != null ? "tank exists":"tank doesn't exist");
+        //print(tank1 != null ? "tank exists":"tank doesn't exist");
 
         EventManager.StartListening(GameEventBase.EventType.KeyBoardEvent, InputHandler);
         EventManager.StartListening(GameEventBase.EventType.KeyPressEvent, KeyHandler);
