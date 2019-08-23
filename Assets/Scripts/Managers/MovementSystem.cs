@@ -44,8 +44,9 @@ public class MovementSystem : PersistentSingleton<MovementSystem>
 
         for (int i = 0; i < _dummies.Count; i++)
         {
+            float speed = _dummies[i].Speed;
             GameUnit dummy = (_dummies[i] as GameUnit);
-            dummy.transform.position = (Vector2)dummy.transform.position + dxdy[dummy.direction] * Time.deltaTime;
+            dummy.transform.position = (Vector2)dummy.transform.position + dxdy[dummy.direction] * speed * Time.deltaTime;
 
             if (!_dummies[i].IsConstantMovement)
                 _dummies.Remove(_dummies[i]);

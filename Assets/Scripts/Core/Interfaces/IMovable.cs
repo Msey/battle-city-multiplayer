@@ -8,6 +8,6 @@ public interface IMovable
     void MoveDown();
     void MoveLeft();
     void MoveRight();
-    // gaz, tormoz etc.
     bool IsConstantMovement { get; }
+    float Speed { get; }
 }

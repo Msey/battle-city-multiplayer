@@ -5,7 +5,9 @@ public interface IDestructable
 
     void Die();
 
-    bool isVulnerable { get; set; }
+    bool isVulnerable { get; }
 
-    bool isAlive { get; set; }
+    bool isAlive { get; }
+
+    int Health { get; }
 }

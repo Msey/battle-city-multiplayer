@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class PlayerTank : TankBase
 {
-    public override bool isVulnerable { get => true; set { } }
-    public override bool isAlive { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+    public new bool isVulnerable { get => true; set { } }
+    public new bool isAlive { get => true; }
+
+
+    const float SHOOT_DELAY_CONSTANT = 4; // TODO: need to be replaced with Level_Upgrade_Constants (later probably)
 
     public override void Die()
     {
@@ -13,10 +16,27 @@ public class PlayerTank : TankBase
 
     public override void Shoot()
     {
-        var bullet = Instantiate(bulletPrefab, transform.position, transform.rotation).gameObject.UseComponent<Bullet>();
-        bullet.IsConstantMovement = true;
-        bullet.direction = this.direction;
-        bullet.Move();
+        if (ammoLimit > 0 && ShootDelay <= 0)
+        {
+            var bullet = Instantiate(bulletPrefab, transform.position, transform.rotation).gameObject.UseComponent<Bullet>();
+            bullet.IsConstantMovement = true;
+            bullet.direction = this.direction;
+            bullet.Move();
+            ammoLimit--;
+            shootDelay = SHOOT_DELAY_CONSTANT;
+            print(ammoLimit);
+        }
+    }
+
+    void Awake()
+    {
+        ammoLimit = 2;
+        shootDelay = 0;
+    }
+
+    void Update()
+    {
+        shootDelay -= Time.deltaTime;
     }
 
     public override void TakeDamade(int amount)

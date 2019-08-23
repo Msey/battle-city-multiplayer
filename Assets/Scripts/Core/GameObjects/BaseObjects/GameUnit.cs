@@ -7,11 +7,13 @@ public abstract class GameUnit : MonoBehaviour, IDestructable
     [HideInInspector]
     public MovementSystem.Direction direction;
 
-    public abstract bool isVulnerable { get; set; }
+    public bool isVulnerable { get; }
 
-    public abstract bool isAlive { get; set; }
+    public bool isAlive { get; }
+
+    public int Health { get; }
 
     public abstract void Die();
 
-    public abstract void TakeDamade(int amount);
+    public abstract void TakeDamade(int amount);    
 }

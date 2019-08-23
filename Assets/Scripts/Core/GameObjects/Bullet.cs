@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class Bullet : GameUnit, IMovable
 {
-    public override bool isVulnerable { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-    public override bool isAlive { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+    public new bool isVulnerable { get; protected set; }
+    public new bool isAlive { get; protected set; }
 
     public bool IsConstantMovement { get; set; }
+
+    public float Speed => 10f;
 
     public override void Die()
     {
