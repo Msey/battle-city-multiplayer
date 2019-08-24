@@ -11,8 +11,8 @@ public abstract class TankBase : GameUnit, IMovable, ICombat
 
     public float Speed => 5f;
 
-    protected float ammoLimit;
-    public float AmmoLimit => ammoLimit;
+    protected int ammoLimit;
+    public int AmmoLimit => ammoLimit;
 
     protected float shootDelay;
     public float ShootDelay => shootDelay;
@@ -47,4 +47,11 @@ public abstract class TankBase : GameUnit, IMovable, ICombat
     }
 
     public abstract void Shoot();
+
+    public void UpdateAmmo()
+    {
+        print("ammoLimit increment from " + ammoLimit + " to "+ (ammoLimit+1));
+        ammoLimit++;
+        shootDelay = 0;
+    }    
 }

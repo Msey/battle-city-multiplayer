@@ -5,8 +5,6 @@ using System;
 
 public class MovementSystem : PersistentSingleton<MovementSystem>
 {
-    private List<IMovable> _dummies;
-
     public enum Direction : sbyte
     {
         Up,
@@ -14,7 +12,6 @@ public class MovementSystem : PersistentSingleton<MovementSystem>
         Left,
         Right
     }
-
 
     private static Dictionary<Direction, Vector2> dxdy = new Dictionary<Direction, Vector2>
     {
@@ -25,10 +22,11 @@ public class MovementSystem : PersistentSingleton<MovementSystem>
         //{Direction.UpLeft, dxdy[Direction.Up] + dxdy[Direction.Left] } //test 
     };
 
-
+    private IList<IMovable> _movingUnits;
+         
     override protected void Awake()
     {
-        _dummies = new List<IMovable>();
+        _movingUnits = new List<IMovable>();
         base.Awake();
     }
 
@@ -39,28 +37,34 @@ public class MovementSystem : PersistentSingleton<MovementSystem>
 
     public void Move()
     {
-        //if (_dummies.Count > 0)
-        //    print("move in ms; dummies = " + _dummies.Count);
+        //if (_movingUnits.Count > 0)
+        //    print("move in ms; dummies = " + _movingUnits.Count);
 
-        for (int i = 0; i < _dummies.Count; i++)
+        for (int i = 0; i < _movingUnits.Count; i++)
         {
-            float speed = _dummies[i].Speed;
-            GameUnit dummy = (_dummies[i] as GameUnit);
+            float speed = _movingUnits[i].Speed;
+            GameUnit dummy = (_movingUnits[i] as GameUnit); // explicit cast is bad as DI point of view
             dummy.transform.position = (Vector2)dummy.transform.position + dxdy[dummy.direction] * speed * Time.deltaTime;
 
-            if (!_dummies[i].IsConstantMovement)
-                _dummies.Remove(_dummies[i]);
+            if (!_movingUnits[i].IsConstantMovement)
+                RemoveUnit(_movingUnits[i]);
             // TODO: inefficiently. Needs to be fixed and optimized
         }
     }
 
-    public void AddUnit(IMovable dummy)
+    public void AddUnit(IMovable movingUnit)
     {
-        //print("add dummy");
-        if (!_dummies.Contains(dummy))
+        if (!_movingUnits.Contains(movingUnit))
+            _movingUnits.Add(movingUnit);
+    }
+
+    public void RemoveUnit(IMovable movingUnit)
+    {
+        //print("add movingUnit");
+        if (_movingUnits.Contains(movingUnit))
         {
-            _dummies.Add(dummy);
-            //print("add dummy successful");
+            _movingUnits.Remove(movingUnit);
+            //print("remove movingUnit successful");
         }
     }
 }

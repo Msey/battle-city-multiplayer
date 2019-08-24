@@ -6,7 +6,9 @@ public interface ICombat
 {
     void Shoot();
 
-    float AmmoLimit { get; }
+    int AmmoLimit { get; }
 
     float ShootDelay{ get; }
+
+    void UpdateAmmo();
 }

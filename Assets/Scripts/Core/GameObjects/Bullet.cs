@@ -6,16 +6,32 @@ public class Bullet : GameUnit, IMovable
 {
     public new bool isVulnerable { get; protected set; }
     public new bool isAlive { get; protected set; }
-
-    public bool IsConstantMovement { get; set; }
+    public bool IsConstantMovement => true;
 
     public float Speed => 10f;
 
+    // private bool _onDeath = false;
+    public ICombat Owner;
     public override void Die()
     {
-        Destroy(this, 1f);
+        Owner.UpdateAmmo();
+        //_onDeath = true;
+        MovementSystem.s_Instance.RemoveUnit(this);
+        Destroy(gameObject);
     }
     
+    private void Start()
+    {
+       var collider = this.gameObject.AddComponent<BoxCollider2D>();
+        this.gameObject.AddComponent<Rigidbody2D>().isKinematic = true;
+        collider.isTrigger = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //print("triggered: "+ this.GetType().ToString());
+        this.Die();
+    }
 
     public override void TakeDamade(int amount)
     {
