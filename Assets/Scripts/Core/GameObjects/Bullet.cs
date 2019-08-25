@@ -10,12 +10,10 @@ public class Bullet : GameUnit, IMovable
 
     public float Speed => 10f;
 
-    // private bool _onDeath = false;
     public ICombat Owner;
     public override void Die()
     {
         Owner.UpdateAmmo();
-        //_onDeath = true;
         MovementSystem.s_Instance.RemoveUnit(this);
         Destroy(gameObject);
     }
