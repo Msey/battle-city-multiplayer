@@ -6,7 +6,8 @@ public abstract class GameEventBase
         Unknown,
         GuiEvent,
         KeyBoardEvent,
-        KeyPressEvent
+        KeyPressEvent,
+        LevelStarted,
     }
 
     public abstract EventType Type();
@@ -42,4 +43,13 @@ public class KeyPressEvent : GameEventBase
         this.code = code;
     }
 }
+
+public class LevelStartedEvent : GameEventBase
+{
+    override public EventType Type()
+    {
+        return EventType.LevelStarted;
+    }
+}
+
 

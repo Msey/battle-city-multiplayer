@@ -8,4 +8,14 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     {
         base.Awake();
     }
+    private void Start()
+    {
+        StartCoroutine(LoadLevel());
+    }
+
+    IEnumerator LoadLevel()
+    {
+        yield return new WaitForFixedUpdate();
+        EventManager.TriggerEvent(new LevelStartedEvent());
+    }
 }
