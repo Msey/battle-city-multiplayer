@@ -31,7 +31,7 @@ public class LevelsManager : PersistentSingleton<LevelsManager>
     {
         if (CurrentGameInfo.GameMode == GameInfo.EGameMode.classic)
         {
-            if (!Utils.Verify(CurrentGameInfo.PlayerCount > 0))
+            if (!Utils.Verify(CurrentGameInfo.PlayersCount > 0))
                 return;
 
             SceneManager.LoadScene(classicGameSceneName);

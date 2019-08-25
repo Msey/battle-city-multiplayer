@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
@@ -11,12 +10,21 @@ public class HUDController : MonoBehaviour
     public GameObject tanksPrefab;
     private List<GameObject> tanksIcons;
 
+    public LayoutGroup livesPanelLayout;
+    public GameObject livesPanelPrefab;
+    private List<GameObject> livesPanels;
+
     protected void Awake()
     {
-        tanksIcons = new List<GameObject>();
         Assert.IsNotNull(currentStageText);
+
+        tanksIcons = new List<GameObject>();
         Assert.IsNotNull(tanksCountLayout);
         Assert.IsNotNull(tanksPrefab);
+
+        livesPanels = new List<GameObject>();
+        Assert.IsNotNull(livesPanelLayout);
+        Assert.IsNotNull(livesPanelPrefab);
     }
 
     private void Start()
@@ -38,6 +46,7 @@ public class HUDController : MonoBehaviour
     {
         SetStage(LevelsManager.s_Instance.CurrentGameInfo.CurrentStage);
         SetEnemyTanksCount(10);
+        SetLivesPanelCount(LevelsManager.s_Instance.CurrentGameInfo.PlayersCount);
     }
 
     public void SetStage(int stage)
@@ -62,5 +71,45 @@ public class HUDController : MonoBehaviour
             Destroy(tankIcon);
             tanksIcons.RemoveAt(0);
         }
+    }
+
+    public void SetLivesPanelCount(int count)
+    {
+        if (!Utils.Verify(count >= 0))
+            return;
+
+        while (livesPanels.Count < count)
+        {
+            GameObject livesPanelObject = Instantiate(livesPanelPrefab);
+            livesPanels.Add(livesPanelObject);
+            livesPanelObject.transform.SetParent(livesPanelLayout.transform, false);
+
+            var livesPanel = livesPanelObject.GetComponent<LivesPanel>();
+            if (!Utils.Verify(livesPanel))
+                continue;
+            livesPanel.SetPlayerNumber(livesPanels.Count);
+        }
+        while (livesPanels.Count > count)
+        {
+            GameObject livesPanel = livesPanels[0];
+            Destroy(livesPanel);
+            livesPanels.RemoveAt(0);
+        }
+    }
+
+    public void SetPlayerLives(int player, int lives)
+    {
+        if (!Utils.InRange(0, player, livesPanels.Count))
+            return;
+
+        GameObject livesPanelObject = livesPanels[player];
+        if (!Utils.Verify(livesPanelObject))
+            return;
+
+        var livesPanel = livesPanelObject.GetComponent<LivesPanel>();
+        if (!Utils.Verify(livesPanel))
+            return;
+
+        livesPanel.SetLives(lives);
     }
 }
