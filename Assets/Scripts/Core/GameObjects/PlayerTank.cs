@@ -8,7 +8,7 @@ public class PlayerTank : TankBase
     public new bool isAlive { get => true; }
 
 
-    const float SHOOT_DELAY_CONSTANT = 4; // TODO: need to be replaced with Level_Upgrade_Constants (later probably)
+    const float SHOOT_DELAY_CONSTANT = 0.6f; // TODO: need to be replaced with Level_Upgrade_Constants (later probably)
 
     public override void Die()
     {

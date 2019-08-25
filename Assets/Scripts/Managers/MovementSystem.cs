@@ -23,7 +23,7 @@ public class MovementSystem : PersistentSingleton<MovementSystem>
     };
 
     private IList<IMovable> _movingUnits;
-         
+
     override protected void Awake()
     {
         _movingUnits = new List<IMovable>();
@@ -60,11 +60,7 @@ public class MovementSystem : PersistentSingleton<MovementSystem>
 
     public void RemoveUnit(IMovable movingUnit)
     {
-        //print("add movingUnit");
         if (_movingUnits.Contains(movingUnit))
-        {
             _movingUnits.Remove(movingUnit);
-            //print("remove movingUnit successful");
-        }
     }
 }
