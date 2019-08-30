@@ -39,7 +39,7 @@ public class PlayerTank : TankBase
         shootDelay -= Time.deltaTime;
     }
 
-    public override void TakeDamade(int amount)
+    public override void OnHit(GameObject hitSource)
     {
     }
 }

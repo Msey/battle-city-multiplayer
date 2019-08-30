@@ -1,7 +1,7 @@
 ﻿
 public interface IDestructable
 {
-    void TakeDamade(int amount);
+    void OnHit(UnityEngine.GameObject hitSource);
 
     void Die();
 

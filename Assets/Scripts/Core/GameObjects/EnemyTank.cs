@@ -21,8 +21,9 @@ public class EnemyTank : TankBase
     {
     }
 
-    public override void TakeDamade(int amount)
+
+    public override void OnHit(GameObject hitSource)
     {
-       
+        throw new System.NotImplementedException();
     }
 }

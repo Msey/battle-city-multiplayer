@@ -31,9 +31,6 @@ public class Bullet : GameUnit, IMovable
         this.Die();
     }
 
-    public override void TakeDamade(int amount)
-    {
-    }
 
 
     public void MoveDown()
@@ -63,5 +60,25 @@ public class Bullet : GameUnit, IMovable
     public void Move()
     {
         MovementSystem.s_Instance.AddUnit(this);
+        print("bullet_move");
+        var entryObjects = Physics2D.OverlapCircleAll((Vector2)transform.position, 1);
+        if (entryObjects.Length > 0)
+            print(entryObjects.Length);
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(transform.position, 1);
+        Gizmos.color = Color.white;
+
+    }
+
+    public override void OnHit(GameObject hitSource)
+    {
+        Die();
+        Bullet sourceBullet;
+        if (sourceBullet = hitSource.GetComponent<Bullet>())
+            sourceBullet.Die();// ?. operator probably
     }
 }
