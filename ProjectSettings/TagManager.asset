@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Water
+  - Ice
+  - Forest
+  - Concrete
+  - Brick
   layers:
   - Default
   - TransparentFX
@@ -13,13 +18,13 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Ice
+  - Water
+  - Brick
+  - Concrete
+  - Tank
+  - Forest
+  - Bullet
   - 
   - 
   - 
