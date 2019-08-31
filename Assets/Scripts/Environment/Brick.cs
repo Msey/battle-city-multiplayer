@@ -8,7 +8,7 @@ public class Brick : GameUnit
     {
         Destroy(gameObject);
     }
-    public override void OnHit(GameObject hitSource)
+    public override void OnHit(GameUnit hitSource)
     {
         Die();
     }

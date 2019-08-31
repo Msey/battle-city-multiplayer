@@ -8,7 +8,7 @@ public class Forest : GameUnit
     {
         Destroy(gameObject);
     }
-    public override void OnHit(GameObject hitSource)
+    public override void OnHit(GameUnit hitSource)
     {
         Die();
     }
