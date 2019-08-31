@@ -10,6 +10,8 @@ public class Bullet : GameUnit, IMovable
 
     public float Speed => 10f;
 
+    bool hitOccured = false;
+
     public ICombat Owner;
     public override void Die()
     {
@@ -32,7 +34,9 @@ public class Bullet : GameUnit, IMovable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        print("triggered: "+ this.GetType().ToString());
+        if (hitOccured) return;
+        //print("triggered: "+ this.GetType().ToString());
+
         var hitSource = collision.GetComponent<GameUnit>();
         if(hitSource)
             OnHit(hitSource);
