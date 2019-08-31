@@ -22,7 +22,7 @@ public class EnemyTank : TankBase
     }
 
 
-    public override void OnHit(GameObject hitSource)
+    public override void OnHit(GameUnit hitSource)
     {
         throw new System.NotImplementedException();
     }

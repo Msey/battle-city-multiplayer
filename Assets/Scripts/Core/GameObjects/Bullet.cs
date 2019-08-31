@@ -10,6 +10,8 @@ public class Bullet : GameUnit, IMovable
 
     public float Speed => 10f;
 
+    bool hitOccured = false;
+
     public ICombat Owner;
     public override void Die()
     {
@@ -21,14 +23,24 @@ public class Bullet : GameUnit, IMovable
     private void Start()
     {
        var collider = this.gameObject.AddComponent<BoxCollider2D>();
-        this.gameObject.AddComponent<Rigidbody2D>().isKinematic = true;
+        Rigidbody2D rb;
+        if (!(rb = gameObject.GetComponent<Rigidbody2D>()))
+            rb = this.gameObject.AddComponent<Rigidbody2D>();
+
+
+        rb.isKinematic = true;
         collider.isTrigger = true;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (hitOccured) return;
         //print("triggered: "+ this.GetType().ToString());
-        this.Die();
+
+        var hitSource = collision.GetComponent<GameUnit>();
+        if(hitSource)
+            OnHit(hitSource);
+
     }
 
 
@@ -60,10 +72,6 @@ public class Bullet : GameUnit, IMovable
     public void Move()
     {
         MovementSystem.s_Instance.AddUnit(this);
-        print("bullet_move");
-        var entryObjects = Physics2D.OverlapCircleAll((Vector2)transform.position, 1);
-        if (entryObjects.Length > 0)
-            print(entryObjects.Length);
     }
 
     void OnDrawGizmos()
@@ -71,12 +79,21 @@ public class Bullet : GameUnit, IMovable
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(transform.position, 1);
         Gizmos.color = Color.white;
-
     }
 
-    public override void OnHit(GameObject hitSource)
+    public override void OnHit(GameUnit hitSource)
     {
+
+        print("OnHit");
+        hitSource.OnHit(this as GameUnit);
+        //var entryObjects = Physics2D.OverlapCircleAll((Vector2)transform.position, 1);
+        //if (entryObjects.Length > 0)
+        //    print(entryObjects.Length);
+
+
+
         Die();
+
         Bullet sourceBullet;
         if (sourceBullet = hitSource.GetComponent<Bullet>())
             sourceBullet.Die();// ?. operator probably

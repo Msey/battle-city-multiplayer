@@ -15,5 +15,5 @@ public abstract class GameUnit : MonoBehaviour, IDestructable
 
     public abstract void Die();
 
-    public abstract void OnHit(GameObject hitSource);
+    public abstract void OnHit(GameUnit hitSource);
 }

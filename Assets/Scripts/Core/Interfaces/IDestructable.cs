@@ -1,7 +1,7 @@
 ﻿
 public interface IDestructable
 {
-    void OnHit(UnityEngine.GameObject hitSource);
+    void OnHit(GameUnit hitSource);
 
     void Die();
 
