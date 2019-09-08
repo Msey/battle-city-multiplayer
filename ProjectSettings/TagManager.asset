@@ -8,12 +8,12 @@ TagManager:
   - Forest
   - Concrete
   - Brick
+  - Water
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
   - 
-  - Water
   - UI
   - 
   - 
