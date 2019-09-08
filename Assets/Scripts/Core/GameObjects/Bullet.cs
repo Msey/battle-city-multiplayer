@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bullet : GameUnit, IMovable
 {
+    const float BULLET_TRIGGER_OVERLAPPING = 0.18f;
     public new bool isVulnerable { get; protected set; }
     public new bool isAlive { get; protected set; }
     public bool IsConstantMovement => true;
@@ -19,10 +20,10 @@ public class Bullet : GameUnit, IMovable
         MovementSystem.s_Instance.RemoveUnit(this);
         Destroy(gameObject);
     }
-    
+
     private void Start()
     {
-       var collider = this.gameObject.AddComponent<BoxCollider2D>();
+        var collider = this.gameObject.AddComponent<BoxCollider2D>();
         Rigidbody2D rb;
         if (!(rb = gameObject.GetComponent<Rigidbody2D>()))
             rb = this.gameObject.AddComponent<Rigidbody2D>();
@@ -34,11 +35,11 @@ public class Bullet : GameUnit, IMovable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (hitOccured) return;
+        //if (hitOccured) return;
         //print("triggered: "+ this.GetType().ToString());
 
         var hitSource = collision.GetComponent<GameUnit>();
-        if(hitSource)
+        if (hitSource)
             OnHit(hitSource);
 
     }
@@ -77,7 +78,7 @@ public class Bullet : GameUnit, IMovable
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawSphere(transform.position, 1);
+        Gizmos.DrawSphere(transform.position, BULLET_TRIGGER_OVERLAPPING);
         Gizmos.color = Color.white;
     }
 
@@ -85,17 +86,25 @@ public class Bullet : GameUnit, IMovable
     {
 
         print("OnHit");
-        hitSource.OnHit(this as GameUnit);
-        //var entryObjects = Physics2D.OverlapCircleAll((Vector2)transform.position, 1);
-        //if (entryObjects.Length > 0)
-        //    print(entryObjects.Length);
+
+        var entryObjects = Physics2D.OverlapCircleAll((Vector2)transform.position, BULLET_TRIGGER_OVERLAPPING);
+        
+        if (entryObjects.Length > 0)
+            print(entryObjects.Length);
 
 
 
         Die();
 
+
+        //foreach(var obj in entryObjects)
+        //{
+        //    obj.GetComponent<Bull>
+        //}
+
         Bullet sourceBullet;
         if (sourceBullet = hitSource.GetComponent<Bullet>())
             sourceBullet.Die();// ?. operator probably
+        else hitSource.OnHit(this as GameUnit);
     }
 }
