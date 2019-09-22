@@ -44,7 +44,8 @@ public class MovementSystem : PersistentSingleton<MovementSystem>
         {
             float speed = _movingUnits[i].Speed;
             GameUnit dummy = (_movingUnits[i] as GameUnit); // explicit cast is bad as DI point of view
-            dummy.transform.position = (Vector2)dummy.transform.position + dxdy[dummy.direction] * speed * Time.deltaTime;
+            if (AreBoundsCorrect(dummy, speed))
+                dummy.transform.position = (Vector2)dummy.transform.position + dxdy[dummy.direction] * speed * Time.deltaTime;
 
             if (!_movingUnits[i].IsConstantMovement)
                 RemoveUnit(_movingUnits[i]);
@@ -62,5 +63,32 @@ public class MovementSystem : PersistentSingleton<MovementSystem>
     {
         if (_movingUnits.Contains(movingUnit))
             _movingUnits.Remove(movingUnit);
+    }
+
+    private bool AreBoundsCorrect(GameUnit u, float speed)
+    {
+        var collider = u.GetComponent<BoxCollider2D>();
+
+        var t = (Vector2)u.transform.position + dxdy[u.direction] * speed * Time.deltaTime;
+
+        //Debug.DrawLine(new Vector2(t.x + collider.size.x, t.y + collider.size.y),
+        //               new Vector2(t.x - collider.size.x, t.y - collider.size.y));
+
+
+        if (collider != null)
+        {
+            var objectsInBox = Physics2D.OverlapBoxAll((Vector2)u.transform.position + dxdy[u.direction] * speed * Time.deltaTime,
+                 collider.size*2, 0);
+
+
+            for (int i = 0; i < objectsInBox.Length; i++)
+            {
+                if (objectsInBox[i].gameObject != u.gameObject && objectsInBox[i].GetComponent<BoxCollider2D>())
+                    return false;
+            }
+        }
+        
+
+        return true;
     }
 }
