@@ -1,11 +1,6 @@
 ﻿using System;
 using UnityEngine;
 
-#if NETFX_CORE
-	using System.Reflection;
-#endif
-
-
 [AttributeUsage(AttributeTargets.Class, Inherited = true)]
 public class SingletonPrefabAttribute : Attribute
 {
