@@ -43,7 +43,7 @@ public abstract class TankBase : GameUnit, IMovable, ICombat
 
     private void Move()
     {
-        MovementSystem.s_Instance.AddUnit(this);
+        MovementSystem.s_Instance.Move(this);
     }
 
     public abstract void Shoot();

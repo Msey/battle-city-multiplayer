@@ -36,7 +36,8 @@ public class PlayerTank : TankBase
 
     void Update()
     {
-        shootDelay -= Time.deltaTime;
+        if (shootDelay > 0)
+            shootDelay -= Time.deltaTime;
     }
 
     public override void OnHit(GameUnit hitSource)
