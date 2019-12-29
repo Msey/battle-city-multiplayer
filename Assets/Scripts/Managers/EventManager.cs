@@ -18,29 +18,29 @@ public class EventManager : PersistentSingleton<EventManager>
     {
     }
 
-    public void StartListening<EventType>(UnityAction<EventType> listener)
+    public void StartListening<T>(UnityAction<T> listener)
     {
-        if (s_Instance.eventDictionary.TryGetValue(typeof(EventType), out var currentEvent))
+        if (s_Instance.eventDictionary.TryGetValue(typeof(T), out var currentEvent))
         {
-            (currentEvent as GameEvent<EventType>).AddListener(listener);
+            (currentEvent as GameEvent<T>).AddListener(listener);
         }
         else
         {
-            var newEvent = new GameEvent<EventType>();
+            var newEvent = new GameEvent<T>();
             newEvent.AddListener(listener);
-            s_Instance.eventDictionary.Add(typeof(EventType), newEvent);
+            s_Instance.eventDictionary.Add(typeof(T), newEvent);
         }
     }
 
-    public void StopListening<EventType>(UnityAction<EventType> listener)
+    public void StopListening<T>(UnityAction<T> listener)
     {
-        if (s_Instance.eventDictionary.TryGetValue(typeof(EventType), out var currentEvent))
-           (currentEvent as GameEvent<EventType>).RemoveListener(listener);
+        if (s_Instance.eventDictionary.TryGetValue(typeof(T), out var currentEvent))
+           (currentEvent as GameEvent<T>).RemoveListener(listener);
     }
 
-    public void TriggerEvent<EventType>(EventType e)
+    public void TriggerEvent<T>(T e)
     {
-        if (s_Instance.eventDictionary.TryGetValue(typeof(EventType), out var currentEvent))
-           (currentEvent as GameEvent<EventType>).Invoke(e);
+        if (s_Instance.eventDictionary.TryGetValue(typeof(T), out var currentEvent))
+           (currentEvent as GameEvent<T>).Invoke(e);
     }
 }
