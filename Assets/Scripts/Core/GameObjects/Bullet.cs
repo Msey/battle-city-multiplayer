@@ -17,7 +17,6 @@ public class Bullet : GameUnit, IMovable
     public override void Die()
     {
         Owner.UpdateAmmo();
-        MovementSystem.s_Instance.RemoveUnit(this);
         Destroy(gameObject);
     }
 
@@ -72,7 +71,7 @@ public class Bullet : GameUnit, IMovable
 
     public void Move()
     {
-        MovementSystem.s_Instance.AddUnit(this);
+        MovementSystem.s_Instance.Move(this);
     }
 
     void OnDrawGizmos()

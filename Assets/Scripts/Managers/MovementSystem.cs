@@ -22,48 +22,22 @@ public class MovementSystem : PersistentSingleton<MovementSystem>
         //{Direction.UpLeft, dxdy[Direction.Up] + dxdy[Direction.Left] } //test 
     };
 
-    private IList<IMovable> _movingUnits;
 
     override protected void Awake()
     {
-        _movingUnits = new List<IMovable>();
         base.Awake();
     }
 
-    void Update()
+
+
+    public void Move(IMovable movingUnit)
     {
-        Move();
+        float speed = movingUnit.Speed;
+        GameUnit unit = (movingUnit as GameUnit); // explicit cast is bad as DI point of view
+        if (AreBoundsCorrect(unit, speed))
+            unit.transform.position = (Vector2)unit.transform.position + dxdy[unit.direction] * speed * Time.deltaTime;
     }
 
-    public void Move()
-    {
-        //if (_movingUnits.Count > 0)
-        //    print("move in ms; dummies = " + _movingUnits.Count);
-
-        for (int i = 0; i < _movingUnits.Count; i++)
-        {
-            float speed = _movingUnits[i].Speed;
-            GameUnit dummy = (_movingUnits[i] as GameUnit); // explicit cast is bad as DI point of view
-            if (AreBoundsCorrect(dummy, speed))
-                dummy.transform.position = (Vector2)dummy.transform.position + dxdy[dummy.direction] * speed * Time.deltaTime;
-
-            if (!_movingUnits[i].IsConstantMovement)
-                RemoveUnit(_movingUnits[i]);
-            // TODO: inefficiently. Needs to be fixed and optimized
-        }
-    }
-
-    public void AddUnit(IMovable movingUnit)
-    {
-        if (!_movingUnits.Contains(movingUnit))
-            _movingUnits.Add(movingUnit);
-    }
-
-    public void RemoveUnit(IMovable movingUnit)
-    {
-        if (_movingUnits.Contains(movingUnit))
-            _movingUnits.Remove(movingUnit);
-    }
 
     private bool AreBoundsCorrect(GameUnit u, float speed)
     {
@@ -78,7 +52,7 @@ public class MovementSystem : PersistentSingleton<MovementSystem>
         if (collider != null)
         {
             var objectsInBox = Physics2D.OverlapBoxAll((Vector2)u.transform.position + dxdy[u.direction] * speed * Time.deltaTime,
-                 collider.size*2, 0);
+                 collider.size * 2, 0);
 
 
             for (int i = 0; i < objectsInBox.Length; i++)
@@ -87,8 +61,9 @@ public class MovementSystem : PersistentSingleton<MovementSystem>
                     return false;
             }
         }
-        
+
 
         return true;
     }
 }
+
