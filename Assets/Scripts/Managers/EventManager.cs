@@ -3,52 +3,44 @@ using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameEvent : UnityEvent<GameEventBase>
-{
-}
-
 public class EventManager : PersistentSingleton<EventManager>
 {
-    private Dictionary<GameEventBase.EventType, GameEvent> eventDictionary;
+    private Dictionary<System.Type, System.Object> eventDictionary;
 
     override protected void Awake()
     {
         base.Awake();
         if (eventDictionary == null)
-            eventDictionary = new Dictionary<GameEventBase.EventType, GameEvent>();
+            eventDictionary = new Dictionary<System.Type, System.Object>();
     }
 
-    public static void StartListening(GameEventBase.EventType eventType, UnityAction<GameEventBase> listener)
+    public class GameEvent<T> : UnityEvent<T>
     {
-        GameEvent thisEvent = null;
-        if (s_Instance.eventDictionary.TryGetValue(eventType, out thisEvent))
+    }
+
+    public void StartListening<EventType>(UnityAction<EventType> listener)
+    {
+        if (s_Instance.eventDictionary.TryGetValue(typeof(EventType), out var currentEvent))
         {
-            thisEvent.AddListener(listener);
+            (currentEvent as GameEvent<EventType>).AddListener(listener);
         }
         else
         {
-            thisEvent = new GameEvent();
-            thisEvent.AddListener(listener);
-            s_Instance.eventDictionary.Add(eventType, thisEvent);
+            var newEvent = new GameEvent<EventType>();
+            newEvent.AddListener(listener);
+            s_Instance.eventDictionary.Add(typeof(EventType), newEvent);
         }
     }
 
-    public static void StopListening(GameEventBase.EventType eventType, UnityAction<GameEventBase> listener)
+    public void StopListening<EventType>(UnityAction<EventType> listener)
     {
-        if (s_Instance == null)
-            return;
-        GameEvent thisEvent = null;
-        if (s_Instance.eventDictionary.TryGetValue(eventType, out thisEvent))
-            thisEvent.RemoveListener(listener);
+        if (s_Instance.eventDictionary.TryGetValue(typeof(EventType), out var currentEvent))
+           (currentEvent as GameEvent<EventType>).RemoveListener(listener);
     }
 
-    public static void TriggerEvent(GameEventBase e)
+    public void TriggerEvent<EventType>(EventType e)
     {
-        if (!Utils.Verify(e))
-            return;
-
-        GameEvent thisEvent = null;
-        if (s_Instance.eventDictionary.TryGetValue(e.Type(), out thisEvent))
-            thisEvent.Invoke(e);
+        if (s_Instance.eventDictionary.TryGetValue(typeof(EventType), out var currentEvent))
+           (currentEvent as GameEvent<EventType>).Invoke(e);
     }
 }

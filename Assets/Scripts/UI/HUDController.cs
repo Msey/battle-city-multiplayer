@@ -29,12 +29,12 @@ public class HUDController : MonoBehaviour
 
     private void Start()
     {
-        EventManager.StartListening(GameEventBase.EventType.LevelStarted, OnGameStarted);
+        EventManager.s_Instance.StartListening<LevelStartedEvent>(OnGameStarted);
     }
 
     private void OnDestroy()
     {
-        EventManager.StopListening(GameEventBase.EventType.LevelStarted, OnGameStarted);
+        EventManager.s_Instance.StopListening<LevelStartedEvent>(OnGameStarted);
     }
 
     public void OnBackToMenuClicked()
@@ -42,7 +42,7 @@ public class HUDController : MonoBehaviour
         LevelsManager.s_Instance.OpenMainMenu();
     }
 
-    public void OnGameStarted(GameEventBase e)
+    public void OnGameStarted(LevelStartedEvent e)
     {
         SetStage(LevelsManager.s_Instance.CurrentGameInfo.CurrentStage);
         SetEnemyTanksCount(10);

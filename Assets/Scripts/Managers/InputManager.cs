@@ -14,39 +14,33 @@ public class InputManager : MonoBehaviour
         tank1 = FindObjectOfType<PlayerTank>();
         //print(tank1 != null ? "tank exists":"tank doesn't exist");
 
-        EventManager.StartListening(GameEventBase.EventType.KeyBoardEvent, InputHandler);
-        EventManager.StartListening(GameEventBase.EventType.KeyPressEvent, KeyHandler);
+        EventManager.s_Instance.StartListening<KeyBoardEvent>(InputHandler);
+        EventManager.s_Instance.StartListening<KeyPressEvent>(KeyHandler);
     }
 
     void Update()
     {        
-        EventManager.TriggerEvent(kbEvent);
+        EventManager.s_Instance.TriggerEvent<KeyBoardEvent>(kbEvent);
     }
 
-    void KeyHandler(GameEventBase e)
+    void KeyHandler(KeyPressEvent e)
     {
-        //print("1");
-        if (e is KeyPressEvent)
+        //print("2");
+        Action<string> invokable = print;
+        switch (e.code)
         {
-            //print("2");
-            Action<string> invokable = print;
-            switch ((e as KeyPressEvent).code)
-            {
-                case KeyCode.W: tank1.MoveUp(); break;
-                case KeyCode.A: tank1.MoveLeft(); break;
-                case KeyCode.S: tank1.MoveDown(); break;
-                case KeyCode.D: tank1.MoveRight(); break;
-                case KeyCode.Space: tank1.Shoot(); break;
-            }
+            case KeyCode.W: tank1.MoveUp(); break;
+            case KeyCode.A: tank1.MoveLeft(); break;
+            case KeyCode.S: tank1.MoveDown(); break;
+            case KeyCode.D: tank1.MoveRight(); break;
+            case KeyCode.Space: tank1.Shoot(); break;
         }
     }
 
-
-
-    void InputHandler(GameEventBase e)
+    void InputHandler(KeyBoardEvent e)
     {
         foreach (KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
             if (Input.GetKey(kcode))
-                EventManager.TriggerEvent(new KeyPressEvent(kcode));
+                EventManager.s_Instance.TriggerEvent<KeyPressEvent>(new KeyPressEvent(kcode));
     }
 }

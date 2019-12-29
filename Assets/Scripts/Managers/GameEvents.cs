@@ -1,41 +1,11 @@
 ﻿
-public abstract class GameEventBase
+public class KeyBoardEvent
 {
-    public enum EventType
-    {
-        Unknown,
-        GuiEvent,
-        KeyBoardEvent,
-        KeyPressEvent,
-        LevelStarted,
-    }
 
-    public abstract EventType Type();
 }
 
-public class GuiEvent : GameEventBase
+public class KeyPressEvent
 {
-    override public EventType Type()
-    {
-        return EventType.GuiEvent;
-    }
-}
-
-public class KeyBoardEvent : GameEventBase
-{
-    override public EventType Type()
-    {
-        return EventType.KeyBoardEvent;
-    }
-}
-
-public class KeyPressEvent : GameEventBase
-{
-    override public EventType Type()
-    {
-        return EventType.KeyPressEvent;
-    }
-
     public readonly UnityEngine.KeyCode code;
 
     public KeyPressEvent(UnityEngine.KeyCode code)
@@ -44,12 +14,8 @@ public class KeyPressEvent : GameEventBase
     }
 }
 
-public class LevelStartedEvent : GameEventBase
+public class LevelStartedEvent
 {
-    override public EventType Type()
-    {
-        return EventType.LevelStarted;
-    }
 }
 
 

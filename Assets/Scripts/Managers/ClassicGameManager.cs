@@ -16,6 +16,6 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     IEnumerator LoadLevel()
     {
         yield return new WaitForFixedUpdate();
-        EventManager.TriggerEvent(new LevelStartedEvent());
+        EventManager.s_Instance.TriggerEvent(new LevelStartedEvent());
     }
 }
