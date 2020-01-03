@@ -66,4 +66,19 @@ public static partial class Utils
         if (number >= 1) return "I" + ToRoman(number - 1);
         return number.ToString();
     }
+
+    public static float RoundByFactor(float value, float factor)
+    {
+        return Mathf.Round(value / factor) * factor;
+    }
+
+    public static float FloorByFactor(float value, float factor)
+    {
+        return Mathf.Floor(value / factor) * factor;
+    }
+
+    public static float CeilByFactor(float value, float factor)
+    {
+        return Mathf.Ceil(value / factor) * factor;
+    }
 }
