@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CircleCollider2D))]
+[RequireComponent(typeof(CircleCollider2D), typeof(Animator))]
 public class TankMovement : MonoBehaviour
 {
     //256px tank = 0.16 unity
@@ -38,12 +38,33 @@ public class TankMovement : MonoBehaviour
             }
 
             direction = value;
+            animator.SetTrigger(DirectionAnimationTrigger(direction));
         }
     }
 
+    bool stoped = true;
+    public bool Stoped
+    {
+        get
+        {
+            return stoped;
+        }
+        set
+        {
+            if (stoped == value)
+                return;
+
+            if (!stoped)
+                animator.SetFloat("Velocity", 0.0f);
+            else
+                animator.SetFloat("Velocity", velocity);
+            stoped = value;
+        }
+    }
     public float velocity = 0.0f;
-    public bool stoped = true;
+
     CircleCollider2D circleCollider;
+    Animator animator;
     int obstaclesMask = 0;
 
     const float CELL_SIZE = 1.28f;
@@ -51,12 +72,14 @@ public class TankMovement : MonoBehaviour
     void Start()
     {
         circleCollider = GetComponent<CircleCollider2D>();
+        animator = GetComponent<Animator>();
+        animator.SetFloat("Velocity", 0.0f);
         obstaclesMask = LayerMask.GetMask("Water", "Brick", "Concrete");
     }
 
     void Update()
     {
-        if (stoped)
+        if (Stoped)
             return;
 
         Vector2 oldCellPosition = CellPosition();
@@ -97,6 +120,22 @@ public class TankMovement : MonoBehaviour
                 return Vector2.right;
         }
         return Vector2.zero;
+    }
+
+    private static string DirectionAnimationTrigger(eDirection dir)
+    {
+        switch (dir)
+        {
+            case eDirection.Up:
+                return "Up";
+            case eDirection.Down:
+                return "Down";
+            case eDirection.Left:
+                return "Left";
+            case eDirection.Right:
+                return "Right";
+        }
+        return "";
     }
 
     private float DirectionAngle()
@@ -155,17 +194,17 @@ public class TankMovement : MonoBehaviour
         return Vector2.zero;
     }
 
-    bool IsDirectionAxisChanged(eDirection oldDir, eDirection newDir)
+    static bool IsDirectionAxisChanged(eDirection oldDir, eDirection newDir)
     {
         return IsVerticalAxis(oldDir) != IsVerticalAxis(newDir);
     }
 
-    bool IsVerticalAxis(eDirection dir)
+    static bool IsVerticalAxis(eDirection dir)
     {
         return dir == eDirection.Up || dir == eDirection.Down;
     }
 
-    bool IsHorizontalAxis(eDirection dir)
+    static bool IsHorizontalAxis(eDirection dir)
     {
         return !IsVerticalAxis(dir);
     }
