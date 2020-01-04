@@ -9,6 +9,7 @@ TagManager:
   - Concrete
   - Brick
   - Water
+  - Bullet
   layers:
   - Default
   - TransparentFX
