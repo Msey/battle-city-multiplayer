@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Forest : GameUnit
+public class Forest : MonoBehaviour, IBulletTarget
 {
-    public override void Die()
+    public void Die()
     {
         Destroy(gameObject);
     }
-    public override void OnHit(GameUnit hitSource)
+    public void OnHit(Bullet bullet)
     {
         Die();
     }

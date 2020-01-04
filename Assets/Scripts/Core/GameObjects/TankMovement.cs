@@ -75,10 +75,10 @@ public class TankMovement : MonoBehaviour
             return;
 
         Vector2 oldCellPosition = CellPosition();
-        transform.position = (Vector2)transform.position + velocity * DirectionVector() * Time.deltaTime;
+        transform.position = (Vector2)transform.position + velocity * GameConstants.DirectionVector(Direction) * Time.deltaTime;
         UpdateColliderPoition();
 
-        var obstacle = Physics2D.OverlapCircle(FrontCellPosition(), circleCollider.radius, obstaclesMask);
+        var obstacle = Physics2D.OverlapCircle(FrontCellPosition(), ColliderScaledRadius(), obstaclesMask);
         if (obstacle != null)
         {
             transform.position = oldCellPosition;
@@ -86,32 +86,19 @@ public class TankMovement : MonoBehaviour
         }
     }
 
+    float ColliderScaledRadius()
+    {
+        return transform.lossyScale.x * circleCollider.radius * 0.75f;
+    }
 
     void UpdateColliderPoition()
     {
-        var colliderPosition = transform.InverseTransformPoint(CellPosition());
         circleCollider.offset = ColliderPosition();
     }
 
     private Vector2 ColliderPosition()
     {
         return transform.InverseTransformPoint(CellPosition());
-    }
-
-    private Vector2 DirectionVector()
-    {
-        switch (Direction)
-        {
-            case GameConstants.eDirection.Up:
-                return Vector2.up;
-            case GameConstants.eDirection.Down:
-                return Vector2.down;
-            case GameConstants.eDirection.Left:
-                return Vector2.left;
-            case GameConstants.eDirection.Right:
-                return Vector2.right;
-        }
-        return Vector2.zero;
     }
 
     private static string DirectionAnimationTrigger(GameConstants.eDirection dir)
@@ -128,11 +115,6 @@ public class TankMovement : MonoBehaviour
                 return "Right";
         }
         return "";
-    }
-
-    private float DirectionAngle()
-    {
-        return Vector2.Angle(Vector2.up, DirectionVector());
     }
 
     private Vector2 CellPosition()

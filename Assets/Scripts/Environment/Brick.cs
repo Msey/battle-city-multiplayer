@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 [RequireComponent(typeof(Animator))]
-public class Brick : GameUnit
+public class Brick : MonoBehaviour, IBulletTarget
 {
     enum BrickState
     {
@@ -23,31 +23,31 @@ public class Brick : GameUnit
         animator = GetComponent<Animator>();
     }
 
-    public override void Die()
+    public void Die()
     {
         Destroy(gameObject);
     }
-    public override void OnHit(GameUnit hitSource)
+    public void OnHit(Bullet bullet)
     {
-        if (!hitSource)
+        if (!bullet)
             return;
 
         if (brickState != BrickState.Full)
             Die();
         else
         {
-            switch (hitSource.direction)
+            switch (bullet.Direction)
             {
-                case MovementSystem.Direction.Down:
+                case GameConstants.eDirection.Down:
                     SetBrickState(BrickState.Bottom);
                     break;
-                case MovementSystem.Direction.Up:
+                case GameConstants.eDirection.Up:
                     SetBrickState(BrickState.Top);
                     break;
-                case MovementSystem.Direction.Left:
+                case GameConstants.eDirection.Left:
                     SetBrickState(BrickState.Left);
                     break;
-                case MovementSystem.Direction.Right:
+                case GameConstants.eDirection.Right:
                     SetBrickState(BrickState.Right);
                     break;
             }

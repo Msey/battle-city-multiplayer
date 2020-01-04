@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Concrete : GameUnit
+public class Concrete : MonoBehaviour, IBulletTarget
 {
-    public override void Die()
+    public void Die()
     {
         Destroy(gameObject);
     }
-    public override void OnHit(GameUnit hitSource)
+    public void OnHit(Bullet bullet)
     {
         Die();
     }
