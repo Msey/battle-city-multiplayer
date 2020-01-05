@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,13 +32,13 @@ public class TestTankController : MonoBehaviour
 
         tankMovement.Stoped = false;
         if (verticalAxis > 0.0f)
-            tankMovement.Direction = GameConstants.eDirection.Up;
+            tankMovement.Direction = eDirection.Up;
         else if (verticalAxis < 0.0f)
-            tankMovement.Direction = GameConstants.eDirection.Down;
+            tankMovement.Direction = eDirection.Down;
         else if (horizontalAxis < 0.0f)
-            tankMovement.Direction = GameConstants.eDirection.Left;
+            tankMovement.Direction = eDirection.Left;
         else if (horizontalAxis > 0.0f)
-            tankMovement.Direction = GameConstants.eDirection.Right;
+            tankMovement.Direction = eDirection.Right;
         else
             tankMovement.Stoped = true;
     }
@@ -47,8 +48,10 @@ public class TestTankController : MonoBehaviour
 
         const float SHOOT_DELAY_CONSTANT = 0.6f; // TODO: need to be replaced with Level_Upgrade_Constants (later probably)
         if (shootDelay <= 0)
-        {
+        { 
             var bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
+            // TODO: bulletPrefab must be loaded from Object inspector due 
+            // to active bullet script attached to the object on scene
             var bulletComponent = bullet.GetComponent<Bullet>();
             if (bulletComponent)
                 bulletComponent.Direction = tankMovement.Direction;
