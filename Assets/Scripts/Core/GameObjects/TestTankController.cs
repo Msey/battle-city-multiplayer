@@ -32,13 +32,13 @@ public class TestTankController : MonoBehaviour
 
         tankMovement.Stoped = false;
         if (verticalAxis > 0.0f)
-            tankMovement.Direction = eDirection.Up;
+            tankMovement.Direction = Direction.Up;
         else if (verticalAxis < 0.0f)
-            tankMovement.Direction = eDirection.Down;
+            tankMovement.Direction = Direction.Down;
         else if (horizontalAxis < 0.0f)
-            tankMovement.Direction = eDirection.Left;
+            tankMovement.Direction = Direction.Left;
         else if (horizontalAxis > 0.0f)
-            tankMovement.Direction = eDirection.Right;
+            tankMovement.Direction = Direction.Right;
         else
             tankMovement.Stoped = true;
     }

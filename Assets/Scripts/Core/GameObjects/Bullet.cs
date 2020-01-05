@@ -14,7 +14,10 @@ public enum BulletStrength
 [RequireComponent(typeof(CircleCollider2D))]
 public class Bullet : MonoBehaviour
 {
-    public eDirection Direction { get; set; } = eDirection.Right;
+    public Direction Direction { get; set; } = Direction.Right;
+
+    public BulletStrength Power = BulletStrength.Standart;
+
     CircleCollider2D circleCollider;
     public float velocity = 5.4f;
     private int obstaclesMask = 0;

@@ -8,8 +8,8 @@ public class TankMovement : MonoBehaviour
     //256px tank = 0.16 unity
     //1px dendy tank = 0,000625 unity
     
-    eDirection direction = eDirection.Up;
-    public eDirection Direction
+    Direction direction = Direction.Up;
+    public Direction Direction
     {
         get
         {
@@ -101,17 +101,17 @@ public class TankMovement : MonoBehaviour
         return transform.InverseTransformPoint(CellPosition());
     }
 
-    private static string DirectionAnimationTrigger(eDirection dir)
+    private static string DirectionAnimationTrigger(Direction dir)
     {
         switch (dir)
         {
-            case eDirection.Up:
+            case Direction.Up:
                 return "Up";
-            case eDirection.Down:
+            case Direction.Down:
                 return "Down";
-            case eDirection.Left:
+            case Direction.Left:
                 return "Left";
-            case eDirection.Right:
+            case Direction.Right:
                 return "Right";
         }
         return "";
@@ -123,16 +123,16 @@ public class TankMovement : MonoBehaviour
         Vector2 currentPosition = transform.position;
         switch (Direction)
         {
-            case eDirection.Up:
+            case Direction.Up:
                 currentPosition.y += smallOffset;
                 break;
-            case eDirection.Down:
+            case Direction.Down:
                 currentPosition.y -= smallOffset;
                 break;
-            case eDirection.Left:
+            case Direction.Left:
                 currentPosition.x -= smallOffset;
                 break;
-            case eDirection.Right:
+            case Direction.Right:
                 currentPosition.x += smallOffset;
                 break;
         }
@@ -148,19 +148,19 @@ public class TankMovement : MonoBehaviour
 
         switch (Direction)
         {
-            case eDirection.Up:
+            case Direction.Up:
                 return new Vector2(
                     Utils.RoundByFactor(currentPosition.x, GameConstants.cellSize),
                     Utils.CeilByFactor(currentPosition.y, GameConstants.cellSize));
-            case eDirection.Down:
+            case Direction.Down:
                 return new Vector2(
                     Utils.RoundByFactor(currentPosition.x, GameConstants.cellSize),
                     Utils.FloorByFactor(currentPosition.y, GameConstants.cellSize));
-            case eDirection.Left:
+            case Direction.Left:
                 return new Vector2(
                     Utils.FloorByFactor(currentPosition.x, GameConstants.cellSize),
                     Utils.RoundByFactor(currentPosition.y, GameConstants.cellSize));
-            case eDirection.Right:
+            case Direction.Right:
                 return new Vector2(
                     Utils.CeilByFactor(currentPosition.x, GameConstants.cellSize),
                     Utils.RoundByFactor(currentPosition.y, GameConstants.cellSize));
@@ -168,17 +168,17 @@ public class TankMovement : MonoBehaviour
         return Vector2.zero;
     }
 
-    static bool IsDirectionAxisChanged(eDirection oldDir, eDirection newDir)
+    static bool IsDirectionAxisChanged(Direction oldDir, Direction newDir)
     {
         return IsVerticalAxis(oldDir) != IsVerticalAxis(newDir);
     }
 
-    static bool IsVerticalAxis(eDirection dir)
+    static bool IsVerticalAxis(Direction dir)
     {
-        return dir == eDirection.Up || dir == eDirection.Down;
+        return dir == Direction.Up || dir == Direction.Down;
     }
 
-    static bool IsHorizontalAxis(eDirection dir)
+    static bool IsHorizontalAxis(Direction dir)
     {
         return !IsVerticalAxis(dir);
     }

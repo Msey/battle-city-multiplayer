@@ -31,13 +31,14 @@ public class BulletBehaviour : MonoBehaviour
             }
         }
 #if DEBUG
-        print(bullets.Count);
+        print("Total bullets: " + bullets.Count);
 #endif
     }
 
     public static void AddBullet(Bullet bullet)
     {
-        bullets.Add(bullet);
+        if (bullet != null && bullets != null)
+            bullets.Add(bullet);
     }
 
 

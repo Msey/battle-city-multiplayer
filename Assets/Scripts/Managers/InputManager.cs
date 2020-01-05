@@ -25,7 +25,6 @@ public class InputManager : MonoBehaviour
 
     void KeyHandler(KeyPressEvent e)
     {
-        //print("2");
         Action<string> invokable = print;
         switch (e.code)
         {
@@ -39,8 +38,22 @@ public class InputManager : MonoBehaviour
 
     void InputHandler(KeyBoardEvent e)
     {
-        foreach (KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
+        foreach (KeyCode kcode in /*Enum.GetValues(typeof(KeyCode))*/ GameCodes)
             if (Input.GetKey(kcode))
                 EventManager.s_Instance.TriggerEvent<KeyPressEvent>(new KeyPressEvent(kcode));
+    }
+
+    private IEnumerable<KeyCode> GameCodes
+    {
+        get { return Codes(); }
+    }
+
+    private IEnumerable<KeyCode> Codes()
+    {
+        yield return KeyCode.W;
+        yield return KeyCode.A;
+        yield return KeyCode.S;
+        yield return KeyCode.D;
+        yield return KeyCode.Space;
     }
 }

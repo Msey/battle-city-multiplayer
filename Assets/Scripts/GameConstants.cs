@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-    public enum eDirection
+    public enum Direction
     {
         Up,
         Down,
@@ -12,23 +12,23 @@ public static partial class GameConstants
 {
     public const float cellSize = 1.28f;
 
-    public static Vector2 DirectionVector(eDirection direction)
+    public static Vector2 DirectionVector(Direction direction)
     {
         switch (direction)
         {
-            case eDirection.Up:
+            case Direction.Up:
                 return Vector2.up;
-            case eDirection.Down:
+            case Direction.Down:
                 return Vector2.down;
-            case eDirection.Left:
+            case Direction.Left:
                 return Vector2.left;
-            case eDirection.Right:
+            case Direction.Right:
                 return Vector2.right;
         }
         return Vector2.zero;
     }
 
-    public static float DirectionAngle(eDirection direction)
+    public static float DirectionAngle(Direction direction)
     {
         return -Vector2.Angle(Vector2.up, DirectionVector(direction));
     }
