@@ -26,6 +26,9 @@ public class BulletBehaviour : MonoBehaviour
 
             if (obstacles.Length > 0)
             {
+#if DEBUG
+                print("bullets["+i+"].Die();");
+#endif
                 bullets[i].Die();
                 bullets.Remove(bullets[i]);
             }

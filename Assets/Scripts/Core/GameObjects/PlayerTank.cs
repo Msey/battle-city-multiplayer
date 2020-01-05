@@ -18,13 +18,7 @@ public class PlayerTank : TankBase
     {
         if (ammoLimit > 0 && ShootDelay <= 0)
         {
-            var bullet = Instantiate(bulletPrefab, transform.position, transform.rotation).gameObject.UseComponent<Bullet>();
-            //bullet.Owner = this;
-            //bullet.direction = this.direction;
-            //bullet.Move();
-            ammoLimit--;
-            shootDelay = SHOOT_DELAY_CONSTANT;
-            print(ammoLimit);
+
         }
     }
 

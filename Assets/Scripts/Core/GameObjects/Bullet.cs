@@ -32,6 +32,13 @@ public class Bullet : MonoBehaviour
         get { return obstaclesMask; }
     }
 
+    ICombat owner;
+    public ICombat Owner
+    {
+        get { return owner; }
+        set { print("set owner"); owner = value; }
+    }
+
     void Start()
     {
         circleCollider = GetComponent<CircleCollider2D>();
@@ -43,6 +50,8 @@ public class Bullet : MonoBehaviour
 
     public void Die()
     {
-        Destroy(gameObject);
+        print("destroyed");
+        Owner.UpdateAmmo();
+        Destroy(this.gameObject);
     }
 }

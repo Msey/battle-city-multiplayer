@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    PlayerTank tank1;
+    TestTankController tank1;
 
     KeyBoardEvent kbEvent = new KeyBoardEvent();
 
     private void Start()
     {
-        tank1 = FindObjectOfType<PlayerTank>();
+        tank1 = FindObjectOfType<TestTankController>();
         //print(tank1 != null ? "tank exists":"tank doesn't exist");
 
         EventManager.s_Instance.StartListening<KeyBoardEvent>(InputHandler);
@@ -28,10 +28,10 @@ public class InputManager : MonoBehaviour
         Action<string> invokable = print;
         switch (e.code)
         {
-            case KeyCode.W: tank1.MoveUp(); break;
-            case KeyCode.A: tank1.MoveLeft(); break;
-            case KeyCode.S: tank1.MoveDown(); break;
-            case KeyCode.D: tank1.MoveRight(); break;
+            case KeyCode.W: tank1.UpdateMovement(Direction.Up); break;
+            case KeyCode.A: tank1.UpdateMovement(Direction.Left); break;
+            case KeyCode.S: tank1.UpdateMovement(Direction.Down); break;
+            case KeyCode.D: tank1.UpdateMovement(Direction.Right); break;
             case KeyCode.Space: tank1.Shoot(); break;
         }
     }
