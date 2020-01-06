@@ -322,6 +322,39 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &774635691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774635687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5abe7d616ca0a24892a7062dd4716f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTankAnimations:
+  - tankette:
+    - {fileID: 7400000, guid: 8b0f7a844827c5b42883b3fd6c5b6f52, type: 2}
+    - {fileID: 7400000, guid: 815f695bfa5bfcc47817c14b94caf8cf, type: 2}
+    - {fileID: 7400000, guid: a17d06fc0907e6046ac188ec2c89dc2a, type: 2}
+    - {fileID: 7400000, guid: 54a85f9832e07ae428b832cd870fe2d3, type: 2}
+    light:
+    - {fileID: 7400000, guid: a834c53e7032d504b8eb122aee871e19, type: 2}
+    - {fileID: 7400000, guid: 5d5e1d787660f63498cc8fafa602ae41, type: 2}
+    - {fileID: 7400000, guid: 946e3e438ee623b4d8751036ba6458aa, type: 2}
+    - {fileID: 7400000, guid: 55d415ea7f3d6bb41a45d893daa24eee, type: 2}
+    medium:
+    - {fileID: 7400000, guid: b922b9d60608af247bd7e8f5fe13c6f0, type: 2}
+    - {fileID: 7400000, guid: e07d7925af683674cb8fe0b7950798ea, type: 2}
+    - {fileID: 7400000, guid: 7367608a1aa8cde4e95cf9ded9f669de, type: 2}
+    - {fileID: 7400000, guid: b07893d1ef105594fbb2c338a4b719c9, type: 2}
+    heavy:
+    - {fileID: 7400000, guid: eda632db3a48a564496463d6632f55e3, type: 2}
+    - {fileID: 7400000, guid: 0576d4749bafda44b8ebf1f82f4ee5c7, type: 2}
+    - {fileID: 7400000, guid: 487b5484c9c8a1846b3b86dd5e6bae19, type: 2}
+    - {fileID: 7400000, guid: 0453a2f9c4bb017478032d3b5b6b1b97, type: 2}
 --- !u!58 &774635692
 CircleCollider2D:
   m_ObjectHideFlags: 0

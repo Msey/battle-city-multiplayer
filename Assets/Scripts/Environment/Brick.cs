@@ -38,16 +38,16 @@ public class Brick : MonoBehaviour, IBulletTarget
         {
             switch (bullet.Direction)
             {
-                case GameConstants.eDirection.Down:
+                case GameConstants.Direction.Down:
                     SetBrickState(BrickState.Bottom);
                     break;
-                case GameConstants.eDirection.Up:
+                case GameConstants.Direction.Up:
                     SetBrickState(BrickState.Top);
                     break;
-                case GameConstants.eDirection.Left:
+                case GameConstants.Direction.Left:
                     SetBrickState(BrickState.Left);
                     break;
-                case GameConstants.eDirection.Right:
+                case GameConstants.Direction.Right:
                     SetBrickState(BrickState.Right);
                     break;
             }

@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(TankMovement))]
+[RequireComponent(typeof(TankMovement),typeof(PlayerTankAnimator))]
 public class TestTankController : MonoBehaviour
 {
     float shootDelay = 0.0f;
     public GameObject bulletPrefab;
     TankMovement tankMovement;
+    PlayerTankAnimator tankAnimator;
     void Start()
     {
         tankMovement = GetComponent<TankMovement>();
+        tankAnimator = GetComponent<PlayerTankAnimator>();
     }
 
     void Update()
@@ -22,6 +24,9 @@ public class TestTankController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
             Shoot();
+
+        if (Input.GetKeyDown(KeyCode.F2))
+            ChangeTankLevel();
     }
 
     void UpdateMovement()
@@ -31,13 +36,13 @@ public class TestTankController : MonoBehaviour
 
         tankMovement.Stoped = false;
         if (verticalAxis > 0.0f)
-            tankMovement.Direction = GameConstants.eDirection.Up;
+            tankMovement.Direction = GameConstants.Direction.Up;
         else if (verticalAxis < 0.0f)
-            tankMovement.Direction = GameConstants.eDirection.Down;
+            tankMovement.Direction = GameConstants.Direction.Down;
         else if (horizontalAxis < 0.0f)
-            tankMovement.Direction = GameConstants.eDirection.Left;
+            tankMovement.Direction = GameConstants.Direction.Left;
         else if (horizontalAxis > 0.0f)
-            tankMovement.Direction = GameConstants.eDirection.Right;
+            tankMovement.Direction = GameConstants.Direction.Right;
         else
             tankMovement.Stoped = true;
     }
@@ -54,5 +59,10 @@ public class TestTankController : MonoBehaviour
                 bulletComponent.Direction = tankMovement.Direction;
             shootDelay = SHOOT_DELAY_CONSTANT;
         }
+    }
+
+    void ChangeTankLevel()
+    {
+        tankAnimator.LevelType = (PlayerTankAnimator.TankLevelType)(int)(tankAnimator.LevelType) + 1;
     }
 }
