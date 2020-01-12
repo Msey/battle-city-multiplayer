@@ -91,7 +91,7 @@ public class PlayerTankAnimator : MonoBehaviour
     void ChangeAnimationClips()
     {
         var tankStateClips = playerTankAnimations[animationIndex].GetClips(LevelType);
-        clipOverrides["PlayerTankUp"] = tankStateClips[0];
+        clipOverrides["PlayerTankUp"] = tankStateClips[0]; //TODO rename
         clipOverrides["PlayerTankDown"] = tankStateClips[1];
         clipOverrides["PlayerTankLeft"] = tankStateClips[2];
         clipOverrides["PlayerTankRight"] = tankStateClips[3];
