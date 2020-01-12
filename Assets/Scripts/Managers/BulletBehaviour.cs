@@ -2,48 +2,49 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletBehaviour : MonoBehaviour
+public class BulletBehaviour : Singleton<BulletBehaviour>
 {
-    static List<Bullet> bullets;
+    static HashSet<Bullet> bullets;
     void Start()
     {
-        bullets = new List<Bullet>();
+        bullets = new HashSet<Bullet>();
     }
 
     void Update()
     {
-        for ( int i = 0; i < bullets.Count; i++)
+        var removedBullets = new List<Bullet>();
+        foreach (Bullet bullet in bullets)
         {
-            bullets[i].transform.position = (Vector2)bullets[i].transform.position + bullets[i].velocity * GameConstants.DirectionVector(bullets[i].Direction) * Time.deltaTime;
-            bullets[i].transform.rotation = Quaternion.Euler(0.0f, 0.0f, GameConstants.DirectionAngle(bullets[i].Direction));
-            var obstacles = Physics2D.OverlapCircleAll(bullets[i].transform.position, bullets[i].Radius, bullets[i].ObstaclesMask);
+            bullet.transform.position = (Vector2)bullet.transform.position + bullet.velocity * GameUtils.DirectionVector(bullet.Direction) * Time.deltaTime;
+            bullet.transform.rotation = Quaternion.Euler(0.0f, 0.0f, GameUtils.DirectionAngle(bullet.Direction));
+            var obstacles = Physics2D.OverlapCircleAll(bullet.transform.position, bullet.Radius, bullet.ObstaclesMask);
             foreach (var obstacle in obstacles)
             {
                 var bulletTarget = (obstacle.gameObject.GetComponent<IBulletTarget>());
                 if (bulletTarget != null)
-                    bulletTarget.OnHit(bullets[i]);
+                    bulletTarget.OnHit(bullet);
             }
 
             if (obstacles.Length > 0)
             {
 #if DEBUG
-                print("bullets["+i+"].Die();");
+                print("bullet Die();");
 #endif
-                bullets[i].Die();
-                bullets.Remove(bullets[i]);
+                bullet.Die();
+                removedBullets.Add(bullet);
             }
         }
+
+        foreach (Bullet removedBullet in removedBullets)
+            bullets.Remove(removedBullet);
 #if DEBUG
-        print("Total bullets: " + bullets.Count);
+            print("Total bullets: " + bullets.Count);
 #endif
     }
 
-    public static void AddBullet(Bullet bullet)
+    public void AddBullet(Bullet bullet)
     {
         if (bullet != null && bullets != null)
             bullets.Add(bullet);
     }
-
-
-
 }

@@ -14,7 +14,7 @@ public enum BulletStrength
 [RequireComponent(typeof(CircleCollider2D))]
 public class Bullet : MonoBehaviour
 {
-    public Direction Direction { get; set; } = Direction.Right;
+    public GameConstants.Direction Direction { get; set; } = GameConstants.Direction.Right;
 
     public BulletStrength Power = BulletStrength.Standart;
 
@@ -44,14 +44,14 @@ public class Bullet : MonoBehaviour
         circleCollider = GetComponent<CircleCollider2D>();
         obstaclesMask = LayerMask.GetMask("Brick", "Concrete");
 
-        BulletBehaviour.AddBullet(this);
+        BulletBehaviour.s_Instance.AddBullet(this);
     }
 
 
     public void Die()
     {
         print("destroyed");
-        Owner.UpdateAmmo();
+        //Owner.UpdateAmmo();
         Destroy(this.gameObject);
     }
 }

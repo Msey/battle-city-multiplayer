@@ -28,11 +28,11 @@ public class InputManager : MonoBehaviour
         Action<string> invokable = print;
         switch (e.code)
         {
-            case KeyCode.W: tank1.UpdateMovement(Direction.Up); break;
-            case KeyCode.A: tank1.UpdateMovement(Direction.Left); break;
-            case KeyCode.S: tank1.UpdateMovement(Direction.Down); break;
-            case KeyCode.D: tank1.UpdateMovement(Direction.Right); break;
-            case KeyCode.Space: tank1.Shoot(); break;
+           // case KeyCode.W: tank1.UpdateMovement(Ga Direction.Up); break;
+           // case KeyCode.A: tank1.UpdateMovement(Direction.Left); break;
+           // case KeyCode.S: tank1.UpdateMovement(Direction.Down); break;
+           // case KeyCode.D: tank1.UpdateMovement(Direction.Right); break;
+           // case KeyCode.Space: tank1.Shoot(); break;
         }
     }
 
