@@ -96,8 +96,6 @@ public class EnemyTankAnimator : MonoBehaviour
         animatorOverrideController.GetOverrides(clipOverrides);
         ChangeAnimationClips();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        ArmorColor = eArmorColor.Green;
-        Blinking = true;
     }
 
     void CheckAnimations()
