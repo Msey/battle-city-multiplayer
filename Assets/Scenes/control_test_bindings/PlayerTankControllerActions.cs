@@ -25,7 +25,7 @@ public class PlayerTankControllerActions : PlayerActionSet
 
     public static PlayerTankControllerActions CreateWithDefaultBindings()
     {
-        var playerActions = new PlayerTankControllerActions();        
+        var playerActions = new PlayerTankControllerActions();
 
 
         playerActions.Up.AddDefaultBinding(Key.W);
@@ -41,5 +41,33 @@ public class PlayerTankControllerActions : PlayerActionSet
         playerActions.ListenOptions.UnsetDuplicateBindingsOnSet = true;
 
         return playerActions;
+    }
+
+
+    void BindListen()
+    {
+        var actionCount = this.Actions.Count;
+        for (var i = 0; i < actionCount; i++)
+        {
+            var action = this.Actions[i];
+
+            var name = action.Name;
+            if (action.IsListeningForBinding)
+            {
+                name += " (Listening)";
+            }
+            //name += " via " + action.ActiveDevice.Name;
+            //name += ", class: " + action.LastDeviceClass;
+            //name += ", style: " + action.LastDeviceStyle;
+
+            var bindingCount = action.Bindings.Count;
+            for (var j = 0; j < bindingCount; j++)
+            {
+                var binding = action.Bindings[j];
+
+                    action.ListenForBindingReplacing(binding);
+
+            }
+        }
     }
 }
