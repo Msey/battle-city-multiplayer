@@ -20,5 +20,9 @@ public class PlayerControllerBindings : MonoBehaviour
 
         if (playerActions.Left.IsPressed) Debug.Log(playerActions.Left.Name);
         if (playerActions.Right.IsPressed) Debug.Log(playerActions.Right.Name);
+
+        if (Input.GetKeyDown(KeyCode.Z))
+            playerActions.BindInput(InputType.Fire);
+
     }
 }

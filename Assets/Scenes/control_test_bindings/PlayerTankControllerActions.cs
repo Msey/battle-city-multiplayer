@@ -37,8 +37,21 @@ public class PlayerTankControllerActions : PlayerActionSet
         playerActions.Fire.AddDefaultBinding(Key.Space);
 
         playerActions.ListenOptions.IncludeUnknownControllers = true;
-        playerActions.ListenOptions.MaxAllowedBindings = 1;
+        playerActions.ListenOptions.MaxAllowedBindings = 3;
         playerActions.ListenOptions.UnsetDuplicateBindingsOnSet = true;
+
+        playerActions.ListenOptions.OnBindingFound = (action, binding) => {
+            if (binding == new KeyBindingSource(Key.Escape))
+            {
+                action.StopListeningForBinding();
+                return false;
+            }
+            return true;
+        };
+
+        playerActions.ListenOptions.OnBindingAdded += (action, binding) => {
+            Debug.Log("Binding added... " + binding.DeviceName + ": " + binding.Name);
+        };
 
         return playerActions;
     }
@@ -70,4 +83,39 @@ public class PlayerTankControllerActions : PlayerActionSet
             }
         }
     }
+
+
+    private void BindInput(PlayerAction action)
+    {
+        var aCount = action.Bindings.Count;
+        for (var i = 0; i < aCount; i++)
+        {
+            var binding = Up.Bindings[i];
+
+            action.ListenForBindingReplacing(binding);
+        }
+    }
+
+    public void BindInput(InputType type)
+    {
+        switch (type)
+        {
+            case InputType.Up: BindInput(this.Up); break; 
+            case InputType.Down: BindInput(this.Down); break; 
+            case InputType.Left: BindInput(this.Left); break; 
+            case InputType.Right: BindInput(this.Right); break; 
+            case InputType.Fire: BindInput(this.Fire); break;
+        }
+    }
+
+
+}
+
+public enum InputType
+{
+    Up,
+    Down,
+    Left,
+    Right,
+    Fire
 }
