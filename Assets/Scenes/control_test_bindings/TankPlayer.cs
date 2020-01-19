@@ -72,7 +72,7 @@ public class TankPlayer : MonoBehaviour
 
     void OnGUI()
     {
-        const float h = 22.0f;
+        const float h = 11.0f;
         var y = 10.0f;
 
         GUI.Label(new Rect(10, y, 300, y + h), "Last Input Type: " + Actions.LastInputType);

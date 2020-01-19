@@ -32,10 +32,12 @@ public class TankPlayerActions : PlayerActionSet
         actions.Left.AddDefaultBinding(Key.LeftArrow);
         actions.Right.AddDefaultBinding(Key.RightArrow);
 
-        actions.Up.AddDefaultBinding(Key.UpArrow);
-        actions.Down.AddDefaultBinding(Key.DownArrow);
-        actions.Left.AddDefaultBinding(Key.LeftArrow);
-        actions.Right.AddDefaultBinding(Key.RightArrow);
+        actions.Up.AddDefaultBinding(Key.W);
+        actions.Down.AddDefaultBinding(Key.S);
+        actions.Left.AddDefaultBinding(Key.A);
+        actions.Right.AddDefaultBinding(Key.D);
+
+        actions.Fire.AddDefaultBinding(Key.Space);
 
         return actions;
     }

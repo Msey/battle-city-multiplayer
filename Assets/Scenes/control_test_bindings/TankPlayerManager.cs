@@ -8,13 +8,14 @@ public class TankPlayerManager : MonoBehaviour
 
     const int maxPlayers = 4;
 
+
     List<TankPlayer> players = new List<TankPlayer>(maxPlayers);
 
     TankPlayerActions keyboardListener;
     TankPlayerActions joystickListener;
 
 
-    void OnEnable()
+    void Start()
     {
         InControl.InputManager.OnDeviceDetached += OnDeviceDetached;
 
@@ -33,23 +34,44 @@ public class TankPlayerManager : MonoBehaviour
 
 
 
+    void Update()
+    {
+        if (JoinButtonWasPressedOnListener(joystickListener))
+        {
+            var inputDevice = InControl.InputManager.ActiveDevice;
 
+            if (ThereIsNoPlayerUsingJoystick(inputDevice))
+            {
+                CreatePlayer(inputDevice);
+            }
+        }
 
+        if (JoinButtonWasPressedOnListener(keyboardListener))
+        {
+            if (ThereIsNoPlayerUsingKeyboard())
+            {
+                CreatePlayer(null);
+            }
+        }
+    }
 
+    bool ThereIsNoPlayerUsingJoystick(InputDevice inputDevice)
+    {
+        return FindPlayerUsingJoystick(inputDevice) == null;
+    }
+    bool ThereIsNoPlayerUsingKeyboard()
+    {
+        return FindPlayerUsingKeyboard() == null;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    bool JoinButtonWasPressedOnListener(TankPlayerActions actions)
+    {
+        return actions.Up.WasPressed || 
+            actions.Down.WasPressed ||
+            actions.Left.WasPressed || 
+            actions.Right.WasPressed ||
+            actions.Fire.WasPressed;
+    }
 
 
     void OnDeviceDetached(InputDevice inputDevice)
@@ -75,10 +97,49 @@ public class TankPlayerManager : MonoBehaviour
 
         return null;
     }
+    TankPlayer FindPlayerUsingKeyboard()
+    {
+        var playerCount = players.Count;
+        for (var i = 0; i < playerCount; i++)
+        {
+            var player = players[i];
+            if (player.Actions == keyboardListener)
+            {
+                return player;
+            }
+        }
+
+        return null;
+    }
+
+
+    TankPlayer CreatePlayer(InputDevice inputDevice)
+    {
+        if (players.Count < maxPlayers)
+        {
+            var gameObject = new GameObject("player_0");
+            var player = gameObject.UseComponent<TankPlayer>();
+
+            if (inputDevice == null)
+                player.Actions = keyboardListener;
+            else
+            {
+                var actions = TankPlayerActions.CreateWithJoystickBindings();
+                actions.Device = inputDevice;
+
+                player.Actions = actions;
+            }
+
+            players.Add(player);
+
+            return player;
+        }
+
+        return null;
+    }
 
     void RemovePlayer(TankPlayer player)
     {
-        //playerPositions.Insert(0, player.transform.position);
         players.Remove(player);
         player.Actions = null;
         Destroy(player.gameObject);
