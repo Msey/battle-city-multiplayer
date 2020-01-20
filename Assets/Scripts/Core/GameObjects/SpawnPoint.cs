@@ -10,6 +10,13 @@ public class SpawnPoint : MonoBehaviour
     public delegate void SpawnRequest(Transform transform);
     Queue<SpawnRequest> spawnRequests = new Queue<SpawnRequest>();
 
+    public enum PointType
+    {
+        Player,
+        Enemy
+    }
+    public PointType pointType = PointType.Player;
+
     void Start()
     {
         animator = GetComponent<SpawnPointAnimatorController>();
