@@ -36,9 +36,14 @@ public class TankPlayerManager : MonoBehaviour
 
     void Update()
     {
+            var inputDevice = InControl.InputManager.ActiveDevice;
+        print(InControl.InputManager.Devices.Count);
+        for (int l = 0; l < InControl.InputManager.Devices.Count; l++)
+            print(InControl.InputManager.Devices[l].Name);
+
+
         if (JoinButtonWasPressedOnListener(joystickListener))
         {
-            var inputDevice = InControl.InputManager.ActiveDevice;
 
             if (ThereIsNoPlayerUsingJoystick(inputDevice))
             {
