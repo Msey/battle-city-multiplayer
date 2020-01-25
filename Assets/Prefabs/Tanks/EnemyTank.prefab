@@ -10,12 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 7186440764920074317}
   - component: {fileID: 7186440764920074316}
-  - component: {fileID: 7186440764920074307}
   - component: {fileID: 7186440764920074313}
   - component: {fileID: 7186440764920074318}
   - component: {fileID: 7186440764920074319}
   - component: {fileID: 7186440764920074312}
-  - component: {fileID: 7186440764920074315}
+  - component: {fileID: 684632444662902416}
   m_Layer: 0
   m_Name: EnemyTank
   m_TagString: Untagged
@@ -87,20 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7186440764920074307
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7186440764920074306}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff7cd2f91b97e4a429b20a5a7003cd17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  direction: 0
-  bulletPrefab: {fileID: 0}
 --- !u!58 &7186440764920074313
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -204,7 +189,7 @@ MonoBehaviour:
     - {fileID: 7400000, guid: a792bec736b510044804c249a3b59d63, type: 2}
   tankIndex: 3
   inBlinkFrameState: 0
---- !u!114 &7186440764920074315
+--- !u!114 &684632444662902416
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -216,5 +201,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c28af5a07db656a4bbb928c86618197f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 1529277084776549667, guid: d9364bf9dcc706042a3e87d2c5fc6af5,
-    type: 3}
+  bulletPrefab: {fileID: 0}

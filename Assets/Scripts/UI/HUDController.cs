@@ -9,6 +9,7 @@ public class HUDController : MonoBehaviour
     public LayoutGroup tanksCountLayout;
     public GameObject tanksPrefab;
     private List<GameObject> tanksIcons;
+    private int enemyTanksCount = 0;
 
     public LayoutGroup livesPanelLayout;
     public GameObject livesPanelPrefab;
@@ -25,16 +26,18 @@ public class HUDController : MonoBehaviour
         livesPanels = new List<GameObject>();
         Assert.IsNotNull(livesPanelLayout);
         Assert.IsNotNull(livesPanelPrefab);
-    }
 
-    private void Start()
-    {
-        EventManager.s_Instance.StartListening<LevelStartedEvent>(OnGameStarted);
+        if (EventManager.s_Instance != null)
+        {
+            EventManager.s_Instance.StartListening<LevelStartedEvent>(OnGameStarted);
+            EventManager.s_Instance.StartListening<EnemyTankCreatedEvent>(OnEnemyTankCreated);
+        }
     }
 
     private void OnDestroy()
     {
         EventManager.s_Instance.StopListening<LevelStartedEvent>(OnGameStarted);
+        EventManager.s_Instance.StopListening<EnemyTankCreatedEvent>(OnEnemyTankCreated);
     }
 
     public void OnBackToMenuClicked()
@@ -45,8 +48,22 @@ public class HUDController : MonoBehaviour
     public void OnGameStarted(LevelStartedEvent e)
     {
         SetStage(LevelsManager.s_Instance.CurrentGameInfo.CurrentStage);
-        SetEnemyTanksCount(10);
+        LoadGameInfo();
+    }
+
+    private void LoadGameInfo()
+    {
+        if (ClassicGameManager.s_Instance != null)
+            SetEnemyTanksCount(ClassicGameManager.s_Instance.LevelEnemeyTanksCount);
+        else
+            SetEnemyTanksCount(0);
+
         SetLivesPanelCount(LevelsManager.s_Instance.CurrentGameInfo.PlayersCount);
+    }
+
+    void OnEnemyTankCreated(EnemyTankCreatedEvent e)
+    {
+        SetEnemyTanksCount(enemyTanksCount - 1);
     }
 
     public void SetStage(int stage)
@@ -58,6 +75,8 @@ public class HUDController : MonoBehaviour
     {
         if (!Utils.Verify(count >= 0))
             return;
+
+        enemyTanksCount = count;
 
         while (tanksIcons.Count < count)
         {
