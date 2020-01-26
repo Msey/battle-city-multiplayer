@@ -2,17 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+class EnemyTankCreatedEvent
+{
+}
+
 [RequireComponent(typeof(TankMovement),typeof(EnemyTankAnimator))]
-public class TestEnemyTankController : MonoBehaviour
+public class EnemyTankController : MonoBehaviour
 {
     float shootDelay = 0.0f;
     public GameObject bulletPrefab;
     TankMovement tankMovement;
     EnemyTankAnimator tankAnimator;
-    void Start()
+
+    private void Awake()
     {
         tankMovement = GetComponent<TankMovement>();
         tankAnimator = GetComponent<EnemyTankAnimator>();
+
+        if (EventManager.s_Instance != null)
+            EventManager.s_Instance.TriggerEvent<EnemyTankCreatedEvent>(new EnemyTankCreatedEvent());
     }
 
     void Update()

@@ -32,7 +32,8 @@ public class TankMovement : MonoBehaviour
             }
 
             direction = value;
-            animator.SetInteger("Direction", (int) direction);
+            if (animator)
+                animator.SetInteger("Direction", (int) direction);
         }
     }
 
@@ -61,11 +62,12 @@ public class TankMovement : MonoBehaviour
     Animator animator;
     int obstaclesMask = 0;
 
-    void Start()
+    private void Awake()
     {
         circleCollider = GetComponent<CircleCollider2D>();
         animator = GetComponent<Animator>();
         animator.SetFloat("Velocity", 0.0f);
+        animator.SetInteger("Direction", (int)direction);
         obstaclesMask = LayerMask.GetMask("Water", "Brick", "Concrete");
     }
 

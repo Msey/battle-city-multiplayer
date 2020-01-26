@@ -10,4 +10,12 @@ public static partial class GameConstants
         Left = 2,
         Right = 3,
     }
+
+    public enum EnemyTankType
+    {
+        Basic,
+        Fast,
+        Power,
+        Armor,
+    }
 }
