@@ -27,6 +27,8 @@ public class TankPlayerActions : PlayerActionSet
     {
         var actions = new TankPlayerActions();
 
+        actions.ListenOptions.IncludeUnknownControllers = true;
+
         actions.Up.AddDefaultBinding(Key.UpArrow);
         actions.Down.AddDefaultBinding(Key.DownArrow);
         actions.Left.AddDefaultBinding(Key.LeftArrow);
@@ -39,31 +41,8 @@ public class TankPlayerActions : PlayerActionSet
 
         actions.Fire.AddDefaultBinding(Key.Space);
 
-        return actions;
-    }
-
-
-    public static TankPlayerActions CreateWithJoystickBindings()
-    {
-        var actions = new TankPlayerActions();
-
-        actions.Up.AddDefaultBinding(InputControlType.Action1);
-        actions.Down.AddDefaultBinding(InputControlType.Action2);
-        actions.Left.AddDefaultBinding(InputControlType.Action3);
-        actions.Right.AddDefaultBinding(InputControlType.Action4);
-        actions.Fire.AddDefaultBinding(InputControlType.Action5);
-
-        actions.Up.AddDefaultBinding(InputControlType.LeftStickUp);
-        actions.Down.AddDefaultBinding(InputControlType.LeftStickDown);
-        actions.Left.AddDefaultBinding(InputControlType.LeftStickLeft);
-        actions.Right.AddDefaultBinding(InputControlType.LeftStickRight);
-        actions.Fire.AddDefaultBinding(InputControlType.RightStickButton);
-
-        actions.Up.AddDefaultBinding(InputControlType.DPadUp);
-        actions.Down.AddDefaultBinding(InputControlType.DPadDown);
-        actions.Left.AddDefaultBinding(InputControlType.DPadLeft);
-        actions.Right.AddDefaultBinding(InputControlType.DPadRight);
-        actions.Fire.AddDefaultBinding(InputControlType.DPadX);
+        actions.ListenOptions.OnBindingAdded += (action, binding) =>
+        Debug.Log("Binding added... " + binding.DeviceName + ": " + binding.Name);
 
         return actions;
     }

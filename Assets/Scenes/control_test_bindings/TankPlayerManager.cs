@@ -6,148 +6,94 @@ using InControl;
 public class TankPlayerManager : MonoBehaviour
 {
 
-    const int maxPlayers = 4;
+    public int maxPlayers = 4;
+    // const int ControlInputCount = (int)InputControlType.Count;
 
-
-    List<TankPlayer> players = new List<TankPlayer>(maxPlayers);
-
-    TankPlayerActions keyboardListener;
-    TankPlayerActions joystickListener;
+    List<TankPlayer> players;//= new List<TankPlayer>(maxPlayers);
 
 
     void Start()
     {
-        InControl.InputManager.OnDeviceDetached += OnDeviceDetached;
+        players = new List<TankPlayer>(maxPlayers);
 
-        keyboardListener = TankPlayerActions.CreateWithKeyboardBindings();
-        joystickListener = TankPlayerActions.CreateWithJoystickBindings();
+        for (int i = 0; i < maxPlayers; i++)
+        {
+            var player = new TankPlayer();
+            if (i == 0) { player.PlayerActionSet = TankPlayerActions.CreateWithKeyboardBindings(); print("created player " + i); }
+            players.Add(player);
+        }
     }
 
-
-    void OnDisable()
-    {
-        InControl.InputManager.OnDeviceDetached -= OnDeviceDetached;
-        joystickListener.Destroy();
-        keyboardListener.Destroy();
-    }
-
-
-
+    bool setkey = false;
 
     void Update()
     {
-            var inputDevice = InControl.InputManager.ActiveDevice;
-        print(InControl.InputManager.Devices.Count);
-        for (int l = 0; l < InControl.InputManager.Devices.Count; l++)
-            print(InControl.InputManager.Devices[l].Name);
+        //    var inputDevice = InControl.InputManager.ActiveDevice;
+        //print(InControl.InputManager.Devices.Count);
+        //for (int l = 0; l < InControl.InputManager.Devices.Count; l++)
+        //    if(InControl.InputManager.Devices[l].AnyButtonWasPressed)
+        //        print("d: "+InControl.InputManager.Devices[l].GetFirstPressedButton());
+        if (Input.GetKeyDown(KeyCode.Z)) setkey = true;
 
+        //for (int i = 0; i < maxPlayers; i++)
+        //{
+        //    print(i);
+        print(setkey);
 
-        if (JoinButtonWasPressedOnListener(joystickListener))
+        if (players[0] != null && players[0].PlayerActionSet != null)
         {
+            print("player(" + 0 + ")X: " + players[0].PlayerActionSet.Direction.X + "| Y: " + players[0].PlayerActionSet.Direction.Y + "| Fire: " + (players[0].PlayerActionSet.Fire.IsPressed ? "Y" : "N"));
 
-            if (ThereIsNoPlayerUsingJoystick(inputDevice))
+            var actionCount = players[0].PlayerActionSet.Actions.Count;
+           // print("actioncount:" + actionCount);
+            for (var j = 0; j < actionCount; j++)
             {
-                CreatePlayer(inputDevice);
-            }
-        }
+                var action = players[0].PlayerActionSet.Actions[j];
 
-        if (JoinButtonWasPressedOnListener(keyboardListener))
-        {
-            if (ThereIsNoPlayerUsingKeyboard())
-            {
-                CreatePlayer(null);
-            }
-        }
-    }
-
-    bool ThereIsNoPlayerUsingJoystick(InputDevice inputDevice)
-    {
-        return FindPlayerUsingJoystick(inputDevice) == null;
-    }
-    bool ThereIsNoPlayerUsingKeyboard()
-    {
-        return FindPlayerUsingKeyboard() == null;
-    }
-
-    bool JoinButtonWasPressedOnListener(TankPlayerActions actions)
-    {
-        return actions.Up.WasPressed || 
-            actions.Down.WasPressed ||
-            actions.Left.WasPressed || 
-            actions.Right.WasPressed ||
-            actions.Fire.WasPressed;
-    }
-
-
-    void OnDeviceDetached(InputDevice inputDevice)
-    {
-        var player = FindPlayerUsingJoystick(inputDevice);
-        if (player != null)
-        {
-            RemovePlayer(player);
-        }
-    }
-
-    TankPlayer FindPlayerUsingJoystick(InputDevice inputDevice)
-    {
-        var playerCount = players.Count;
-        for (var i = 0; i < playerCount; i++)
-        {
-            var player = players[i];
-            if (player.Actions.Device == inputDevice)
-            {
-                return player;
-            }
-        }
-
-        return null;
-    }
-    TankPlayer FindPlayerUsingKeyboard()
-    {
-        var playerCount = players.Count;
-        for (var i = 0; i < playerCount; i++)
-        {
-            var player = players[i];
-            if (player.Actions == keyboardListener)
-            {
-                return player;
-            }
-        }
-
-        return null;
-    }
-
-
-    TankPlayer CreatePlayer(InputDevice inputDevice)
-    {
-        if (players.Count < maxPlayers)
-        {
-            var gameObject = new GameObject("player_0");
-            var player = gameObject.UseComponent<TankPlayer>();
-
-            if (inputDevice == null)
-                player.Actions = keyboardListener;
-            else
-            {
-                var actions = TankPlayerActions.CreateWithJoystickBindings();
-                actions.Device = inputDevice;
-
-                player.Actions = actions;
+                var name = action.Name;
+                if (action.IsListeningForBinding)
+                {
+                    name += " (Listening)";
+                }
+                //else print(name);
+                if (setkey)
+                {
+                    action.ResetBindings();
+                    action.ListenForBindingReplacing(action.Bindings[0]);
+                    setkey = false;
+                }
             }
 
-            players.Add(player);
-
-            return player;
         }
-
-        return null;
+        //}
     }
+
+
+    //bool JoinButtonWasPressedOnListener(TankPlayerActions actions)
+    //{
+    //    return actions.Up.WasPressed || 
+    //        actions.Down.WasPressed ||
+    //        actions.Left.WasPressed || 
+    //        actions.Right.WasPressed ||
+    //        actions.Fire.WasPressed;
+    //}
 
     void RemovePlayer(TankPlayer player)
     {
         players.Remove(player);
-        player.Actions = null;
-        Destroy(player.gameObject);
+        player.PlayerActionSet = null;
+      //  Destroy(player.gameObject);
     }
+
+    public void SetPlayers(int amount)
+    {
+        for (int i = amount; i < maxPlayers; i++)
+        {
+          //  players[i].enabled = true; // TODO: добавить механизм отключения игроков
+        }
+    }
+
+
+    
 
 }
