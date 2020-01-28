@@ -25,9 +25,7 @@ public class TankPlayerActions : PlayerActionSet
 
     public static TankPlayerActions CreateWithKeyboardBindings()
     {
-        var actions = new TankPlayerActions();
-
-        actions.ListenOptions.IncludeUnknownControllers = true;
+        var actions = CreateWithEmptyBindings();
 
         actions.Up.AddDefaultBinding(Key.UpArrow);
         actions.Down.AddDefaultBinding(Key.DownArrow);
@@ -41,9 +39,19 @@ public class TankPlayerActions : PlayerActionSet
 
         actions.Fire.AddDefaultBinding(Key.Space);
 
+        return actions;
+    }
+
+    public static TankPlayerActions CreateWithEmptyBindings()
+    {
+        var actions = new TankPlayerActions();
+
+        actions.ListenOptions.IncludeUnknownControllers = true;
+
         actions.ListenOptions.OnBindingAdded += (action, binding) =>
-        Debug.Log("Binding added... " + binding.DeviceName + ": " + binding.Name);
+            Debug.Log("Binding added... " + binding.DeviceName + ": " + binding.Name);
 
         return actions;
+
     }
 }

@@ -19,7 +19,11 @@ public class TankPlayerManager : MonoBehaviour
         for (int i = 0; i < maxPlayers; i++)
         {
             var player = new TankPlayer();
-            if (i == 0) { player.PlayerActionSet = TankPlayerActions.CreateWithKeyboardBindings(); print("created player " + i); }
+
+            player.PlayerActionSet = (i == 0)
+                ? TankPlayerActions.CreateWithKeyboardBindings()
+                : TankPlayerActions.CreateWithEmptyBindings();
+
             players.Add(player);
         }
     }
@@ -28,16 +32,8 @@ public class TankPlayerManager : MonoBehaviour
 
     void Update()
     {
-        //    var inputDevice = InControl.InputManager.ActiveDevice;
-        //print(InControl.InputManager.Devices.Count);
-        //for (int l = 0; l < InControl.InputManager.Devices.Count; l++)
-        //    if(InControl.InputManager.Devices[l].AnyButtonWasPressed)
-        //        print("d: "+InControl.InputManager.Devices[l].GetFirstPressedButton());
         if (Input.GetKeyDown(KeyCode.Z)) setkey = true;
 
-        //for (int i = 0; i < maxPlayers; i++)
-        //{
-        //    print(i);
         print(setkey);
 
         if (players[0] != null && players[0].PlayerActionSet != null)
@@ -68,32 +64,50 @@ public class TankPlayerManager : MonoBehaviour
         //}
     }
 
-
-    //bool JoinButtonWasPressedOnListener(TankPlayerActions actions)
-    //{
-    //    return actions.Up.WasPressed || 
-    //        actions.Down.WasPressed ||
-    //        actions.Left.WasPressed || 
-    //        actions.Right.WasPressed ||
-    //        actions.Fire.WasPressed;
-    //}
-
-    void RemovePlayer(TankPlayer player)
-    {
-        players.Remove(player);
-        player.PlayerActionSet = null;
-      //  Destroy(player.gameObject);
-    }
-
     public void SetPlayers(int amount)
     {
         for (int i = amount; i < maxPlayers; i++)
         {
-          //  players[i].enabled = true; // TODO: добавить механизм отключения игроков
+            players[i].EnabledController = true;
         }
     }
 
+    public void BindPlayerKeyCode(int playerNumber, ActionType actionType)
+    {
+        var player = players[playerNumber - 1];
 
-    
+        switch(actionType)
+        {
+            case ActionType.Fire:
+                player.PlayerActionSet.Fire.ResetBindings();
+                player.PlayerActionSet.Fire.ListenForBindingReplacing(player.PlayerActionSet.Fire.Bindings[0]);
+                break;
+            case ActionType.Left:
+                player.PlayerActionSet.Left.ResetBindings();
+                player.PlayerActionSet.Left.ListenForBindingReplacing(player.PlayerActionSet.Left.Bindings[0]);
+                break;
+            case ActionType.Right:
+                player.PlayerActionSet.Right.ResetBindings();
+                player.PlayerActionSet.Right.ListenForBindingReplacing(player.PlayerActionSet.Right.Bindings[0]);
+                break;
+            case ActionType.Up:
+                player.PlayerActionSet.Up.ResetBindings();
+                player.PlayerActionSet.Up.ListenForBindingReplacing(player.PlayerActionSet.Up.Bindings[0]);
+                break;
+            case ActionType.Down:
+                player.PlayerActionSet.Down.ResetBindings();
+                player.PlayerActionSet.Down.ListenForBindingReplacing(player.PlayerActionSet.Down.Bindings[0]);                
+                break;
+        }
+    }
+
+    public enum ActionType
+    {
+        Fire, 
+        Left,
+        Right,
+        Up,
+        Down
+    }
 
 }

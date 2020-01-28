@@ -4,7 +4,7 @@ using UnityEngine;
 public class TankPlayer //: MonoBehaviour
 {
     public TankPlayerActions PlayerActionSet { get; set; }
-
+    public bool EnabledController { get; set; }
 
     string saveData;
 
