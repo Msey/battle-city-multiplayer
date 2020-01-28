@@ -7,9 +7,10 @@ public class TankPlayerManager : MonoBehaviour
 {
 
     public int maxPlayers = 4;
-    // const int ControlInputCount = (int)InputControlType.Count;
 
-    List<TankPlayer> players;//= new List<TankPlayer>(maxPlayers);
+    public bool IsBindingListening { get; }
+
+    List<TankPlayer> players;
 
 
     void Start()
@@ -38,30 +39,10 @@ public class TankPlayerManager : MonoBehaviour
 
         if (players[0] != null && players[0].PlayerActionSet != null)
         {
-            print("player(" + 0 + ")X: " + players[0].PlayerActionSet.Direction.X + "| Y: " + players[0].PlayerActionSet.Direction.Y + "| Fire: " + (players[0].PlayerActionSet.Fire.IsPressed ? "Y" : "N"));
-
-            var actionCount = players[0].PlayerActionSet.Actions.Count;
-           // print("actioncount:" + actionCount);
-            for (var j = 0; j < actionCount; j++)
-            {
-                var action = players[0].PlayerActionSet.Actions[j];
-
-                var name = action.Name;
-                if (action.IsListeningForBinding)
-                {
-                    name += " (Listening)";
-                }
-                //else print(name);
-                if (setkey)
-                {
-                    action.ResetBindings();
-                    action.ListenForBindingReplacing(action.Bindings[0]);
-                    setkey = false;
-                }
-            }
-
+            print("player(" + 0 + ")X: " + players[0].PlayerActionSet.Direction.X + "| Y: " + 
+                players[0].PlayerActionSet.Direction.Y + "| Fire: " + 
+                (players[0].PlayerActionSet.Fire.IsPressed ? "Y" : "N"));
         }
-        //}
     }
 
     public void SetPlayers(int amount)
@@ -76,7 +57,7 @@ public class TankPlayerManager : MonoBehaviour
     {
         var player = players[playerNumber - 1];
 
-        switch(actionType)
+        switch (actionType)
         {
             case ActionType.Fire:
                 player.PlayerActionSet.Fire.ResetBindings();
@@ -96,18 +77,17 @@ public class TankPlayerManager : MonoBehaviour
                 break;
             case ActionType.Down:
                 player.PlayerActionSet.Down.ResetBindings();
-                player.PlayerActionSet.Down.ListenForBindingReplacing(player.PlayerActionSet.Down.Bindings[0]);                
+                player.PlayerActionSet.Down.ListenForBindingReplacing(player.PlayerActionSet.Down.Bindings[0]);
                 break;
         }
     }
 
     public enum ActionType
     {
-        Fire, 
+        Fire,
         Left,
         Right,
         Up,
         Down
     }
-
 }
