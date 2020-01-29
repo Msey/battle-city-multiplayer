@@ -27,20 +27,17 @@ public class TankPlayerManager : MonoBehaviour
 
             players.Add(player);
         }
+
+        LoadBindings();
     }
 
-    bool setkey = false;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z)) setkey = true;
-
-        print(setkey);
-
         if (players[0] != null && players[0].PlayerActionSet != null)
         {
-            print("player(" + 0 + ")X: " + players[0].PlayerActionSet.Direction.X + "| Y: " + 
-                players[0].PlayerActionSet.Direction.Y + "| Fire: " + 
+            print("player(" + 0 + ")X: " + players[0].PlayerActionSet.Direction.X + "| Y: " +
+                players[0].PlayerActionSet.Direction.Y + "| Fire: " +
                 (players[0].PlayerActionSet.Fire.IsPressed ? "Y" : "N"));
         }
     }
@@ -89,5 +86,34 @@ public class TankPlayerManager : MonoBehaviour
         Right,
         Up,
         Down
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveBindings();
+    }
+
+    string saveData = string.Empty;
+
+    void SaveBindings()
+    {
+        for (int i = 0; i < players.Count; i++)
+        {
+            saveData = players[i].PlayerActionSet.Save();
+            PlayerPrefs.SetString("BindingsPlayer_" + i, saveData);
+        }
+    }
+
+
+    void LoadBindings()
+    {
+        for (int i = 0; i < players.Count; i++)
+        {
+            if (PlayerPrefs.HasKey("BindingsPlayer_" + i))
+            {
+                saveData = PlayerPrefs.GetString("BindingsPlayer_" + i);
+                players[i].PlayerActionSet.Load(saveData);
+            }
+        }
     }
 }

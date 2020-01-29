@@ -6,7 +6,7 @@ public class SetControlsMenuManager : MonoBehaviour
 {
     string parentName = string.Empty;
 
-    TankPlayerManager PlayerManager;
+    private TankPlayerManager PlayerManager;
 
     private void Start()
     {
