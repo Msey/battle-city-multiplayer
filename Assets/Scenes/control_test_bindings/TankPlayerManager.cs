@@ -50,6 +50,33 @@ public class TankPlayerManager : MonoBehaviour
         }
     }
 
+
+    public string GetPlayerActionCode(int playerNumber, ActionType actionType)
+    {
+
+        var player = players[playerNumber];
+
+        switch (actionType)
+        {
+            case ActionType.Fire:
+                return player.PlayerActionSet.Fire.Bindings[0].Name;
+
+            case ActionType.Left:
+                return player.PlayerActionSet.Left.Bindings[0].Name;
+
+            case ActionType.Right:
+                return player.PlayerActionSet.Right.Bindings[0].Name;
+
+            case ActionType.Up:
+                return player.PlayerActionSet.Up.Bindings[0].Name;
+
+            case ActionType.Down:
+                return player.PlayerActionSet.Down.Bindings[0].Name;
+        }
+
+        return null;
+    }
+
     public void BindPlayerKeyCode(int playerNumber, ActionType actionType)
     {
         var player = players[playerNumber - 1];

@@ -48,6 +48,8 @@ public class TankPlayerActions : PlayerActionSet
 
         actions.ListenOptions.IncludeUnknownControllers = true;
 
+        actions.ListenOptions.MaxAllowedBindings = 1;
+
         actions.ListenOptions.OnBindingAdded += (action, binding) =>
             Debug.Log("Binding added... " + binding.DeviceName + ": " + binding.Name);
 
