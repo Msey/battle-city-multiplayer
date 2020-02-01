@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7186440764920074318}
   - component: {fileID: 7186440764920074319}
   - component: {fileID: 7186440764920074312}
-  - component: {fileID: 684632444662902416}
+  - component: {fileID: 5842899169498578785}
   m_Layer: 0
   m_Name: EnemyTank
   m_TagString: Untagged
@@ -189,7 +189,7 @@ MonoBehaviour:
     - {fileID: 7400000, guid: a792bec736b510044804c249a3b59d63, type: 2}
   tankIndex: 3
   inBlinkFrameState: 0
---- !u!114 &684632444662902416
+--- !u!114 &5842899169498578785
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -198,7 +198,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7186440764920074306}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c28af5a07db656a4bbb928c86618197f, type: 3}
+  m_Script: {fileID: 11500000, guid: f902544e9fcb10a4bb75a1dba990ab4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 0}

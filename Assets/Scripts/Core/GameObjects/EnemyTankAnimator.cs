@@ -24,6 +24,7 @@ public class EnemyTankAnimator : MonoBehaviour
     EnemyTankAnimation[] enemyTankAnimations;
     public int tankIndex = 0;
 
+    [SerializeField]
     public bool inBlinkFrameState = false;
     public bool InBlinkFrameState
     {

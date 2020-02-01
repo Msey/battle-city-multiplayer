@@ -15,7 +15,7 @@ public class ClassicGameLevelInfo
 public class ClassicGameManager : Singleton<ClassicGameManager>
 {
     List<SpawnPoint> enemySpawnPoints = new List<SpawnPoint>();
-    Queue<GameConstants.EnemyTankType> enemiesQueue = new Queue<GameConstants.EnemyTankType>();
+    Queue<EnemyTank.EnemyTankType> enemiesQueue = new Queue<EnemyTank.EnemyTankType>();
     int createdEnemyTanksCount = 0;
     int liveTanksCount = 0;
     int levelEnemeyTanksCount = 0;
@@ -82,16 +82,16 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         ClassicGameLevelInfo levelInfo = levels[LevelsManager.s_Instance.CurrentGameInfo.CurrentStage % levels.Length];
 
         for (int basicTank = 0; basicTank < levelInfo.basicTanksCount; ++basicTank)
-            enemiesQueue.Enqueue(GameConstants.EnemyTankType.Basic);
+            enemiesQueue.Enqueue(EnemyTank.EnemyTankType.Basic);
 
         for (int armorTank = 0; armorTank < levelInfo.armorTanksCount; ++armorTank)
-            enemiesQueue.Enqueue(GameConstants.EnemyTankType.Armor);
+            enemiesQueue.Enqueue(EnemyTank.EnemyTankType.Armor);
 
         for (int fastTank = 0; fastTank < levelInfo.fastTanksCount; ++fastTank)
-            enemiesQueue.Enqueue(GameConstants.EnemyTankType.Fast);
+            enemiesQueue.Enqueue(EnemyTank.EnemyTankType.Fast);
 
         for (int powerTank = 0; powerTank < levelInfo.powerTanksCount; ++powerTank)
-            enemiesQueue.Enqueue(GameConstants.EnemyTankType.Power);
+            enemiesQueue.Enqueue(EnemyTank.EnemyTankType.Power);
 
         levelEnemeyTanksCount = enemiesQueue.Count;
     }
@@ -122,14 +122,9 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         if (enemiesQueue.Count == 0)
             return;
 
-        GameConstants.EnemyTankType enemyTankType = enemiesQueue.Dequeue();
-
-        Instantiate(enemyTank, spawnPoint.position, Quaternion.identity);
-        TankMovement enemyTankMovement = enemyTank.GetComponent<TankMovement>();
-        enemyTankMovement.Direction = GameConstants.Direction.Down;
-
-        //TODO
-        enemyTank.GetComponent<EnemyTankAnimator>().tankIndex = (int)enemyTankType;
+        EnemyTank tank = Instantiate(enemyTank, spawnPoint.position, Quaternion.identity).GetComponent<EnemyTank>();
+        tank.Direction = GameConstants.Direction.Down;
+        tank.TankType = enemiesQueue.Dequeue();
 
         if (liveTanksCount < maxEnemyLivesTanksCount)
             GenerateEnemyTank();
