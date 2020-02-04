@@ -34,7 +34,7 @@ public class TestTankController : MonoBehaviour
         float verticalAxis = Input.GetAxis("Vertical");
         float horizontalAxis = Input.GetAxis("Horizontal");
 
-        tankMovement.Stoped = false;
+        tankMovement.Stopped = false;
         if (verticalAxis > 0.0f)
             tankMovement.Direction = GameConstants.Direction.Up;
         else if (verticalAxis < 0.0f)
@@ -44,7 +44,7 @@ public class TestTankController : MonoBehaviour
         else if (horizontalAxis > 0.0f)
             tankMovement.Direction = GameConstants.Direction.Right;
         else
-            tankMovement.Stoped = true;
+            tankMovement.Stopped = true;
     }
 
     public void Shoot()

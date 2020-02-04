@@ -7,7 +7,8 @@ public class TankMovement : MonoBehaviour
 {
     //256px tank = 0.16 unity
     //1px dendy tank = 0,000625 unity
-    
+
+    [SerializeField]
     GameConstants.Direction direction = GameConstants.Direction.Up;
     public GameConstants.Direction Direction
     {
@@ -37,23 +38,23 @@ public class TankMovement : MonoBehaviour
         }
     }
 
-    bool stoped = true;
-    public bool Stoped
+    bool stopped = true;
+    public bool Stopped
     {
         get
         {
-            return stoped;
+            return stopped;
         }
         set
         {
-            if (stoped == value)
+            if (stopped == value)
                 return;
 
-            if (!stoped)
+            if (!stopped)
                 animator.SetFloat("Velocity", 0.0f);
             else
                 animator.SetFloat("Velocity", velocity);
-            stoped = value;
+            stopped = value;
         }
     }
     public float velocity = 0.0f;
@@ -73,7 +74,7 @@ public class TankMovement : MonoBehaviour
 
     void Update()
     {
-        if (Stoped)
+        if (Stopped)
             return;
 
         Vector2 oldCellPosition = CellPosition();

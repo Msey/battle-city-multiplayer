@@ -2,28 +2,115 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyTank : TankBase
+class EnemyTankCreatedEvent
 {
+}
 
-    public enum TankVariation
+class EnemyTankDestroyedEvent
+{
+}
+
+[RequireComponent(typeof(TankMovement), typeof(EnemyTankAnimator))]
+public class EnemyTank : MonoBehaviour, ITank
+{
+    public enum EnemyTankType
     {
-        Simple,
+        Basic,
         Fast,
-        Universal,
-        Heavy
+        Power,
+        Armor,
     }
 
-    public override void Die()
+    [SerializeField]
+    EnemyTankType tankType = EnemyTankType.Basic;
+    public EnemyTankType TankType
     {
+        get => tankType;
+        set
+        {
+            tankType = value;
+            tankAnimator.tankIndex = (int)tankType;
+        }
     }
 
-    public override void Shoot()
+    float shootDelay = 0.0f;
+    public GameObject bulletPrefab;
+    TankMovement tankMovement;
+    EnemyTankAnimator tankAnimator;
+
+    public GameConstants.Direction Direction {
+        get => tankMovement.Direction;
+        set => tankMovement.Direction = value;
+    }
+    public bool Stopped
     {
+        get => tankMovement.Stopped;
+        set => tankMovement.Stopped = value;
     }
 
-
-    public override void OnHit(GameUnit hitSource)
+    private void Awake()
     {
-        throw new System.NotImplementedException();
+        tankMovement = GetComponent<TankMovement>();
+        tankAnimator = GetComponent<EnemyTankAnimator>();
+
+        if (EventManager.s_Instance != null)
+            EventManager.s_Instance.TriggerEvent<EnemyTankCreatedEvent>(new EnemyTankCreatedEvent());
+    }
+
+    void Update()
+    {
+        UpdateMovement();
+
+        if (shootDelay > 0)
+            shootDelay -= Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.Space))
+            Shoot();
+
+        if (Input.GetKeyDown(KeyCode.F2))
+            Destroy();
+    }
+
+    void UpdateMovement()
+    {
+        float verticalAxis = Input.GetAxis("Vertical");
+        float horizontalAxis = Input.GetAxis("Horizontal");
+
+        tankMovement.Stopped = false;
+        if (verticalAxis > 0.0f)
+            tankMovement.Direction = GameConstants.Direction.Up;
+        else if (verticalAxis < 0.0f)
+            tankMovement.Direction = GameConstants.Direction.Down;
+        else if (horizontalAxis < 0.0f)
+            tankMovement.Direction = GameConstants.Direction.Left;
+        else if (horizontalAxis > 0.0f)
+            tankMovement.Direction = GameConstants.Direction.Right;
+        else
+            tankMovement.Stopped = true;
+    }
+
+    void ChangeTankLevel()
+    {
+        //tankAnimator.LevelType = (PlayerTankAnimator.TankLevelType)(int)(tankAnimator.LevelType) + 1;
+    }
+
+    public void Shoot()
+    {
+        const float SHOOT_DELAY_CONSTANT = 0.6f; // TODO: need to be replaced with Level_Upgrade_Constants (later probably)
+        if (shootDelay <= 0)
+        {
+            var bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
+            var bulletComponent = bullet.GetComponent<Bullet>();
+            if (bulletComponent)
+                bulletComponent.Direction = tankMovement.Direction;
+            shootDelay = SHOOT_DELAY_CONSTANT;
+        }
+    }
+
+    private void Destroy()
+    {
+        if (EventManager.s_Instance != null)
+            EventManager.s_Instance.TriggerEvent<EnemyTankDestroyedEvent>(new EnemyTankDestroyedEvent());
+        Destroy(gameObject);
     }
 }
