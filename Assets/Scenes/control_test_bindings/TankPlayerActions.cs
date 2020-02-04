@@ -12,6 +12,7 @@ public class TankPlayerActions : PlayerActionSet
     public PlayerAction Down;
     public PlayerTwoAxisAction Direction;
     public PlayerAction Fire;
+    public PlayerAction FireA;
 
     public TankPlayerActions()
     {
@@ -20,6 +21,7 @@ public class TankPlayerActions : PlayerActionSet
         Up = CreatePlayerAction("Up");
         Down = CreatePlayerAction("Down");
         Fire = CreatePlayerAction("Fire");
+        FireA = CreatePlayerAction("FireA");
         Direction = CreateTwoAxisPlayerAction(Left, Right, Down, Up);
     }
 
@@ -38,6 +40,7 @@ public class TankPlayerActions : PlayerActionSet
         actions.Right.AddDefaultBinding(Key.D);
 
         actions.Fire.AddDefaultBinding(Key.Space);
+        actions.FireA.AddDefaultBinding(Key.LeftControl);
 
         return actions;
     }
@@ -54,6 +57,5 @@ public class TankPlayerActions : PlayerActionSet
             Debug.Log("Binding added... " + binding.DeviceName + ": " + binding.Name);
 
         return actions;
-
     }
 }

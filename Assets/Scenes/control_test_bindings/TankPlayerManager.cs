@@ -58,6 +58,9 @@ public class TankPlayerManager : MonoBehaviour
 
         switch (actionType)
         {
+            case ActionType.FireA:
+                return player.PlayerActionSet.FireA.Bindings[0].Name;
+
             case ActionType.Fire:
                 return player.PlayerActionSet.Fire.Bindings[0].Name;
 
@@ -83,6 +86,10 @@ public class TankPlayerManager : MonoBehaviour
 
         switch (actionType)
         {
+            case ActionType.FireA:
+                player.PlayerActionSet.FireA.ResetBindings();
+                player.PlayerActionSet.FireA.ListenForBindingReplacing(player.PlayerActionSet.FireA.Bindings[0]);
+                break;
             case ActionType.Fire:
                 player.PlayerActionSet.Fire.ResetBindings();
                 player.PlayerActionSet.Fire.ListenForBindingReplacing(player.PlayerActionSet.Fire.Bindings[0]);
@@ -108,6 +115,7 @@ public class TankPlayerManager : MonoBehaviour
 
     public enum ActionType
     {
+        FireA,
         Fire,
         Left,
         Right,
