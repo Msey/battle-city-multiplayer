@@ -6,6 +6,10 @@ class EnemyTankCreatedEvent
 {
 }
 
+class EnemyTankDestroyedEvent
+{
+}
+
 [RequireComponent(typeof(TankMovement), typeof(EnemyTankAnimator))]
 public class EnemyTank : MonoBehaviour, ITank
 {
@@ -64,7 +68,7 @@ public class EnemyTank : MonoBehaviour, ITank
             Shoot();
 
         if (Input.GetKeyDown(KeyCode.F2))
-            ChangeTankLevel();
+            Destroy();
     }
 
     void UpdateMovement()
@@ -101,5 +105,12 @@ public class EnemyTank : MonoBehaviour, ITank
                 bulletComponent.Direction = tankMovement.Direction;
             shootDelay = SHOOT_DELAY_CONSTANT;
         }
+    }
+
+    private void Destroy()
+    {
+        if (EventManager.s_Instance != null)
+            EventManager.s_Instance.TriggerEvent<EnemyTankDestroyedEvent>(new EnemyTankDestroyedEvent());
+        Destroy(gameObject);
     }
 }
