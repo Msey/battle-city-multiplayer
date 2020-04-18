@@ -12,9 +12,6 @@ public class LevelsManager : PersistentSingleton<LevelsManager>
     [SerializeField]
     protected string classicGameSceneName = "Scenes/Game/Classic";
 
-    [SerializeField]
-    protected string controlsMenuSceneName = "Scenes/Menu/ControlsMenu";
-
     public GameInfo CurrentGameInfo { get; set; } = new GameInfo();
     override protected void Awake()
     {
@@ -29,11 +26,6 @@ public class LevelsManager : PersistentSingleton<LevelsManager>
     public void OpenClassicGame()
     {
         SceneManager.LoadScene(classicGameSceneName);
-    }
-
-    public void OpenControlsMenu()
-    {
-        SceneManager.LoadScene(controlsMenuSceneName);
     }
 
     public void StartGame()

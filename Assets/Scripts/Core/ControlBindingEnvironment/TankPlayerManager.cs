@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using InControl;
 
-public class TankPlayerManager : MonoBehaviour
+public class TankPlayerManager : PersistentSingleton<TankPlayerManager>
 {
 
     public int maxPlayers = 4;

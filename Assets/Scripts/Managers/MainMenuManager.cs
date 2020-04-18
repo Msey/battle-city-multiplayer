@@ -1,12 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Assertions;
 
 public class MainMenuManager : Singleton<MainMenuManager>
 {
+    public GameObject mainMenuCanvas;
+    public GameObject settingCanvas;
+
     override protected void Awake()
     {
         base.Awake();
+        Assert.IsNotNull(mainMenuCanvas);
+        Assert.IsNotNull(settingCanvas);
     }
 
     public void OnePlayerGameClicked()
@@ -35,8 +42,21 @@ public class MainMenuManager : Singleton<MainMenuManager>
         LevelsManager.s_Instance.StartGame();
     }
 
-    public void SettingsMenuClicked()
+    public void OpenSettings()
     {
-        LevelsManager.s_Instance.OpenControlsMenu();
+        HideAllCanvases();
+        settingCanvas.SetActive(true);
+    }
+
+    public void OpenMainMenu()
+    {
+        HideAllCanvases();
+        mainMenuCanvas.SetActive(true);
+    }
+
+    private void HideAllCanvases()
+    {
+        settingCanvas.SetActive(false);
+        mainMenuCanvas.SetActive(false);
     }
 }
