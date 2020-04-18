@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    TestTankController tank1;
+    PlayerTank tank1;
 
     KeyBoardEvent kbEvent = new KeyBoardEvent();
 
     private void Start()
     {
-        tank1 = FindObjectOfType<TestTankController>();
+        tank1 = FindObjectOfType<PlayerTank>();
         //print(tank1 != null ? "tank exists":"tank doesn't exist");
 
         EventManager.s_Instance.StartListening<KeyBoardEvent>(InputHandler);
