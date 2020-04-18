@@ -34,4 +34,9 @@ public class MainMenuManager : Singleton<MainMenuManager>
         LevelsManager.s_Instance.CurrentGameInfo.PlayersCount = 4;
         LevelsManager.s_Instance.StartGame();
     }
+
+    public void SettingsMenuClicked()
+    {
+        LevelsManager.s_Instance.OpenControlsMenu();
+    }
 }

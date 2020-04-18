@@ -6,9 +6,9 @@ using System.Text;
 public class GameInfo
 {
     public enum EGameMode {
-        classic,
+        Classic,
     }
-    public EGameMode GameMode { get; set; } = EGameMode.classic;
+    public EGameMode GameMode { get; set; } = EGameMode.Classic;
     public int CurrentStage { get; set; } = 0;
     public int PlayersCount { get; set; } = 0;
 
