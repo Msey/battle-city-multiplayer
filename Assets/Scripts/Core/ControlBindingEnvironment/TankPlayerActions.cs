@@ -27,7 +27,7 @@ public class TankPlayerActions : PlayerActionSet
 
     public static TankPlayerActions CreateWithKeyboardBindings()
     {
-        var actions = CreateWithEmptyBindings();
+        var actions = GetDefaultBindingSettings();
 
         actions.Up.AddDefaultBinding(Key.UpArrow);
         actions.Down.AddDefaultBinding(Key.DownArrow);
@@ -47,6 +47,27 @@ public class TankPlayerActions : PlayerActionSet
 
     public static TankPlayerActions CreateWithEmptyBindings()
     {
+        var actions = GetDefaultBindingSettings();
+
+        actions.Up.AddDefaultBinding(Key.None);
+        actions.Down.AddDefaultBinding(Key.None);
+        actions.Left.AddDefaultBinding(Key.None);
+        actions.Right.AddDefaultBinding(Key.None);
+
+        actions.Up.AddDefaultBinding(Key.None);
+        actions.Down.AddDefaultBinding(Key.None);
+        actions.Left.AddDefaultBinding(Key.None);
+        actions.Right.AddDefaultBinding(Key.None);
+
+        actions.Fire.AddDefaultBinding(Key.None);
+        actions.FireA.AddDefaultBinding(Key.None);
+
+        return actions;
+    }
+
+
+    private static TankPlayerActions GetDefaultBindingSettings()
+    {
         var actions = new TankPlayerActions();
 
         actions.ListenOptions.IncludeUnknownControllers = true;
@@ -54,7 +75,7 @@ public class TankPlayerActions : PlayerActionSet
         actions.ListenOptions.MaxAllowedBindings = 1;
 
         actions.ListenOptions.OnBindingAdded += (action, binding) =>
-            Debug.Log("Binding added... " + binding.DeviceName + ": " + binding.Name);
+           Debug.Log("Binding added... " + binding.DeviceName + ": " + binding.Name);
 
         return actions;
     }

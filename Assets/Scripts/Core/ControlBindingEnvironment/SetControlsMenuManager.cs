@@ -31,6 +31,7 @@ public class SetControlsMenuManager : MonoBehaviour
                     case "Up": child.GetChild(0).GetComponent<Text>().text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(i, TankPlayerManager.ActionType.Up); break;
                     case "Down": child.GetChild(0).GetComponent<Text>().text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(i, TankPlayerManager.ActionType.Down); break;
                     case "Fire": child.GetChild(0).GetComponent<Text>().text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(i, TankPlayerManager.ActionType.Fire); break;
+                    case "FireA": child.GetChild(0).GetComponent<Text>().text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(i, TankPlayerManager.ActionType.FireA); break;
                 }
             }
         }
