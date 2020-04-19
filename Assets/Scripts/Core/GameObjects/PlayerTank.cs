@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class PlayerTankCreatedEvent
+public class PlayerTankCreatedEvent
 {
     public PlayerTankCreatedEvent(PlayerTank tank)
     {

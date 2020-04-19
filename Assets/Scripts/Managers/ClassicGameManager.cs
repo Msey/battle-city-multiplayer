@@ -50,12 +50,12 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     private void OnDestroy()
     {
-        StopListeningEvents();
+        //StopListeningEvents();
     }
 
     void LoadLevel()
     {
-        StartListeningEvents();
+        //StartListeningEvents();
         LoadLevelObjects();
         CreateEnemyQueue();
         LoadSpawnPoints();
@@ -91,76 +91,6 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             playerTankCreating[playerIndex] = false;
             playerTankLiving[playerIndex] = true;
         });
-    }
-
-    void StartListeningEvents()
-    {
-        if (EventManager.s_Instance == null)
-            return;
-
-        EventManager.s_Instance.StartListening<EnemyTankCreatedEvent>(OnEnemyTankCreated);
-        EventManager.s_Instance.StartListening<EnemyTankDestroyedEvent>(OnEnemyTankDestroyed);
-        EventManager.s_Instance.StartListening<PlayerTankCreatedEvent>(OnPlayerTankCreated);
-        EventManager.s_Instance.StartListening<PlayerTankDestroyedEvent>(OnPlayerTankDestroyed);
-    }
-
-    void StopListeningEvents()
-    {
-        if (EventManager.s_Instance == null)
-            return;
-
-        EventManager.s_Instance.StopListening<EnemyTankCreatedEvent>(OnEnemyTankCreated);
-        EventManager.s_Instance.StopListening<EnemyTankDestroyedEvent>(OnEnemyTankDestroyed);
-        EventManager.s_Instance.StopListening<PlayerTankCreatedEvent>(OnPlayerTankCreated);
-        EventManager.s_Instance.StopListening<PlayerTankDestroyedEvent>(OnPlayerTankDestroyed);
-    }
-
-    void OnEnemyTankCreated(EnemyTankCreatedEvent e)
-    {
-        createdEnemyTanksCount++;
-        livedEnemyTanksCount++;
-        enemyTanksOnCreatingCount--;
-
-        if ((livedEnemyTanksCount + enemyTanksOnCreatingCount) < maxEnemyLivesTanksCount)
-            GenerateEnemyTank();
-    }
-
-    void OnEnemyTankDestroyed(EnemyTankDestroyedEvent e)
-    {
-        livedEnemyTanksCount--;
-        if (enemiesQueue.Count == 0)
-            return; //level ended
-        else if ((livedEnemyTanksCount + enemyTanksOnCreatingCount) < maxEnemyLivesTanksCount)
-            GenerateEnemyTank();
-    }
-
-    void OnPlayerTankCreated(PlayerTankCreatedEvent e)
-    {
-        if (e == null)
-            return;
-
-        if (e.Tank == null)
-            return;
-
-        if (e.Tank.PlayerIndex < 0 || e.Tank.PlayerIndex >= GameConstants.playerTanksCount)
-            return;
-
-        playerTankCreating[e.Tank.PlayerIndex] = false;
-        playerTankLiving[e.Tank.PlayerIndex] = true;
-    }
-
-    void OnPlayerTankDestroyed(PlayerTankDestroyedEvent e)
-    {
-        if (e == null)
-            return;
-
-        if (e.Tank == null)
-            return;
-
-        if (e.Tank.PlayerIndex < 0 || e.Tank.PlayerIndex >= GameConstants.playerTanksCount)
-            return;
-
-        playerTankLiving[e.Tank.PlayerIndex] = false;
     }
 
     void LoadLevelObjects()

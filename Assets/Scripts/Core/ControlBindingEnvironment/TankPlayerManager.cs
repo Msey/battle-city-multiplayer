@@ -29,6 +29,8 @@ public class TankPlayerManager : PersistentSingleton<TankPlayerManager>
         }
 
         LoadBindings();
+
+        WireTankEvents();
     }
 
 
@@ -151,4 +153,85 @@ public class TankPlayerManager : PersistentSingleton<TankPlayerManager>
             }
         }
     }
+
+    private void WireTankEvents()
+    {
+        EventManager.s_Instance.StartListening<PlayerTankCreatedEvent>(OnPlayerTankCreated);
+        EventManager.s_Instance.StartListening<PlayerTankDestroyedEvent>(OnPlayerTankDestroyed);
+    }
+
+    void OnPlayerTankCreated(PlayerTankCreatedEvent e)
+    {
+        if (e == null && e.Tank == null &&
+            (e.Tank.PlayerIndex < 0 || e.Tank.PlayerIndex >= GameConstants.playerTanksCount))
+            return;
+
+        print(e.Tank.PlayerIndex);
+    }
+
+    void OnPlayerTankDestroyed(PlayerTankDestroyedEvent e)
+    {
+        if (e == null && e.Tank == null &&
+            (e.Tank.PlayerIndex < 0 || e.Tank.PlayerIndex >= GameConstants.playerTanksCount))
+            return;
+
+        print(e.Tank.PlayerIndex);
+    }
+
+    //void StartListeningEvents()
+    //{
+    //    if (EventManager.s_Instance == null)
+    //        return;
+
+    //    EventManager.s_Instance.StartListening<EnemyTankCreatedEvent>(OnEnemyTankCreated);
+    //    EventManager.s_Instance.StartListening<EnemyTankDestroyedEvent>(OnEnemyTankDestroyed);
+    //    EventManager.s_Instance.StartListening<PlayerTankCreatedEvent>(OnPlayerTankCreated);
+    //    EventManager.s_Instance.StartListening<PlayerTankDestroyedEvent>(OnPlayerTankDestroyed);
+    //}
+
+    //void StopListeningEvents()
+    //{
+    //    if (EventManager.s_Instance == null)
+    //        return;
+
+    //    EventManager.s_Instance.StopListening<EnemyTankCreatedEvent>(OnEnemyTankCreated);
+    //    EventManager.s_Instance.StopListening<EnemyTankDestroyedEvent>(OnEnemyTankDestroyed);
+    //    EventManager.s_Instance.StopListening<PlayerTankCreatedEvent>(OnPlayerTankCreated);
+    //    EventManager.s_Instance.StopListening<PlayerTankDestroyedEvent>(OnPlayerTankDestroyed);
+    //}
+
+    //void OnEnemyTankCreated(EnemyTankCreatedEvent e)
+    //{
+    //    createdEnemyTanksCount++;
+    //    livedEnemyTanksCount++;
+    //    enemyTanksOnCreatingCount--;
+
+    //    if ((livedEnemyTanksCount + enemyTanksOnCreatingCount) < maxEnemyLivesTanksCount)
+    //        GenerateEnemyTank();
+    //}
+
+    //void OnEnemyTankDestroyed(EnemyTankDestroyedEvent e)
+    //{
+    //    livedEnemyTanksCount--;
+    //    if (enemiesQueue.Count == 0)
+    //        return; //level ended
+    //    else if ((livedEnemyTanksCount + enemyTanksOnCreatingCount) < maxEnemyLivesTanksCount)
+    //        GenerateEnemyTank();
+    //}
+
+
+
+    //void OnPlayerTankDestroyed(PlayerTankDestroyedEvent e)
+    //{
+    //    if (e == null)
+    //        return;
+
+    //    if (e.Tank == null)
+    //        return;
+
+    //    if (e.Tank.PlayerIndex < 0 || e.Tank.PlayerIndex >= GameConstants.playerTanksCount)
+    //        return;
+
+    //    playerTankLiving[e.Tank.PlayerIndex] = false;
+    //}
 }
