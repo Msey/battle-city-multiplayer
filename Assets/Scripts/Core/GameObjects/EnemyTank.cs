@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static GameConstants;
 
 class EnemyTankCreatedEvent
 {
@@ -38,7 +39,7 @@ public class EnemyTank : MonoBehaviour, ITank
     TankMovement tankMovement;
     EnemyTankAnimator tankAnimator;
 
-    public GameConstants.Direction Direction {
+    public Direction Direction {
         get => tankMovement.Direction;
         set => tankMovement.Direction = value;
     }
@@ -72,13 +73,13 @@ public class EnemyTank : MonoBehaviour, ITank
 
         tankMovement.Stopped = false;
         if (verticalAxis > 0.0f)
-            tankMovement.Direction = GameConstants.Direction.Up;
+            tankMovement.Direction = Direction.Up;
         else if (verticalAxis < 0.0f)
-            tankMovement.Direction = GameConstants.Direction.Down;
+            tankMovement.Direction = Direction.Down;
         else if (horizontalAxis < 0.0f)
-            tankMovement.Direction = GameConstants.Direction.Left;
+            tankMovement.Direction = Direction.Left;
         else if (horizontalAxis > 0.0f)
-            tankMovement.Direction = GameConstants.Direction.Right;
+            tankMovement.Direction = Direction.Right;
         else
             tankMovement.Stopped = true;
     }

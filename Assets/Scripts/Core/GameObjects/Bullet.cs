@@ -1,22 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using static GameConstants;
-
-public enum BulletStrength
-{
-    Standart,
-    ConcreteOne,
-    ConcreteTwo
-}
 
 [RequireComponent(typeof(CircleCollider2D))]
 public class Bullet : MonoBehaviour
 {
     public Direction Direction { get; set; } = Direction.Right;
-
-    public BulletStrength Power = BulletStrength.Standart;
 
     CircleCollider2D circleCollider;
     public float velocity = 5.4f;
@@ -32,12 +20,6 @@ public class Bullet : MonoBehaviour
         get { return obstaclesMask; }
     }
 
-    ICombat owner;
-    public ICombat Owner
-    {
-        get { return owner; }
-        set { print("set owner"); owner = value; }
-    }
 
     void Start()
     {
@@ -69,7 +51,7 @@ public class Bullet : MonoBehaviour
 
     public void Die()
     {
-        Owner?.UpdateAmmo(); //TODO: in updateammo tell owner that bullet has been destroyed
+        //TODO: in updateammo tell owner that bullet has been destroyed
         Destroy(this.gameObject);
     }
 }

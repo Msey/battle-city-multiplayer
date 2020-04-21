@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static GameConstants;
 
 [RequireComponent(typeof(CircleCollider2D), typeof(Animator))]
 public class TankMovement : MonoBehaviour
@@ -9,8 +10,8 @@ public class TankMovement : MonoBehaviour
     //1px dendy tank = 0,000625 unity
 
     [SerializeField]
-    GameConstants.Direction direction = GameConstants.Direction.Up;
-    public GameConstants.Direction Direction
+    Direction direction = Direction.Up;
+    public Direction Direction
     {
         get
         {
@@ -27,8 +28,9 @@ public class TankMovement : MonoBehaviour
                 Vector2 newPosition = transform.position;
                 if (GameUtils.IsVerticalAxis(value))
                     newPosition.x = cellPosition.x;
-                else //Horizontal Axis
+                else 
                     newPosition.y = cellPosition.y;
+
                 transform.position = newPosition;
             }
 
@@ -68,7 +70,7 @@ public class TankMovement : MonoBehaviour
         circleCollider = GetComponent<CircleCollider2D>();
         animator = GetComponent<Animator>();
         animator.SetFloat("Velocity", 0.0f);
-        animator.SetInteger("Direction", (int)direction);
+        animator.SetInteger("Direction", DirectionAnimationValue(direction));
         obstaclesMask = LayerMask.GetMask("Water", "Brick", "Concrete", "LevelBorder");
     }
 
@@ -104,21 +106,7 @@ public class TankMovement : MonoBehaviour
         return transform.InverseTransformPoint(CellPosition());
     }
 
-    private static int DirectionAnimationValue(GameConstants.Direction dir)
-    {
-        switch (dir)
-        {
-            case GameConstants.Direction.Up:
-                return 0;
-            case GameConstants.Direction.Down:
-                return 1;
-            case GameConstants.Direction.Left:
-                return 2;
-            case GameConstants.Direction.Right:
-                return 3;
-        }
-        return 0;
-    }
+    private static int DirectionAnimationValue(Direction dir) => (int)dir;
 
     private Vector2 CellPosition()
     {
@@ -126,23 +114,23 @@ public class TankMovement : MonoBehaviour
         Vector2 currentPosition = transform.position;
         switch (Direction)
         {
-            case GameConstants.Direction.Up:
+            case Direction.Up:
                 currentPosition.y += smallOffset;
                 break;
-            case GameConstants.Direction.Down:
+            case Direction.Down:
                 currentPosition.y -= smallOffset;
                 break;
-            case GameConstants.Direction.Left:
+            case Direction.Left:
                 currentPosition.x -= smallOffset;
                 break;
-            case GameConstants.Direction.Right:
+            case Direction.Right:
                 currentPosition.x += smallOffset;
                 break;
         }
 
         return new Vector2(
-            Utils.RoundByFactor(currentPosition.x, GameConstants.cellSize),
-            Utils.RoundByFactor(currentPosition.y, GameConstants.cellSize));
+            Utils.RoundByFactor(currentPosition.x, cellSize),
+            Utils.RoundByFactor(currentPosition.y, cellSize));
     }
 
     private Vector2 FrontCellPosition()
@@ -151,22 +139,22 @@ public class TankMovement : MonoBehaviour
 
         switch (Direction)
         {
-            case GameConstants.Direction.Up:
+            case Direction.Up:
                 return new Vector2(
-                    Utils.RoundByFactor(currentPosition.x, GameConstants.cellSize),
-                    Utils.CeilByFactor(currentPosition.y, GameConstants.cellSize));
-            case GameConstants.Direction.Down:
+                    Utils.RoundByFactor(currentPosition.x, cellSize),
+                    Utils.CeilByFactor(currentPosition.y, cellSize));
+            case Direction.Down:
                 return new Vector2(
-                    Utils.RoundByFactor(currentPosition.x, GameConstants.cellSize),
-                    Utils.FloorByFactor(currentPosition.y, GameConstants.cellSize));
-            case GameConstants.Direction.Left:
+                    Utils.RoundByFactor(currentPosition.x, cellSize),
+                    Utils.FloorByFactor(currentPosition.y, cellSize));
+            case Direction.Left:
                 return new Vector2(
-                    Utils.FloorByFactor(currentPosition.x, GameConstants.cellSize),
-                    Utils.RoundByFactor(currentPosition.y, GameConstants.cellSize));
-            case GameConstants.Direction.Right:
+                    Utils.FloorByFactor(currentPosition.x, cellSize),
+                    Utils.RoundByFactor(currentPosition.y, cellSize));
+            case Direction.Right:
                 return new Vector2(
-                    Utils.CeilByFactor(currentPosition.x, GameConstants.cellSize),
-                    Utils.RoundByFactor(currentPosition.y, GameConstants.cellSize));
+                    Utils.CeilByFactor(currentPosition.x, cellSize),
+                    Utils.RoundByFactor(currentPosition.y, cellSize));
         }
         return Vector2.zero;
     }

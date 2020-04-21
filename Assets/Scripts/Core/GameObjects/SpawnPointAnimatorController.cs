@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
 public class SpawnPointAnimatorController : MonoBehaviour
 {
-    public delegate void AnimationFinishedHandler();
-    public event AnimationFinishedHandler AnimationFinished;
+    public Action OnAnimationFinishedCallback = ()=> {};
 
     Animator animator;
     void Start()
@@ -19,8 +17,8 @@ public class SpawnPointAnimatorController : MonoBehaviour
         animator.SetTrigger("StartSpawning");
     }
 
-    void OnAnimationFinished()
+    public void OnAnimationFinished()
     {
-        AnimationFinished?.Invoke();
+        OnAnimationFinishedCallback.Invoke();
     }
 }

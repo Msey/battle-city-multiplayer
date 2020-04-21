@@ -1,9 +1,9 @@
 ﻿using InControl;
 using UnityEngine;
 
-public class TankPlayer //: MonoBehaviour
-{
-    public TankPlayerActions PlayerActionSet { get; set; }
+public class InputPlayer
+{ 
+    public InputPlayerActions PlayerActionSet { get; set; }
     public bool EnabledController { get; set; }
 
     string saveData;
@@ -13,8 +13,7 @@ public class TankPlayer //: MonoBehaviour
         saveData = PlayerActionSet.Save();
         PlayerPrefs.SetString("Bindings", saveData);
     }
-
-
+    
     void LoadBindings()
     {
         if (PlayerPrefs.HasKey("Bindings"))
@@ -23,6 +22,4 @@ public class TankPlayer //: MonoBehaviour
             PlayerActionSet.Load(saveData);
         }
     }    
-
-
 }

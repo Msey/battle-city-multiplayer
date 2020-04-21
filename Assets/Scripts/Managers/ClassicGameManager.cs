@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine.Assertions;
 using UnityEngine;
+using System;
 
-[System.Serializable]
+[Serializable]
 public class ClassicGameLevelInfo
 {
     public int basicTanksCount = 0;
