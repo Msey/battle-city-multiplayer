@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Assertions;
+﻿using UnityEngine;
+using static GameConstants;
 
 [RequireComponent(typeof(Animator))]
 public class Brick : MonoBehaviour, IBulletTarget
@@ -38,16 +36,16 @@ public class Brick : MonoBehaviour, IBulletTarget
         {
             switch (bullet.Direction)
             {
-                case GameConstants.Direction.Down:
+                case Direction.Down:
                     SetBrickState(BrickState.Bottom);
                     break;
-                case GameConstants.Direction.Up:
+                case Direction.Up:
                     SetBrickState(BrickState.Top);
                     break;
-                case GameConstants.Direction.Left:
+                case Direction.Left:
                     SetBrickState(BrickState.Left);
                     break;
-                case GameConstants.Direction.Right:
+                case Direction.Right:
                     SetBrickState(BrickState.Right);
                     break;
             }

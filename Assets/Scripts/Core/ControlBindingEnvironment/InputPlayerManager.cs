@@ -3,43 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using InControl;
 
-public class TankPlayerManager : PersistentSingleton<TankPlayerManager>
+public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
 {
 
     public int maxPlayers = 4;
 
     public bool IsBindingListening { get; }
 
-    List<TankPlayer> players;
+    List<InputPlayer> players;
 
 
     void Start()
     {
-        players = new List<TankPlayer>(maxPlayers);
+        players = new List<InputPlayer>(maxPlayers);
 
         for (int i = 0; i < maxPlayers; i++)
         {
-            var player = new TankPlayer();
+            var player = new InputPlayer();
 
             player.PlayerActionSet = (i == 0)
-                ? TankPlayerActions.CreateWithKeyboardBindings()
-                : TankPlayerActions.CreateWithEmptyBindings();
+                ? InputPlayerActions.CreateWithKeyboardBindings()
+                : InputPlayerActions.CreateWithEmptyBindings();
 
             players.Add(player);
         }
 
         LoadBindings();
-    }
 
-
-    void Update()
-    {
-        if (players[0] != null && players[0].PlayerActionSet != null)
-        {
-            print("player(" + 0 + ")X: " + players[0].PlayerActionSet.Direction.X + "| Y: " +
-                players[0].PlayerActionSet.Direction.Y + "| Fire: " +
-                (players[0].PlayerActionSet.Fire.IsPressed ? "Y" : "N"));
-        }
+        WireTankEvents();
     }
 
     public void SetPlayers(int amount)
@@ -150,5 +141,29 @@ public class TankPlayerManager : PersistentSingleton<TankPlayerManager>
                 players[i].PlayerActionSet.Load(saveData);
             }
         }
+    }
+
+    private void WireTankEvents()
+    {
+        EventManager.s_Instance.StartListening<PlayerTankCreatedEvent>(OnPlayerTankCreated);
+        EventManager.s_Instance.StartListening<PlayerTankDestroyedEvent>(OnPlayerTankDestroyed);
+    }
+
+    void OnPlayerTankCreated(PlayerTankCreatedEvent e)
+    {
+        if (e == null && e.Tank == null &&
+            (e.Tank.PlayerIndex < 0 || e.Tank.PlayerIndex >= GameConstants.playerTanksCount))
+            return;
+
+        print(e.Tank.PlayerIndex);
+    }
+
+    void OnPlayerTankDestroyed(PlayerTankDestroyedEvent e)
+    {
+        if (e == null && e.Tank == null &&
+            (e.Tank.PlayerIndex < 0 || e.Tank.PlayerIndex >= GameConstants.playerTanksCount))
+            return;
+
+        print(e.Tank.PlayerIndex);
     }
 }

@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using static GameConstants;
 
 public interface ITank
 {
-    GameConstants.Direction Direction { get; set; }
+    Direction Direction { get; set; }
 
     bool Stopped { get; set; }
 

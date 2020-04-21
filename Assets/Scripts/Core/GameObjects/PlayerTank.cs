@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static GameConstants;
 
-class PlayerTankCreatedEvent
+public class PlayerTankCreatedEvent
 {
     public PlayerTankCreatedEvent(PlayerTank tank)
     {
@@ -30,7 +31,7 @@ public class PlayerTank : MonoBehaviour, ITank
     TankMovement tankMovement;
     PlayerTankAnimator tankAnimator;
 
-    public GameConstants.Direction Direction
+    public Direction Direction
     {
         get => tankMovement.Direction;
         set => tankMovement.Direction = value;
@@ -61,15 +62,6 @@ public class PlayerTank : MonoBehaviour, ITank
 
         if (shootDelay > 0)
             shootDelay -= Time.deltaTime;
-
-        if (Input.GetKeyDown(KeyCode.Space))
-            Shoot();
-
-        if (Input.GetKeyDown(KeyCode.F2))
-            ChangeTankLevel();
-
-        if (Input.GetKeyDown(KeyCode.F3))
-            Destroy();
     }
 
     void UpdateMovement()
@@ -79,13 +71,13 @@ public class PlayerTank : MonoBehaviour, ITank
 
         tankMovement.Stopped = false;
         if (verticalAxis > 0.0f)
-            tankMovement.Direction = GameConstants.Direction.Up;
+            tankMovement.Direction = Direction.Up;
         else if (verticalAxis < 0.0f)
-            tankMovement.Direction = GameConstants.Direction.Down;
+            tankMovement.Direction = Direction.Down;
         else if (horizontalAxis < 0.0f)
-            tankMovement.Direction = GameConstants.Direction.Left;
+            tankMovement.Direction = Direction.Left;
         else if (horizontalAxis > 0.0f)
-            tankMovement.Direction = GameConstants.Direction.Right;
+            tankMovement.Direction = Direction.Right;
         else
             tankMovement.Stopped = true;
     }

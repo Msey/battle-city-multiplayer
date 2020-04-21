@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TankPlayerActions : PlayerActionSet
+public class InputPlayerActions : PlayerActionSet
 {
 
     public PlayerAction Left;
@@ -14,7 +14,7 @@ public class TankPlayerActions : PlayerActionSet
     public PlayerAction Fire;
     public PlayerAction FireA;
 
-    public TankPlayerActions()
+    public InputPlayerActions()
     {
         Left = CreatePlayerAction("Left");
         Right = CreatePlayerAction("Right");
@@ -25,7 +25,7 @@ public class TankPlayerActions : PlayerActionSet
         Direction = CreateTwoAxisPlayerAction(Left, Right, Down, Up);
     }
 
-    public static TankPlayerActions CreateWithKeyboardBindings()
+    public static InputPlayerActions CreateWithKeyboardBindings()
     {
         var actions = GetDefaultBindingSettings();
 
@@ -45,7 +45,7 @@ public class TankPlayerActions : PlayerActionSet
         return actions;
     }
 
-    public static TankPlayerActions CreateWithEmptyBindings()
+    public static InputPlayerActions CreateWithEmptyBindings()
     {
         var actions = GetDefaultBindingSettings();
 
@@ -66,9 +66,9 @@ public class TankPlayerActions : PlayerActionSet
     }
 
 
-    private static TankPlayerActions GetDefaultBindingSettings()
+    private static InputPlayerActions GetDefaultBindingSettings()
     {
-        var actions = new TankPlayerActions();
+        var actions = new InputPlayerActions();
 
         actions.ListenOptions.IncludeUnknownControllers = true;
 

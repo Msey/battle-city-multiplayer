@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SpawnPointAnimatorController))]
@@ -20,7 +19,7 @@ public class SpawnPoint : MonoBehaviour
     void Start()
     {
         animator = GetComponent<SpawnPointAnimatorController>();
-        animator.AnimationFinished += OnAnimationFinished;
+        animator.OnAnimationFinishedCallback = () => OnAnimationFinished();
     }
 
     public void Spawn(SpawnRequest spawnRequest)
