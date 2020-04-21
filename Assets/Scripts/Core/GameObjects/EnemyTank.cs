@@ -63,12 +63,6 @@ public class EnemyTank : MonoBehaviour, ITank
 
         if (shootDelay > 0)
             shootDelay -= Time.deltaTime;
-
-        if (Input.GetKeyDown(KeyCode.Space))
-            Shoot();
-
-        if (Input.GetKeyDown(KeyCode.F2))
-            Destroy();
     }
 
     void UpdateMovement()

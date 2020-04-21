@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using static GameConstants;
 
 public enum BulletStrength
 {
@@ -14,7 +14,7 @@ public enum BulletStrength
 [RequireComponent(typeof(CircleCollider2D))]
 public class Bullet : MonoBehaviour
 {
-    public GameConstants.Direction Direction { get; set; } = GameConstants.Direction.Right;
+    public Direction Direction { get; set; } = Direction.Right;
 
     public BulletStrength Power = BulletStrength.Standart;
 
@@ -43,15 +43,33 @@ public class Bullet : MonoBehaviour
     {
         circleCollider = GetComponent<CircleCollider2D>();
         obstaclesMask = LayerMask.GetMask("Brick", "Concrete");
-
-        BulletBehaviour.s_Instance.AddBullet(this);
     }
 
+    private void Update()
+    {
+        transform.position = (Vector2)transform.position + velocity * GameUtils.DirectionVector(Direction) * Time.deltaTime;
+        transform.rotation = Quaternion.Euler(0.0f, 0.0f, GameUtils.DirectionAngle(Direction));
+        var obstacles = Physics2D.OverlapCircleAll(transform.position, Radius, ObstaclesMask);
+        foreach (var obstacle in obstacles)
+        {
+            var bulletTarget = (obstacle.gameObject.GetComponent<IBulletTarget>());
+            if (bulletTarget != null)
+                bulletTarget.OnHit(this);
+        }
+
+        if (obstacles.Length > 0)
+        {
+#if DEBUG
+            print("bullet Die();");
+#endif
+            Die();
+ 
+        }
+    }
 
     public void Die()
     {
-        print("destroyed");
-        //Owner.UpdateAmmo();
+        Owner?.UpdateAmmo(); //TODO: in updateammo tell owner that bullet has been destroyed
         Destroy(this.gameObject);
     }
 }

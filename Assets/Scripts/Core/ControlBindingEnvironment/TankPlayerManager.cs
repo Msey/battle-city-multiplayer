@@ -36,12 +36,12 @@ public class TankPlayerManager : PersistentSingleton<TankPlayerManager>
 
     void Update()
     {
-        if (players[0] != null && players[0].PlayerActionSet != null)
-        {
-            print("player(" + 0 + ")X: " + players[0].PlayerActionSet.Direction.X + "| Y: " +
-                players[0].PlayerActionSet.Direction.Y + "| Fire: " +
-                (players[0].PlayerActionSet.Fire.IsPressed ? "Y" : "N"));
-        }
+        //if (players[0] != null && players[0].PlayerActionSet != null)
+        //{
+        //    print("player(" + 0 + ")X: " + players[0].PlayerActionSet.Direction.X + "| Y: " +
+        //        players[0].PlayerActionSet.Direction.Y + "| Fire: " +
+        //        (players[0].PlayerActionSet.Fire.IsPressed ? "Y" : "N"));
+        //}
     }
 
     public void SetPlayers(int amount)
