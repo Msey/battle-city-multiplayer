@@ -44,8 +44,10 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         base.Awake();
     }
     private void Start() => LoadLevel();
+    protected override void OnDestroy() => StopListeningEvents();
 
-    private void OnDestroy() => StopListeningEvents();
+    static public event EventHandler GameStarted; //TODO, move to other place
+    static public event EventHandler GameEnded; //TODO, move to other place
 
     void LoadLevel()
     {
@@ -53,8 +55,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         LoadLevelObjects();
         CreateEnemyQueue();
         LoadSpawnPoints();
-        if (EventManager.s_Instance != null)
-            EventManager.s_Instance.TriggerEvent(new LevelStartedEvent());
+        GameStarted?.Invoke(this, new EventArgs());
         GenerateEnemyTank();
         CreatePlayerTanks();
     }
@@ -157,27 +158,21 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     void StartListeningEvents()
     {
-        if (EventManager.s_Instance == null)
-            return;
-
-        EventManager.s_Instance.StartListening<EnemyTankCreatedEvent>(OnEnemyTankCreated);
-        EventManager.s_Instance.StartListening<EnemyTankDestroyedEvent>(OnEnemyTankDestroyed);
-        EventManager.s_Instance.StartListening<PlayerTankCreatedEvent>(OnPlayerTankCreated);
-        EventManager.s_Instance.StartListening<PlayerTankDestroyedEvent>(OnPlayerTankDestroyed);
+        EnemyTank.TankCreated += OnEnemyTankCreated;
+        EnemyTank.TankDestroyed += OnEnemyTankDestroyed;
+        PlayerTank.TankCreated += OnPlayerTankCreated;
+        PlayerTank.TankDestroyed += OnPlayerTankDestroyed;
     }
 
     void StopListeningEvents()
     {
-        if (EventManager.s_Instance == null)
-            return;
-
-        EventManager.s_Instance.StopListening<EnemyTankCreatedEvent>(OnEnemyTankCreated);
-        EventManager.s_Instance.StopListening<EnemyTankDestroyedEvent>(OnEnemyTankDestroyed);
-        EventManager.s_Instance.StopListening<PlayerTankCreatedEvent>(OnPlayerTankCreated);
-        EventManager.s_Instance.StopListening<PlayerTankDestroyedEvent>(OnPlayerTankDestroyed);
+        EnemyTank.TankCreated -= OnEnemyTankCreated;
+        EnemyTank.TankDestroyed -= OnEnemyTankDestroyed;
+        PlayerTank.TankCreated -= OnPlayerTankCreated;
+        PlayerTank.TankDestroyed -= OnPlayerTankDestroyed;
     }
 
-    void OnEnemyTankCreated(EnemyTankCreatedEvent e)
+    void OnEnemyTankCreated(object sender, EventArgs e)
     {
         createdEnemyTanksCount++;
         livedEnemyTanksCount++;
@@ -187,7 +182,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             GenerateEnemyTank();
     }
 
-    void OnEnemyTankDestroyed(EnemyTankDestroyedEvent e)
+    void OnEnemyTankDestroyed(object sender, EventArgs e)
     {
         livedEnemyTanksCount--;
         if (enemiesQueue.Count == 0)
@@ -196,32 +191,28 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             GenerateEnemyTank();
     }
 
-    void OnPlayerTankCreated(PlayerTankCreatedEvent e)
+    void OnPlayerTankCreated(object sender, EventArgs e)
     {
-        if (e == null)
+        PlayerTank tank = sender as PlayerTank;
+        if (tank == null)
             return;
 
-        if (e.Tank == null)
+        if (tank.PlayerIndex < 0 || tank.PlayerIndex >= GameConstants.playerTanksCount)
             return;
 
-        if (e.Tank.PlayerIndex < 0 || e.Tank.PlayerIndex >= GameConstants.playerTanksCount)
-            return;
-
-        playerTankCreating[e.Tank.PlayerIndex] = false;
-        playerTankLiving[e.Tank.PlayerIndex] = true;
+        playerTankCreating[tank.PlayerIndex] = false;
+        playerTankLiving[tank.PlayerIndex] = true;
     }
 
-    void OnPlayerTankDestroyed(PlayerTankDestroyedEvent e)
+    void OnPlayerTankDestroyed(object sender, EventArgs e)
     {
-        if (e == null)
+        PlayerTank tank = sender as PlayerTank;
+        if (tank == null)
             return;
 
-        if (e.Tank == null)
+        if (tank.PlayerIndex < 0 || tank.PlayerIndex >= GameConstants.playerTanksCount)
             return;
 
-        if (e.Tank.PlayerIndex < 0 || e.Tank.PlayerIndex >= GameConstants.playerTanksCount)
-            return;
-
-        playerTankLiving[e.Tank.PlayerIndex] = false;
+        playerTankLiving[tank.PlayerIndex] = false;
     }
 }

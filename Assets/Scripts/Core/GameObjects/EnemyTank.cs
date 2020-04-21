@@ -1,15 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using static GameConstants;
-
-class EnemyTankCreatedEvent
-{
-}
-
-class EnemyTankDestroyedEvent
-{
-}
 
 [RequireComponent(typeof(TankMovement), typeof(EnemyTankAnimator))]
 public class EnemyTank : MonoBehaviour, ITank
@@ -49,13 +40,14 @@ public class EnemyTank : MonoBehaviour, ITank
         set => tankMovement.Stopped = value;
     }
 
+    static public event EventHandler TankCreated;
+    static public event EventHandler TankDestroyed;
+
     private void Awake()
     {
         tankMovement = GetComponent<TankMovement>();
         tankAnimator = GetComponent<EnemyTankAnimator>();
-
-        if (EventManager.s_Instance != null)
-            EventManager.s_Instance.TriggerEvent<EnemyTankCreatedEvent>(new EnemyTankCreatedEvent());
+        TankCreated?.Invoke(this, new EventArgs());
     }
 
     void Update()
@@ -104,8 +96,7 @@ public class EnemyTank : MonoBehaviour, ITank
 
     private void Destroy()
     {
-        if (EventManager.s_Instance != null)
-            EventManager.s_Instance.TriggerEvent<EnemyTankDestroyedEvent>(new EnemyTankDestroyedEvent());
+        TankDestroyed?.Invoke(this, new EventArgs());
         Destroy(gameObject);
     }
 }

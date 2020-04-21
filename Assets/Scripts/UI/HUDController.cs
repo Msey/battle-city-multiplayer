@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
@@ -27,17 +28,13 @@ public class HUDController : MonoBehaviour
         Assert.IsNotNull(livesPanelLayout);
         Assert.IsNotNull(livesPanelPrefab);
 
-        if (EventManager.s_Instance != null)
-        {
-            EventManager.s_Instance.StartListening<LevelStartedEvent>(OnGameStarted);
-            EventManager.s_Instance.StartListening<EnemyTankCreatedEvent>(OnEnemyTankCreated);
-        }
+        ClassicGameManager.GameStarted += OnGameStarted;
+        EnemyTank.TankCreated += OnEnemyTankCreated;
     }
 
     private void OnDestroy()
     {
-        EventManager.s_Instance.StopListening<LevelStartedEvent>(OnGameStarted);
-        EventManager.s_Instance.StopListening<EnemyTankCreatedEvent>(OnEnemyTankCreated);
+        EnemyTank.TankCreated -= OnEnemyTankCreated;
     }
 
     public void OnBackToMenuClicked()
@@ -45,7 +42,7 @@ public class HUDController : MonoBehaviour
         LevelsManager.s_Instance.OpenMainMenu();
     }
 
-    public void OnGameStarted(LevelStartedEvent e)
+    public void OnGameStarted(object sender, EventArgs e)
     {
         SetStage(LevelsManager.s_Instance.CurrentGameInfo.CurrentStage);
         LoadGameInfo();
@@ -61,7 +58,7 @@ public class HUDController : MonoBehaviour
         SetLivesPanelCount(LevelsManager.s_Instance.CurrentGameInfo.PlayersCount);
     }
 
-    void OnEnemyTankCreated(EnemyTankCreatedEvent e)
+    void OnEnemyTankCreated(object sender, EventArgs e)
     {
         SetEnemyTanksCount(enemyTanksCount - 1);
     }

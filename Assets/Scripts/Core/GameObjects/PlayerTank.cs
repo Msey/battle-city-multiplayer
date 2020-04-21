@@ -1,27 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using static GameConstants;
-
-public class PlayerTankCreatedEvent
-{
-    public PlayerTankCreatedEvent(PlayerTank tank)
-    {
-        Tank = tank;
-    }
-
-    public readonly PlayerTank Tank;
-}
-
-class PlayerTankDestroyedEvent
-{
-    public PlayerTankDestroyedEvent(PlayerTank tank)
-    {
-        Tank = tank;
-    }
-
-    public readonly PlayerTank Tank;
-}
 
 [RequireComponent(typeof(TankMovement),typeof(PlayerTankAnimator))]
 public class PlayerTank : MonoBehaviour, ITank
@@ -44,10 +23,12 @@ public class PlayerTank : MonoBehaviour, ITank
 
     public int PlayerIndex { get; set; } = 0;
 
+    static public event EventHandler TankCreated;
+    static public event EventHandler TankDestroyed;
+
     void Awake()
     {
-        if (EventManager.s_Instance != null)
-            EventManager.s_Instance.TriggerEvent<PlayerTankCreatedEvent>(new PlayerTankCreatedEvent(this));
+        TankCreated?.Invoke(this, new EventArgs());
     }
 
     void Start()
@@ -103,8 +84,7 @@ public class PlayerTank : MonoBehaviour, ITank
 
     private void Destroy()
     {
-        if (EventManager.s_Instance != null)
-            EventManager.s_Instance.TriggerEvent<PlayerTankDestroyedEvent>(new PlayerTankDestroyedEvent(this));
+        TankDestroyed?.Invoke(this, new EventArgs());
         Destroy(gameObject);
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using InControl;
@@ -145,25 +145,31 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
 
     private void WireTankEvents()
     {
-        EventManager.s_Instance.StartListening<PlayerTankCreatedEvent>(OnPlayerTankCreated);
-        EventManager.s_Instance.StartListening<PlayerTankDestroyedEvent>(OnPlayerTankDestroyed);
+        PlayerTank.TankCreated += OnPlayerTankCreated;
+        PlayerTank.TankDestroyed += OnPlayerTankDestroyed;
     }
 
-    void OnPlayerTankCreated(PlayerTankCreatedEvent e)
+    void OnPlayerTankCreated(object sender, EventArgs e)
     {
-        if (e == null && e.Tank == null &&
-            (e.Tank.PlayerIndex < 0 || e.Tank.PlayerIndex >= GameConstants.playerTanksCount))
+        PlayerTank tank = sender as PlayerTank;
+        if (tank == null)
             return;
 
-        print(e.Tank.PlayerIndex);
+        if ((tank.PlayerIndex < 0 || tank.PlayerIndex >= GameConstants.playerTanksCount))
+            return;
+
+        print(tank.PlayerIndex);
     }
 
-    void OnPlayerTankDestroyed(PlayerTankDestroyedEvent e)
+    void OnPlayerTankDestroyed(object sender, EventArgs e)
     {
-        if (e == null && e.Tank == null &&
-            (e.Tank.PlayerIndex < 0 || e.Tank.PlayerIndex >= GameConstants.playerTanksCount))
+        PlayerTank tank = sender as PlayerTank;
+        if (tank == null)
             return;
 
-        print(e.Tank.PlayerIndex);
+        if ((tank.PlayerIndex < 0 || tank.PlayerIndex >= GameConstants.playerTanksCount))
+            return;
+
+        print(tank.PlayerIndex);
     }
 }
