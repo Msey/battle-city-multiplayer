@@ -62,7 +62,9 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     void CreatePlayerTanks()
     {
-        SpawnPlayerTank(0);
+        int playersCount = LevelsManager.s_Instance.CurrentGameInfo.PlayersCount;
+        for (int playerIndex = 0; playerIndex < playersCount; ++playerIndex)
+            SpawnPlayerTank(playerIndex);
     }
 
     public void SpawnPlayerTank(int playerIndex)
