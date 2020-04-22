@@ -33,8 +33,8 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     [SerializeField]
     ClassicGameLevelInfo[] levels;
 
-    bool[] playerTankCreating = new bool[GameConstants.PlayerTanksCount] { false, false, false, false };
-    bool[] playerTankLiving = new bool[GameConstants.PlayerTanksCount] { false, false, false, false };
+    bool[] playerTankCreating = new bool[GameConstants.playerTanksCount] { false, false, false, false };
+    bool[] playerTankLiving = new bool[GameConstants.playerTanksCount] { false, false, false, false };
 
     override protected void Awake()
     {
@@ -55,19 +55,21 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         LoadLevelObjects();
         CreateEnemyQueue();
         LoadSpawnPoints();
-        GameStarted?.Invoke(this, EventArgs.Empty);
+        GameStarted?.Invoke(this, new EventArgs());
         GenerateEnemyTank();
         CreatePlayerTanks();
     }
 
     void CreatePlayerTanks()
     {
-        SpawnPlayerTank(0);
+        int playersCount = LevelsManager.s_Instance.CurrentGameInfo.PlayersCount;
+        for (int playerIndex = 0; playerIndex < playersCount; ++playerIndex)
+            SpawnPlayerTank(playerIndex);
     }
 
     public void SpawnPlayerTank(int playerIndex)
     {
-        if (playerIndex < 0 || playerIndex >= GameConstants.PlayerTanksCount)
+        if (playerIndex < 0 || playerIndex >= GameConstants.playerTanksCount)
             return;
 
         if (playerTankCreating[playerIndex])
@@ -81,8 +83,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         SpawnPoint spawnPoint = playerSpawnPoints[playerIndex];
         spawnPoint.Spawn((point) => {
             PlayerTank tank = Instantiate(playerTankPrefab, point.position, Quaternion.identity).GetComponent<PlayerTank>();
-            //tank.Direction = GameConstants.Direction.Down;
-            //tank.TankType = enemiesQueue.Dequeue();
+            tank.PlayerIndex = playerIndex;
             playerTankCreating[playerIndex] = false;
             playerTankLiving[playerIndex] = true;
         });
@@ -128,7 +129,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
                 playerSpawnPoints.Add(spawnPoint);
         }
 
-        Assert.AreEqual(playerSpawnPoints.Count, GameConstants.PlayerTanksCount);
+        Assert.AreEqual(playerSpawnPoints.Count, GameConstants.playerTanksCount);
     }
 
     void GenerateEnemyTank()
@@ -197,7 +198,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         if (tank == null)
             return;
 
-        if (tank.PlayerIndex < 0 || tank.PlayerIndex >= GameConstants.PlayerTanksCount)
+        if (tank.PlayerIndex < 0 || tank.PlayerIndex >= GameConstants.playerTanksCount)
             return;
 
         playerTankCreating[tank.PlayerIndex] = false;
@@ -210,7 +211,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         if (tank == null)
             return;
 
-        if (tank.PlayerIndex < 0 || tank.PlayerIndex >= GameConstants.PlayerTanksCount)
+        if (tank.PlayerIndex < 0 || tank.PlayerIndex >= GameConstants.playerTanksCount)
             return;
 
         playerTankLiving[tank.PlayerIndex] = false;
