@@ -5,10 +5,11 @@ using static GameConstants;
 [RequireComponent(typeof(TankMovement),typeof(PlayerTankAnimator))]
 public class PlayerTank : MonoBehaviour, ITank
 {
-    float shootDelay = 0.0f;
     public GameObject bulletPrefab;
-    TankMovement tankMovement;
-    PlayerTankAnimator tankAnimator;
+
+    private float shootDelay = 0.0f;
+    private TankMovement tankMovement;
+    private PlayerTankAnimator tankAnimator;
 
     public Direction Direction
     {
@@ -21,14 +22,14 @@ public class PlayerTank : MonoBehaviour, ITank
         set => tankMovement.Stopped = value;
     }
 
-    public int PlayerIndex { get; set; } = 0;
+    public int PlayerIndex { get; set; }
 
-    static public event EventHandler TankCreated;
-    static public event EventHandler TankDestroyed;
+    public static event EventHandler TankCreated;
+    public static event EventHandler TankDestroyed;
 
     void Awake()
     {
-        TankCreated?.Invoke(this, new EventArgs());
+        TankCreated?.Invoke(this, EventArgs.Empty);
     }
 
     void Start()
@@ -39,28 +40,8 @@ public class PlayerTank : MonoBehaviour, ITank
 
     void Update()
     {
-        UpdateMovement();
-
         if (shootDelay > 0)
             shootDelay -= Time.deltaTime;
-    }
-
-    void UpdateMovement()
-    {
-        float verticalAxis = Input.GetAxis("Vertical");
-        float horizontalAxis = Input.GetAxis("Horizontal");
-
-        tankMovement.Stopped = false;
-        if (verticalAxis > 0.0f)
-            tankMovement.Direction = Direction.Up;
-        else if (verticalAxis < 0.0f)
-            tankMovement.Direction = Direction.Down;
-        else if (horizontalAxis < 0.0f)
-            tankMovement.Direction = Direction.Left;
-        else if (horizontalAxis > 0.0f)
-            tankMovement.Direction = Direction.Right;
-        else
-            tankMovement.Stopped = true;
     }
 
     public void Shoot()
@@ -84,7 +65,7 @@ public class PlayerTank : MonoBehaviour, ITank
 
     private void Destroy()
     {
-        TankDestroyed?.Invoke(this, new EventArgs());
+        TankDestroyed?.Invoke(this, EventArgs.Empty);
         Destroy(gameObject);
     }
 }

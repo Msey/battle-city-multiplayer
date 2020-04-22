@@ -11,5 +11,5 @@ public static partial class GameConstants
         Right = 3,
     }
 
-    public const int playerTanksCount = 4;
+    public const int PlayerTanksCount = 4;
 }

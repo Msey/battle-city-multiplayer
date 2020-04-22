@@ -47,7 +47,7 @@ public class EnemyTank : MonoBehaviour, ITank
     {
         tankMovement = GetComponent<TankMovement>();
         tankAnimator = GetComponent<EnemyTankAnimator>();
-        TankCreated?.Invoke(this, new EventArgs());
+        TankCreated?.Invoke(this, EventArgs.Empty);
     }
 
     void Update()
@@ -96,7 +96,7 @@ public class EnemyTank : MonoBehaviour, ITank
 
     private void Destroy()
     {
-        TankDestroyed?.Invoke(this, new EventArgs());
+        TankDestroyed?.Invoke(this, EventArgs.Empty);
         Destroy(gameObject);
     }
 }

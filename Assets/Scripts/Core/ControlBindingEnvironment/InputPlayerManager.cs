@@ -41,6 +41,18 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
         }
     }
 
+    private void Update()
+    {
+        for (int i = 0; i < maxPlayers; i++)
+        {
+            if (players[i] != null && players[i].Tank != null)
+            {
+                players[i].Update();
+                //print("i = "+i+" "+(int)players[i].GetStandartDirection());
+            }
+        }
+    }
+
 
     public string GetPlayerActionCode(int playerNumber, ActionType actionType)
     {
@@ -151,25 +163,21 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
 
     void OnPlayerTankCreated(object sender, EventArgs e)
     {
-        PlayerTank tank = sender as PlayerTank;
-        if (tank == null)
-            return;
+        var lastCreatedTank = (PlayerTank)sender;
 
-        if ((tank.PlayerIndex < 0 || tank.PlayerIndex >= GameConstants.playerTanksCount))
-            return;
-
-        print(tank.PlayerIndex);
+        if (Utils.InRange(0, lastCreatedTank.PlayerIndex, GameConstants.PlayerTanksCount))
+        {
+            players[lastCreatedTank.PlayerIndex].Tank = lastCreatedTank;
+        }
     }
 
     void OnPlayerTankDestroyed(object sender, EventArgs e)
     {
-        PlayerTank tank = sender as PlayerTank;
-        if (tank == null)
-            return;
+        var lastCreatedTank = (PlayerTank)sender;
 
-        if ((tank.PlayerIndex < 0 || tank.PlayerIndex >= GameConstants.playerTanksCount))
-            return;
-
-        print(tank.PlayerIndex);
+        if (Utils.InRange(0, lastCreatedTank.PlayerIndex, GameConstants.PlayerTanksCount))
+        {
+            players[lastCreatedTank.PlayerIndex].Tank = null;
+        }
     }
 }

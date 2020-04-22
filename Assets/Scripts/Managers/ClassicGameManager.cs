@@ -33,8 +33,8 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     [SerializeField]
     ClassicGameLevelInfo[] levels;
 
-    bool[] playerTankCreating = new bool[GameConstants.playerTanksCount] { false, false, false, false };
-    bool[] playerTankLiving = new bool[GameConstants.playerTanksCount] { false, false, false, false };
+    bool[] playerTankCreating = new bool[GameConstants.PlayerTanksCount] { false, false, false, false };
+    bool[] playerTankLiving = new bool[GameConstants.PlayerTanksCount] { false, false, false, false };
 
     override protected void Awake()
     {
@@ -55,7 +55,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         LoadLevelObjects();
         CreateEnemyQueue();
         LoadSpawnPoints();
-        GameStarted?.Invoke(this, new EventArgs());
+        GameStarted?.Invoke(this, EventArgs.Empty);
         GenerateEnemyTank();
         CreatePlayerTanks();
     }
@@ -67,7 +67,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     public void SpawnPlayerTank(int playerIndex)
     {
-        if (playerIndex < 0 || playerIndex >= GameConstants.playerTanksCount)
+        if (playerIndex < 0 || playerIndex >= GameConstants.PlayerTanksCount)
             return;
 
         if (playerTankCreating[playerIndex])
@@ -128,7 +128,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
                 playerSpawnPoints.Add(spawnPoint);
         }
 
-        Assert.AreEqual(playerSpawnPoints.Count, GameConstants.playerTanksCount);
+        Assert.AreEqual(playerSpawnPoints.Count, GameConstants.PlayerTanksCount);
     }
 
     void GenerateEnemyTank()
@@ -197,7 +197,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         if (tank == null)
             return;
 
-        if (tank.PlayerIndex < 0 || tank.PlayerIndex >= GameConstants.playerTanksCount)
+        if (tank.PlayerIndex < 0 || tank.PlayerIndex >= GameConstants.PlayerTanksCount)
             return;
 
         playerTankCreating[tank.PlayerIndex] = false;
@@ -210,7 +210,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         if (tank == null)
             return;
 
-        if (tank.PlayerIndex < 0 || tank.PlayerIndex >= GameConstants.playerTanksCount)
+        if (tank.PlayerIndex < 0 || tank.PlayerIndex >= GameConstants.PlayerTanksCount)
             return;
 
         playerTankLiving[tank.PlayerIndex] = false;
