@@ -10,7 +10,7 @@ public class TankMovement : MonoBehaviour
     //1px dendy tank = 0,000625 unity
 
     [SerializeField]
-    Direction direction = Direction.Up;
+    Direction direction;
     public Direction Direction
     {
         get
@@ -81,13 +81,13 @@ public class TankMovement : MonoBehaviour
 
         Vector2 oldCellPosition = CellPosition();
         transform.position = (Vector2)transform.position + velocity * GameUtils.DirectionVector(Direction) * Time.deltaTime;
-        UpdateColliderPoition();
+        UpdateColliderPosition();
 
         var obstacle = Physics2D.OverlapCircle(FrontCellPosition(), ColliderScaledRadius(), obstaclesMask);
         if (obstacle != null)
         {
             transform.position = oldCellPosition;
-            UpdateColliderPoition();
+            UpdateColliderPosition();
         }
     }
 
@@ -96,7 +96,7 @@ public class TankMovement : MonoBehaviour
         return transform.lossyScale.x * circleCollider.radius * 0.75f;
     }
 
-    void UpdateColliderPoition()
+    void UpdateColliderPosition()
     {
         circleCollider.offset = ColliderPosition();
     }

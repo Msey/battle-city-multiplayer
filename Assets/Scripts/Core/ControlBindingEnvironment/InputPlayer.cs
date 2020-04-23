@@ -32,19 +32,32 @@ public class InputPlayer
         if (PlayerActionSet.Fire.IsPressed || PlayerActionSet.FireA.IsPressed)
             Tank.Shoot();
 
-        Tank.Stopped = false;
-        Tank.Direction = this.GetStandartDirection(); // VITEK, fix kostilek
+        bool stopTank;
+
+        Tank.Direction =
+            lastDirection =
+            GetStandartDirection(out stopTank);
+
+        Tank.Stopped = stopTank;
     }
 
-    public Direction GetStandartDirection()
+
+    private Direction lastDirection;
+    public Direction GetStandartDirection(out bool stopTank)
     {
+        stopTank = false;
+
         if (PlayerActionSet.Left.IsPressed)
             return Direction.Left;
         if (PlayerActionSet.Right.IsPressed)
             return Direction.Right;
         if (PlayerActionSet.Up.IsPressed)
             return Direction.Up;
+        if (PlayerActionSet.Down.IsPressed)
+            return Direction.Down;
 
-        return Direction.Down;
+        stopTank = true;
+
+        return lastDirection;
     }
 }
