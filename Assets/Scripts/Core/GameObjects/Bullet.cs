@@ -2,12 +2,14 @@
 using static GameConstants;
 
 [RequireComponent(typeof(CircleCollider2D))]
-public class Bullet : MonoBehaviour
+public class Bullet : MonoBehaviour, IBullet
 {
-    public Direction Direction { get; set; } = Direction.Right;
+    public Direction Direction { get; set; }
+    public ITank Owner { get; set; }
 
-    CircleCollider2D circleCollider;
     public float velocity = 5.4f;
+
+    private CircleCollider2D circleCollider;
     private int obstaclesMask = 0;
 
     public float Radius
@@ -20,38 +22,48 @@ public class Bullet : MonoBehaviour
         get { return obstaclesMask; }
     }
 
+    public EntityRelationGroup Group { get; set; }
 
     void Start()
     {
         circleCollider = GetComponent<CircleCollider2D>();
-        obstaclesMask = LayerMask.GetMask("Brick", "Concrete");
+        obstaclesMask = LayerMask.GetMask("Brick", "Concrete", "LevelBorder", "Tank", "Bullet");
     }
 
     private void Update()
     {
         transform.position = (Vector2)transform.position + velocity * GameUtils.DirectionVector(Direction) * Time.deltaTime;
         transform.rotation = Quaternion.Euler(0.0f, 0.0f, GameUtils.DirectionAngle(Direction));
+
         var obstacles = Physics2D.OverlapCircleAll(transform.position, Radius, ObstaclesMask);
+
+        bool destroyCurrent = false;
+
         foreach (var obstacle in obstacles)
         {
-            var bulletTarget = (obstacle.gameObject.GetComponent<IBulletTarget>());
-            if (bulletTarget != null)
-                bulletTarget.OnHit(this);
+            IBulletTarget other = obstacle.gameObject.GetComponent<IBulletTarget>();
+
+            if (other != null)
+            {
+                if (other.Group != this.Group)
+                {
+                    other.OnHit(this);
+                    destroyCurrent = true;
+                }
+                else continue;
+            }
         }
 
-        if (obstacles.Length > 0)
-        {
-#if DEBUG
-            print("bullet Die();");
-#endif
-            Die();
- 
-        }
+        if (destroyCurrent) Die();
     }
 
     public void Die()
     {
-        //TODO: in updateammo tell owner that bullet has been destroyed
-        Destroy(this.gameObject);
+        Destroy(gameObject);
+    }
+
+    public void OnHit(IBullet bullet)
+    {
     }
 }
+

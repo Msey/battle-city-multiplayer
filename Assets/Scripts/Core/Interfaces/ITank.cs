@@ -1,6 +1,6 @@
 ﻿using static GameConstants;
 
-public interface ITank
+public interface ITank : IBulletTarget
 {
     Direction Direction { get; set; }
 

@@ -16,8 +16,10 @@ public class Brick : MonoBehaviour, IBulletTarget
     private BrickState brickState = BrickState.Full;
     private Animator animator;
 
+ public EntityRelationGroup Group { get; set; }
     void Awake()
     {
+        Group = new EntityRelationGroup(this);
         animator = GetComponent<Animator>();
     }
 
@@ -25,11 +27,8 @@ public class Brick : MonoBehaviour, IBulletTarget
     {
         Destroy(gameObject);
     }
-    public void OnHit(Bullet bullet)
+    public void OnHit(IBullet bullet)
     {
-        if (!bullet)
-            return;
-
         if (brickState != BrickState.Full)
             Die();
         else

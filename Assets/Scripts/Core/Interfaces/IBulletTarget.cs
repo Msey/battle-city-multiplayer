@@ -1,5 +1,7 @@
 ﻿
 public interface IBulletTarget
 {
-    void OnHit(Bullet bullet);
+    void OnHit(IBullet bullet);
+
+    EntityRelationGroup Group { get; set; }
 }

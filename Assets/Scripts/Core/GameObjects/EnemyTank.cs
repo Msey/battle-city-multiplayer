@@ -39,12 +39,15 @@ public class EnemyTank : MonoBehaviour, ITank
         get => tankMovement.Stopped;
         set => tankMovement.Stopped = value;
     }
+    public EntityRelationGroup Group { get ; set; }
 
     static public event EventHandler TankCreated;
     static public event EventHandler TankDestroyed;
 
     private void Awake()
     {
+        Group = new EntityRelationGroup(this);
+
         tankMovement = GetComponent<TankMovement>();
         tankAnimator = GetComponent<EnemyTankAnimator>();
         TankCreated?.Invoke(this, EventArgs.Empty);
@@ -98,5 +101,9 @@ public class EnemyTank : MonoBehaviour, ITank
     {
         TankDestroyed?.Invoke(this, EventArgs.Empty);
         Destroy(gameObject);
+    }
+
+    public void OnHit(IBullet bullet)
+    {
     }
 }
