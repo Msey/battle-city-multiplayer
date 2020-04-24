@@ -1,13 +1,14 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 using static GameConstants;
 
 [RequireComponent(typeof(TankMovement),typeof(PlayerTankAnimator))]
 public class PlayerTank : MonoBehaviour, ITank
 {
     public GameObject bulletPrefab;
-
-    private float shootDelay = 0.0f;
+    public GameObject explosionPrefab;
+    private bool canShoot = true;
     private TankMovement tankMovement;
     private PlayerTankAnimator tankAnimator;
 
@@ -30,6 +31,8 @@ public class PlayerTank : MonoBehaviour, ITank
 
     void Awake()
     {
+        Assert.IsNotNull(bulletPrefab);
+        Assert.IsNotNull(explosionPrefab);
         Group = new EntityRelationGroup(this);
         TankCreated?.Invoke(this, EventArgs.Empty);
     }
@@ -40,16 +43,9 @@ public class PlayerTank : MonoBehaviour, ITank
         tankAnimator = GetComponent<PlayerTankAnimator>();
     }
 
-    void Update()
-    {
-        if (shootDelay > 0)
-            shootDelay -= Time.deltaTime;
-    }
-
     public void Shoot()
     {
-        const float SHOOT_DELAY_CONSTANT = 0.6f; // TODO: need to be replaced with Level_Upgrade_Constants (later probably)
-        if (shootDelay <= 0)
+        if (canShoot)
         {
             var bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
             var bulletComponent = bullet.GetComponent<IBullet>();
@@ -60,7 +56,7 @@ public class PlayerTank : MonoBehaviour, ITank
                 bulletComponent.Owner = this;
                 bulletComponent.Group = new EntityRelationGroup(this);
             }
-            shootDelay = SHOOT_DELAY_CONSTANT;
+            canShoot = false;
         }
     }
 
@@ -78,5 +74,10 @@ public class PlayerTank : MonoBehaviour, ITank
     public void OnHit(IBullet bullet)
     {
         print(1);
+    }
+
+    public void OnBulletHit(IBullet bullet)
+    {
+        canShoot = true;
     }
 }

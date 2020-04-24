@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 using static GameConstants;
 
 [RequireComponent(typeof(CircleCollider2D))]
@@ -8,9 +9,11 @@ public class Bullet : MonoBehaviour, IBullet
     public ITank Owner { get; set; }
 
     public float velocity = 5.4f;
+    public GameObject explosionPrefab;
 
     private CircleCollider2D circleCollider;
     private int obstaclesMask = 0;
+    private bool needCreateExplosion = true;
 
     public float Radius
     {
@@ -23,6 +26,11 @@ public class Bullet : MonoBehaviour, IBullet
     }
 
     public EntityRelationGroup Group { get; set; }
+
+    void Awake()
+    {
+        Assert.IsNotNull(explosionPrefab);
+    }
 
     void Start()
     {
@@ -41,17 +49,16 @@ public class Bullet : MonoBehaviour, IBullet
 
         foreach (var obstacle in obstacles)
         {
-            IBulletTarget other = obstacle.gameObject.GetComponent<IBulletTarget>();
+            IBulletTarget bulletTarget = obstacle.gameObject.GetComponent<IBulletTarget>();
 
-            if (other != null)
+            if (bulletTarget?.Group != this.Group)
             {
-                if (other.Group != this.Group)
-                {
-                    other.OnHit(this);
-                    destroyCurrent = true;
-                }
-                else continue;
+                bulletTarget.OnHit(this);
+                if (Owner != null)
+                    Owner.OnBulletHit(this);
+                destroyCurrent = true;           
             }
+            else continue;
         }
 
         if (destroyCurrent) Die();
@@ -59,11 +66,15 @@ public class Bullet : MonoBehaviour, IBullet
 
     public void Die()
     {
+        if (needCreateExplosion)
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 
     public void OnHit(IBullet bullet)
     {
+        needCreateExplosion = false;
+        Die();
     }
 }
 

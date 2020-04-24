@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 using static GameConstants;
 
 [RequireComponent(typeof(TankMovement), typeof(EnemyTankAnimator))]
@@ -27,6 +28,7 @@ public class EnemyTank : MonoBehaviour, ITank
 
     float shootDelay = 0.0f;
     public GameObject bulletPrefab;
+    public GameObject explosionPrefab;
     TankMovement tankMovement;
     EnemyTankAnimator tankAnimator;
 
@@ -46,8 +48,10 @@ public class EnemyTank : MonoBehaviour, ITank
 
     private void Awake()
     {
-        Group = new EntityRelationGroup(this);
+        Assert.IsNotNull(bulletPrefab);
+        Assert.IsNotNull(explosionPrefab);
 
+        Group = new EntityRelationGroup(this);
         tankMovement = GetComponent<TankMovement>();
         tankAnimator = GetComponent<EnemyTankAnimator>();
         TankCreated?.Invoke(this, EventArgs.Empty);
@@ -99,11 +103,18 @@ public class EnemyTank : MonoBehaviour, ITank
 
     private void Destroy()
     {
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         TankDestroyed?.Invoke(this, EventArgs.Empty);
         Destroy(gameObject);
     }
 
     public void OnHit(IBullet bullet)
     {
+        Destroy();
+    }
+
+    public void OnBulletHit(IBullet bullet)
+    {
+
     }
 }

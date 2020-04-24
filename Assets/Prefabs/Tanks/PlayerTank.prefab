@@ -71,8 +71,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -598994931
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: -9014633916290698030, guid: e0e78549e6927e04886d1de24bc73e08,
     type: 3}
@@ -148,6 +148,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 1529277084776549667, guid: d9364bf9dcc706042a3e87d2c5fc6af5,
+    type: 3}
+  explosionPrefab: {fileID: 5257524347701420840, guid: c3cbfc46606c6ee438a33be6583d13e4,
     type: 3}
 --- !u!114 &2473230439682506924
 MonoBehaviour:

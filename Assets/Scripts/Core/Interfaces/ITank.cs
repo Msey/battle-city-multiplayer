@@ -7,4 +7,6 @@ public interface ITank : IBulletTarget
     bool Stopped { get; set; }
 
     void Shoot();
+
+    void OnBulletHit(IBullet bullet);
 }
