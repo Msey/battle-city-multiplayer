@@ -23,8 +23,8 @@ public class EntityRelationGroup
         {
             CurrentGroup = GroupType.Enemies;
         }
-        else if (entity is Brick ||
-            entity is Concrete ||
+        else if (entity is Concrete ||
+            entity is LevelBorder ||
             entity is Brick)
         {
             CurrentGroup = GroupType.Obstacles;
