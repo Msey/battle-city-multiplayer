@@ -48,7 +48,6 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
             if (players[i] != null && players[i].Tank != null)
             {
                 players[i].Update();
-                //print("i = "+i+" "+(int)players[i].GetStandartDirection());
             }
         }
     }
