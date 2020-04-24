@@ -10,6 +10,7 @@ TagManager:
   - Brick
   - Water
   - Bullet
+  - PickUp
   layers:
   - Default
   - TransparentFX
@@ -28,7 +29,7 @@ TagManager:
   - Ice
   - LevelBorder
   - EagleFortress
-  - 
+  - PickUp
   - 
   - 
   - 
