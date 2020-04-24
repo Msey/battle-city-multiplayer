@@ -46,8 +46,8 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     private void Start() => LoadLevel();
     protected override void OnDestroy() => StopListeningEvents();
 
-    static public event EventHandler GameStarted; //TODO, move to other place
-    static public event EventHandler GameEnded; //TODO, move to other place
+    public event EventHandler GameStarted; //TODO, move to other place
+    public event EventHandler GameEnded; //TODO, move to other place
 
     void LoadLevel()
     {

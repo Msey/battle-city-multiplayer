@@ -28,12 +28,13 @@ public class HUDController : MonoBehaviour
         Assert.IsNotNull(livesPanelLayout);
         Assert.IsNotNull(livesPanelPrefab);
 
-        ClassicGameManager.GameStarted += OnGameStarted;
+        ClassicGameManager.s_Instance.GameStarted += OnGameStarted;
         EnemyTank.TankCreated += OnEnemyTankCreated;
     }
 
     private void OnDestroy()
     {
+        ClassicGameManager.s_Instance.GameStarted -= OnGameStarted;
         EnemyTank.TankCreated -= OnEnemyTankCreated;
     }
 
