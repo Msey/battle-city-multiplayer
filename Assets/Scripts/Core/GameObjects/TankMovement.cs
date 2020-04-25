@@ -9,6 +9,8 @@ public class TankMovement : MonoBehaviour
     //256px tank = 0.16 unity
     //1px dendy tank = 0,000625 unity
 
+    public ITank Owner { get; set; }
+
     [SerializeField]
     Direction direction;
     public Direction Direction
@@ -19,24 +21,26 @@ public class TankMovement : MonoBehaviour
         }
         set
         {
-            if (direction == value)
-                return;
-
-            if (GameUtils.IsDirectionAxisChanged(direction, value))
+            if (direction != value)
             {
-                Vector2 cellPosition = CellPosition();
-                Vector2 newPosition = transform.position;
-                if (GameUtils.IsVerticalAxis(value))
-                    newPosition.x = cellPosition.x;
-                else 
-                    newPosition.y = cellPosition.y;
 
-                transform.position = newPosition;
+                if (GameUtils.IsDirectionAxisChanged(direction, value))
+                {
+                    Vector2 cellPosition = CellPosition();
+                    Vector2 newPosition = transform.position;
+
+                    if (GameUtils.IsVerticalAxis(value))
+                        newPosition.x = cellPosition.x;
+                    else
+                        newPosition.y = cellPosition.y;
+
+                    transform.position = newPosition;
+                }
+
+                direction = value;
+                if (animator)
+                    animator.SetInteger("Direction", (int)direction);
             }
-
-            direction = value;
-            if (animator)
-                animator.SetInteger("Direction", (int) direction);
         }
     }
 
@@ -49,17 +53,16 @@ public class TankMovement : MonoBehaviour
         }
         set
         {
-            if (stopped == value)
-                return;
-
-            if (!stopped)
-                animator.SetFloat("Velocity", 0.0f);
-            else
-                animator.SetFloat("Velocity", velocity);
-            stopped = value;
+            if (stopped != value)
+            {
+                if (!stopped)
+                    animator.SetFloat("Velocity", 0.0f);
+                else
+                    animator.SetFloat("Velocity", Owner.Characteristics.TankSpeed);
+                stopped = value;
+            }
         }
     }
-    public float velocity = 0.0f;
 
     CircleCollider2D circleCollider;
     Animator animator;
@@ -80,7 +83,7 @@ public class TankMovement : MonoBehaviour
             return;
 
         Vector2 oldCellPosition = CellPosition();
-        transform.position = (Vector2)transform.position + velocity * GameUtils.DirectionVector(Direction) * Time.deltaTime;
+        transform.position = (Vector2)transform.position + Owner.Characteristics.TankSpeed * GameUtils.DirectionVector(Direction) * Time.deltaTime;
         UpdateColliderPosition();
 
         var obstacle = Physics2D.OverlapCircle(FrontCellPosition(), ColliderScaledRadius(), obstaclesMask);

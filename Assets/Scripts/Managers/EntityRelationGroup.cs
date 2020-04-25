@@ -1,7 +1,4 @@
-﻿
-
-
-public class EntityRelationGroup
+﻿public class EntityRelationGroup
 {
     public enum GroupType
     {

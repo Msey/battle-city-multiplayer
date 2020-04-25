@@ -8,9 +8,21 @@ public class PlayerTank : MonoBehaviour, ITank
 {
     public GameObject bulletPrefab;
     public GameObject explosionPrefab;
-    private bool canShoot = true;
+
+
     private TankMovement tankMovement;
     private PlayerTankAnimator tankAnimator;
+
+    public bool CanShoot
+    {
+        get
+        {
+            return (shootDelay <= 0 && ammoLeft > 0);
+        }
+    }
+
+    float shootDelay;
+    private int ammoLeft;
 
     public Direction Direction
     {
@@ -36,6 +48,7 @@ public class PlayerTank : MonoBehaviour, ITank
     }
 
     public EntityRelationGroup Group { get; set; }
+    public TankCharacteristicSet Characteristics { get; set; }
 
     public static event EventHandler TankCreated;
     public static event EventHandler TankDestroyed;
@@ -47,27 +60,46 @@ public class PlayerTank : MonoBehaviour, ITank
         tankMovement = GetComponent<TankMovement>();
         tankAnimator = GetComponent<PlayerTankAnimator>();
         Group = new EntityRelationGroup(this);
+        Characteristics = new TankCharacteristicSet();
     }
 
     void Start()
     {
         TankCreated?.Invoke(this, EventArgs.Empty);
+
+        tankMovement.Owner = this;
+
+        ammoLeft = Characteristics.AmmoLimit;
     }
+
+    void Update()
+    {
+        //UpdateMovement();
+
+        if (shootDelay > 0)
+            shootDelay -= Time.deltaTime;
+    }
+
 
     public void Shoot()
     {
-        if (canShoot)
+        if (CanShoot)
         {
-            var bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
-            var bulletComponent = bullet.GetComponent<IBullet>();
+            ammoLeft--;
+            shootDelay = Characteristics.ShootDelay;
+
+            IBullet bulletComponent =
+                Instantiate(bulletPrefab, transform.position, transform.rotation)
+                .GetComponent<IBullet>();
 
             if (bulletComponent != null)
             {
-                bulletComponent.Direction = tankMovement.Direction;
-                bulletComponent.Owner = this;
+                bulletComponent.Direction = Direction;
                 bulletComponent.Group = new EntityRelationGroup(this);
+                bulletComponent.Owner = this;
             }
-            canShoot = false;
+
+            
         }
     }
 
@@ -89,11 +121,17 @@ public class PlayerTank : MonoBehaviour, ITank
 
     public void OnHit(IBullet bullet)
     {
-        print(1);
+
     }
 
-    public void OnBulletHit(IBullet bullet)
+    public void OnMyBulletHit(IBullet bullet)
     {
-        canShoot = true;
+        ammoLeft++;
+
+        if (ammoLeft >= Characteristics.AmmoLimit)
+        {
+            shootDelay = 0;
+            ammoLeft = Characteristics.AmmoLimit;
+        }
     }
 }

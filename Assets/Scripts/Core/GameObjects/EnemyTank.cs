@@ -26,7 +26,7 @@ public class EnemyTank : MonoBehaviour, ITank
         }
     }
 
-    float shootDelay = 0.0f;
+    float shootDelay;
     public GameObject bulletPrefab;
     public GameObject explosionPrefab;
     TankMovement tankMovement;
@@ -42,6 +42,8 @@ public class EnemyTank : MonoBehaviour, ITank
         set => tankMovement.Stopped = value;
     }
     public EntityRelationGroup Group { get ; set; }
+    public TankCharacteristicSet Characteristics { get; set; }
+
 
     static public event EventHandler TankCreated;
     static public event EventHandler TankDestroyed;
@@ -54,11 +56,13 @@ public class EnemyTank : MonoBehaviour, ITank
         Group = new EntityRelationGroup(this);
         tankMovement = GetComponent<TankMovement>();
         tankAnimator = GetComponent<EnemyTankAnimator>();
+        Characteristics = new TankCharacteristicSet();
     }
 
     void Start()
     {
         TankCreated?.Invoke(this, EventArgs.Empty);
+        tankMovement.Owner = this;
     }
 
     void Update()
@@ -71,6 +75,13 @@ public class EnemyTank : MonoBehaviour, ITank
 
     void UpdateMovement()
     {
+        /*
+         * TODO:
+         *      1. code below must be removed
+         *      2. here should be an AI controller
+         *      3. ???
+         */
+
         float verticalAxis = Input.GetAxis("Vertical");
         float horizontalAxis = Input.GetAxis("Horizontal");
 
@@ -97,10 +108,17 @@ public class EnemyTank : MonoBehaviour, ITank
         const float SHOOT_DELAY_CONSTANT = 0.6f; // TODO: need to be replaced with Level_Upgrade_Constants (later probably)
         if (shootDelay <= 0)
         {
-            var bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
-            var bulletComponent = bullet.GetComponent<Bullet>();
-            if (bulletComponent)
-                bulletComponent.Direction = tankMovement.Direction;
+            IBullet bulletComponent = 
+                Instantiate(bulletPrefab, transform.position, transform.rotation)
+                .GetComponent<IBullet>();
+
+            if (bulletComponent != null)
+            {
+                bulletComponent.Direction = Direction;
+                bulletComponent.Group = new EntityRelationGroup(this);
+                bulletComponent.Owner = this;
+            }                
+
             shootDelay = SHOOT_DELAY_CONSTANT;
         }
     }
@@ -121,7 +139,7 @@ public class EnemyTank : MonoBehaviour, ITank
         Destroy();
     }
 
-    public void OnBulletHit(IBullet bullet)
+    public void OnMyBulletHit(IBullet bullet)
     {
 
     }

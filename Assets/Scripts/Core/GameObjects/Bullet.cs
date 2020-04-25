@@ -8,7 +8,6 @@ public class Bullet : MonoBehaviour, IBullet
     public Direction Direction { get; set; }
     public ITank Owner { get; set; }
 
-    public float velocity = 5.4f;
     public GameObject explosionPrefab;
 
     private CircleCollider2D circleCollider;
@@ -40,7 +39,7 @@ public class Bullet : MonoBehaviour, IBullet
 
     private void Update()
     {
-        transform.position = (Vector2)transform.position + velocity * GameUtils.DirectionVector(Direction) * Time.deltaTime;
+        transform.position = (Vector2)transform.position + Owner.Characteristics.BulletSpeed * GameUtils.DirectionVector(Direction) * Time.deltaTime;
         transform.rotation = Quaternion.Euler(0.0f, 0.0f, GameUtils.DirectionAngle(Direction));
 
         var obstacles = Physics2D.OverlapCircleAll(transform.position, Radius, ObstaclesMask);
@@ -54,8 +53,8 @@ public class Bullet : MonoBehaviour, IBullet
             if (bulletTarget?.Group != this.Group)
             {
                 bulletTarget.OnHit(this);
-                if (Owner != null)
-                    Owner.OnBulletHit(this);
+                Owner?.OnMyBulletHit(this);
+
                 destroyCurrent = true;           
             }
             else continue;

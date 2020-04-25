@@ -14,7 +14,7 @@ public class SpawnPointAnimatorController : MonoBehaviour
 
     public void PlayAnimation()
     {
-        animator.SetTrigger("StartSpawning");
+        animator?.SetTrigger("StartSpawning");
     }
 
     public void OnAnimationFinished()
