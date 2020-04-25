@@ -68,8 +68,12 @@ public class PlayerTank : MonoBehaviour, ITank
     private void Destroy()
     {
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-        TankDestroyed?.Invoke(this, EventArgs.Empty);
         Destroy(gameObject);
+    }
+
+    void OnDestroy()
+    {
+        TankDestroyed?.Invoke(this, EventArgs.Empty);
     }
 
     public void OnHit(IBullet bullet)
