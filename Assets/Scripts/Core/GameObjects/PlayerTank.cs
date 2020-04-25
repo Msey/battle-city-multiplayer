@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using static GameConstants;
 
-[RequireComponent(typeof(TankMovement),typeof(PlayerTankAnimator))]
+[RequireComponent(typeof(TankMovement), typeof(PlayerTankAnimator))]
 public class PlayerTank : MonoBehaviour, ITank
 {
     public GameObject bulletPrefab;
@@ -23,7 +23,18 @@ public class PlayerTank : MonoBehaviour, ITank
         set => tankMovement.Stopped = value;
     }
 
-    public int PlayerIndex { get; set; }
+    private int playerIndex;
+
+    public int PlayerIndex
+    {
+        get => playerIndex;
+        set
+        {
+            playerIndex = value;
+            tankAnimator.AnimationColorIndex = playerIndex % tankAnimator.AnimationColorCount;
+        }
+    }
+
     public EntityRelationGroup Group { get; set; }
 
     public static event EventHandler TankCreated;

@@ -72,7 +72,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -598994931
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: -9014633916290698030, guid: e0e78549e6927e04886d1de24bc73e08,
     type: 3}
@@ -184,4 +184,24 @@ MonoBehaviour:
     - {fileID: 7400000, guid: 0576d4749bafda44b8ebf1f82f4ee5c7, type: 2}
     - {fileID: 7400000, guid: 487b5484c9c8a1846b3b86dd5e6bae19, type: 2}
     - {fileID: 7400000, guid: 0453a2f9c4bb017478032d3b5b6b1b97, type: 2}
+  - tankette:
+    - {fileID: 7400000, guid: ba527919b12840d4fa77da5488862a49, type: 2}
+    - {fileID: 7400000, guid: 7214f7f29ace88b49a95593e1eb55cf0, type: 2}
+    - {fileID: 7400000, guid: 480ad27399cf052409654f80e7608c7c, type: 2}
+    - {fileID: 7400000, guid: 1d35f4bf3bf7a4647b7e0b325533cb72, type: 2}
+    light:
+    - {fileID: 7400000, guid: bb9824f4dc990984a9351b19bb75259f, type: 2}
+    - {fileID: 7400000, guid: b1aa7699826c82240848bcda75378a8b, type: 2}
+    - {fileID: 7400000, guid: 62f73cc75f76a8d4fb0a8986346e202e, type: 2}
+    - {fileID: 7400000, guid: c0ad4264a6e1eeb40be029cfc871252b, type: 2}
+    medium:
+    - {fileID: 7400000, guid: d5b184fdf97141242bf26619dbfcf1d4, type: 2}
+    - {fileID: 7400000, guid: 86fad52e2936ae4439a83f4b1055baeb, type: 2}
+    - {fileID: 7400000, guid: dbacd31318a0e894c9c7711d07dde25e, type: 2}
+    - {fileID: 7400000, guid: 192ff787bdfc727449daef6ff85969f8, type: 2}
+    heavy:
+    - {fileID: 7400000, guid: 8ab97ec51924b1b4a888075976e7a815, type: 2}
+    - {fileID: 7400000, guid: 202fc2001b11af347af8aacabd3f9474, type: 2}
+    - {fileID: 7400000, guid: e27256a1d3f44c246ab1b73cbc087b4b, type: 2}
+    - {fileID: 7400000, guid: 7eba31fb26d7c864ab6b04d0168984c2, type: 2}
   animationIndex: 0

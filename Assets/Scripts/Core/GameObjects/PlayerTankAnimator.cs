@@ -33,11 +33,19 @@ public class PlayerTankAnimator : MonoBehaviour
 {
     [SerializeField]
     PlayerTankAnimation[] playerTankAnimations;
-    public int animationIndex = 0;
+    public int AnimationColorIndex { get; set; }
 
     Animator animator;
     AnimatorOverrideController animatorOverrideController;
     AnimationClipOverrides clipOverrides;
+
+    public int AnimationColorCount
+    {
+        get
+        {
+            return playerTankAnimations.Length;
+        }
+    }
 
     public enum TankLevelType
     {
@@ -89,7 +97,7 @@ public class PlayerTankAnimator : MonoBehaviour
 
     void ChangeAnimationClips()
     {
-        var tankStateClips = playerTankAnimations[animationIndex].GetClips(LevelType);
+        var tankStateClips = playerTankAnimations[AnimationColorIndex].GetClips(LevelType);
         clipOverrides["PlayerTankUp"] = tankStateClips[0]; //TODO rename
         clipOverrides["PlayerTankDown"] = tankStateClips[1];
         clipOverrides["PlayerTankLeft"] = tankStateClips[2];
