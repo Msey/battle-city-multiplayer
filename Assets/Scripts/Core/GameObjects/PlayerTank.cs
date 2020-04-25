@@ -33,19 +33,14 @@ public class PlayerTank : MonoBehaviour, ITank
     {
         Assert.IsNotNull(bulletPrefab);
         Assert.IsNotNull(explosionPrefab);
+        tankMovement = GetComponent<TankMovement>();
+        tankAnimator = GetComponent<PlayerTankAnimator>();
         Group = new EntityRelationGroup(this);
-    }
-
-    public void SetPlayer(int index)
-    {
-        PlayerIndex = index;
-        TankCreated?.Invoke(this, EventArgs.Empty);
     }
 
     void Start()
     {
-        tankMovement = GetComponent<TankMovement>();
-        tankAnimator = GetComponent<PlayerTankAnimator>();
+        TankCreated?.Invoke(this, EventArgs.Empty);
     }
 
     public void Shoot()

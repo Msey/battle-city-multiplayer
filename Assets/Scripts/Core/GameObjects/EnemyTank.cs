@@ -54,6 +54,10 @@ public class EnemyTank : MonoBehaviour, ITank
         Group = new EntityRelationGroup(this);
         tankMovement = GetComponent<TankMovement>();
         tankAnimator = GetComponent<EnemyTankAnimator>();
+    }
+
+    void Start()
+    {
         TankCreated?.Invoke(this, EventArgs.Empty);
     }
 
