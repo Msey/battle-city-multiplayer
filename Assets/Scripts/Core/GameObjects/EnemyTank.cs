@@ -62,7 +62,7 @@ public class EnemyTank : MonoBehaviour, ITank
     void Start()
     {
         TankCreated?.Invoke(this, EventArgs.Empty);
-        tankMovement.Owner = this;
+        tankMovement.Velocity = Characteristics.Velocity;
     }
 
     void Update()

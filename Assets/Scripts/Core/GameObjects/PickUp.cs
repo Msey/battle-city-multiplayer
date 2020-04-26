@@ -25,8 +25,6 @@ public class PickUp : MonoBehaviour
     }
     void Update()
     {
-        print(radius);
-
         var tank = Physics2D.OverlapCircle(transform.position, radius)
             .GetComponent<ITank>();
 

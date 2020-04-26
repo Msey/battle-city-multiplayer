@@ -9,8 +9,6 @@ public class TankMovement : MonoBehaviour
     //256px tank = 0.16 unity
     //1px dendy tank = 0,000625 unity
 
-    public ITank Owner { get; set; }
-
     [SerializeField]
     Direction direction;
     public Direction Direction
@@ -58,11 +56,12 @@ public class TankMovement : MonoBehaviour
                 if (!stopped)
                     animator.SetFloat("Velocity", 0.0f);
                 else
-                    animator.SetFloat("Velocity", Owner.Characteristics.TankSpeed);
+                    animator.SetFloat("Velocity", Velocity);
                 stopped = value;
             }
         }
     }
+    public float Velocity { get; set; } = 0.0f;
 
     CircleCollider2D circleCollider;
     Animator animator;
@@ -83,7 +82,7 @@ public class TankMovement : MonoBehaviour
             return;
 
         Vector2 oldCellPosition = CellPosition();
-        transform.position = (Vector2)transform.position + Owner.Characteristics.TankSpeed * GameUtils.DirectionVector(Direction) * Time.deltaTime;
+        transform.position = (Vector2)transform.position + Velocity * GameUtils.DirectionVector(Direction) * Time.deltaTime;
         UpdateColliderPosition();
 
         var obstacle = Physics2D.OverlapCircle(FrontCellPosition(), ColliderScaledRadius(), obstaclesMask);

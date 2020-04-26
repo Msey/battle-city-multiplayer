@@ -67,7 +67,7 @@ public class PlayerTank : MonoBehaviour, ITank
     {
         TankCreated?.Invoke(this, EventArgs.Empty);
 
-        tankMovement.Owner = this;
+        tankMovement.Velocity = Characteristics.Velocity;
 
         ammoLeft = Characteristics.AmmoLimit;
     }
