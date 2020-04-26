@@ -8,7 +8,7 @@ public class Bullet : MonoBehaviour, IBullet
     public Direction Direction { get; set; }
     public ITank Owner { get; set; }
 
-    public float Velocity { get; set; }
+    public float Velocity { get; set; } = 5.4f;
     public GameObject explosionPrefab;
 
     private CircleCollider2D circleCollider;
@@ -36,7 +36,6 @@ public class Bullet : MonoBehaviour, IBullet
     {
         circleCollider = GetComponent<CircleCollider2D>();
         obstaclesMask = LayerMask.GetMask("Brick", "Concrete", "LevelBorder", "Tank", "Bullet", "EagleFortress");
-        Velocity = Owner.Characteristics.BulletSpeed;
     }
 
     private void Update()
