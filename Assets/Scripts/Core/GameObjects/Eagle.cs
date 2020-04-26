@@ -5,9 +5,10 @@ using UnityEngine.Assertions;
 public class Eagle : MonoBehaviour, IBulletTarget
 {
     public Sprite destroyedTexture;
-    private SpriteRenderer spriteRenderer;
     public GameObject explosionPrefab;
     public EntityRelationGroup Group { get; set; }
+    private SpriteRenderer spriteRenderer;
+    private bool isDestroyed = false;
     void Awake()
     {
         Assert.IsNotNull(explosionPrefab);
@@ -15,9 +16,13 @@ public class Eagle : MonoBehaviour, IBulletTarget
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public void OnHit(IBullet bullet)
+    public bool OnHit(IBullet bullet)
     {
+        if (isDestroyed)
+            return false;
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         spriteRenderer.sprite = destroyedTexture;
+        isDestroyed = true;
+        return true;
     }
 }

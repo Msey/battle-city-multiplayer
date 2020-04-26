@@ -53,9 +53,10 @@ public class Bullet : MonoBehaviour, IBullet
 
             if (bulletTarget?.Group != this.Group)
             {
-                bulletTarget.OnHit(this);
-                Owner?.OnMyBulletHit(this);
+                if (!bulletTarget.OnHit(this))
+                    continue;
 
+                Owner?.OnMyBulletHit(this);
                 destroyCurrent = true;           
             }
             else continue;
@@ -71,10 +72,11 @@ public class Bullet : MonoBehaviour, IBullet
         Destroy(gameObject);
     }
 
-    public void OnHit(IBullet bullet)
+    public bool OnHit(IBullet bullet)
     {
         needCreateExplosion = false;
         Die();
+        return true;
     }
 }
 

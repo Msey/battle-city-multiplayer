@@ -134,9 +134,10 @@ public class EnemyTank : MonoBehaviour, ITank
         TankDestroyed?.Invoke(this, EventArgs.Empty);
     }
 
-    public void OnHit(IBullet bullet)
+    public bool OnHit(IBullet bullet)
     {
         Destroy();
+        return true;
     }
 
     public void OnMyBulletHit(IBullet bullet)

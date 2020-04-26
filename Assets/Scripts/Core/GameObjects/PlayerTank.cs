@@ -119,9 +119,9 @@ public class PlayerTank : MonoBehaviour, ITank
         TankDestroyed?.Invoke(this, EventArgs.Empty);
     }
 
-    public void OnHit(IBullet bullet)
+    public bool OnHit(IBullet bullet)
     {
-
+        return true;
     }
 
     public void OnMyBulletHit(IBullet bullet)

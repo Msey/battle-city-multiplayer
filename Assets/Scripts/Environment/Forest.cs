@@ -8,8 +8,9 @@ public class Forest : MonoBehaviour, IBulletTarget
         Destroy(gameObject);
     }
 
-    public void OnHit(IBullet bullet)
+    public bool OnHit(IBullet bullet)
     {
         Die();
+        return true;
     }
 }

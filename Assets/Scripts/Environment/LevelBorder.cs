@@ -9,8 +9,8 @@ public class LevelBorder : MonoBehaviour, IBulletTarget
         Group = new EntityRelationGroup(this);
     }
 
-    public void OnHit(IBullet bullet)
+    public bool OnHit(IBullet bullet)
     {
-      
+        return true;
     }
 }

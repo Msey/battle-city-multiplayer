@@ -28,7 +28,7 @@ public class Brick : MonoBehaviour, IBulletTarget
     {
         Destroy(gameObject);
     }
-    public void OnHit(IBullet bullet)
+    public bool OnHit(IBullet bullet)
     {
         if (brickState != BrickState.Full)
             Die();
@@ -50,6 +50,8 @@ public class Brick : MonoBehaviour, IBulletTarget
                     break;
             }
         }
+
+        return true;
     }
 
     void SetBrickState(BrickState brickState)
