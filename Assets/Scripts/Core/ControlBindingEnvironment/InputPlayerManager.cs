@@ -82,9 +82,9 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
         return null;
     }
 
-    public void BindPlayerKeyCode(int playerNumber, ActionType actionType)
+    public void BindPlayerKeyCode(int playerIndex, ActionType actionType)
     {
-        var player = players[playerNumber - 1];
+        var player = players[playerIndex];
 
         switch (actionType)
         {
@@ -137,7 +137,7 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
         for (int i = 0; i < players.Count; i++)
         {
             saveData = players[i].PlayerActionSet.Save();
-            PlayerPrefs.SetString("BindingsPlayer_" + i, saveData);
+            PlayerPrefs.SetString("BindingsPlayer__" + i, saveData);
         }
     }
 
@@ -146,9 +146,9 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
     {
         for (int i = 0; i < players.Count; i++)
         {
-            if (PlayerPrefs.HasKey("BindingsPlayer_" + i))
+            if (PlayerPrefs.HasKey("BindingsPlayer__" + i))
             {
-                saveData = PlayerPrefs.GetString("BindingsPlayer_" + i);
+                saveData = PlayerPrefs.GetString("BindingsPlayer__" + i);
                 players[i].PlayerActionSet.Load(saveData);
             }
         }

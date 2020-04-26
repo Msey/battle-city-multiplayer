@@ -29,11 +29,6 @@ public class InputPlayerActions : PlayerActionSet
     {
         var actions = GetDefaultBindingSettings();
 
-        actions.Up.AddDefaultBinding(Key.UpArrow);
-        actions.Down.AddDefaultBinding(Key.DownArrow);
-        actions.Left.AddDefaultBinding(Key.LeftArrow);
-        actions.Right.AddDefaultBinding(Key.RightArrow);
-
         actions.Up.AddDefaultBinding(Key.W);
         actions.Down.AddDefaultBinding(Key.S);
         actions.Left.AddDefaultBinding(Key.A);
@@ -48,11 +43,6 @@ public class InputPlayerActions : PlayerActionSet
     public static InputPlayerActions CreateWithEmptyBindings()
     {
         var actions = GetDefaultBindingSettings();
-
-        actions.Up.AddDefaultBinding(Key.None);
-        actions.Down.AddDefaultBinding(Key.None);
-        actions.Left.AddDefaultBinding(Key.None);
-        actions.Right.AddDefaultBinding(Key.None);
 
         actions.Up.AddDefaultBinding(Key.None);
         actions.Down.AddDefaultBinding(Key.None);

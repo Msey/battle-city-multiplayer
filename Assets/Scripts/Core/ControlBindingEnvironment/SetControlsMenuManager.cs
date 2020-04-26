@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class SetControlsMenuManager : MonoBehaviour
 {
-    public Transform[] PlayerControlButtonSet;
+    public Transform[] PlayerControlButtonSets;
 
     private InputPlayerManager PlayerManager;
 
@@ -19,9 +19,11 @@ public class SetControlsMenuManager : MonoBehaviour
 
     private void DefineKeyCodes()
     {
-        for (int i = 0; i < PlayerControlButtonSet.Length; i++)
+        foreach (var buttonSet in PlayerControlButtonSets)
         {
-            foreach (Transform child in PlayerControlButtonSet[i])
+            int i = buttonSet.GetSiblingIndex();
+
+            foreach (Transform child in buttonSet)
             {
                 string keyCodeString = child.GetChild(0).name.Split('_')[0];
                 switch (keyCodeString)
@@ -35,128 +37,129 @@ public class SetControlsMenuManager : MonoBehaviour
                 }
             }
         }
+
     }
 
     public void p1_OnFireAKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.FireA);
+        PlayerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.FireA);
     }
 
     public void p1_OnFireKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Fire);
+        PlayerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Fire);
     }
 
     public void p1_OnLeftKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Left);
+        PlayerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Left);
     }
 
     public void p1_OnRightKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Right);
+        PlayerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Right);
     }
 
     public void p1_OnUpKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Up);
+        PlayerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Up);
     }
 
     public void p1_OnDownKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Down);
+        PlayerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Down);
     }
 
     public void p2_OnFireAKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.FireA);
+        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.FireA);
     }
 
     public void p2_OnFireKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Fire);
+        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Fire);
     }
 
     public void p2_OnLeftKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Left);
+        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Left);
     }
 
     public void p2_OnRightKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Right);
+        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Right);
     }
 
     public void p2_OnUpKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Up);
+        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Up);
     }
 
     public void p2_OnDownKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Down);
+        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Down);
     }
 
 
     public void p3_OnFireAKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.FireA);
+        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.FireA);
     }
 
     public void p3_OnFireKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Fire);
+        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Fire);
     }
 
     public void p3_OnLeftKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Left);
+        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Left);
     }
 
     public void p3_OnRightKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Right);
+        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Right);
     }
 
     public void p3_OnUpKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Up);
+        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Up);
     }
 
     public void p3_OnDownKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Down);
+        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Down);
     }
 
 
     public void p4_OnFireAKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(4, InputPlayerManager.ActionType.FireA);
+        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.FireA);
     }
 
     public void p4_OnFireKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(4, InputPlayerManager.ActionType.Fire);
+        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Fire);
     }
 
     public void p4_OnLeftKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(4, InputPlayerManager.ActionType.Left);
+        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Left);
     }
 
     public void p4_OnRightKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(4, InputPlayerManager.ActionType.Right);
+        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Right);
     }
 
     public void p4_OnUpKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(4, InputPlayerManager.ActionType.Up);
+        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Up);
     }
 
     public void p4_OnDownKey_BindingClick()
     {
-        PlayerManager.BindPlayerKeyCode(4, InputPlayerManager.ActionType.Down);
+        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Down);
     }
 
 
