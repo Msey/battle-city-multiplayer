@@ -16,10 +16,10 @@ public class SpawnPoint : MonoBehaviour
     }
     public PointType pointType = PointType.Player;
 
-    void Start()
+    void Awake()
     {
         animator = GetComponent<SpawnPointAnimatorController>();
-        animator.OnAnimationFinishedCallback = () => OnAnimationFinished();
+        animator.OnAnimationFinishedCallback = () => MakeSpawnRequests();
     }
 
     public void Spawn(SpawnRequest spawnRequest)
@@ -30,9 +30,9 @@ public class SpawnPoint : MonoBehaviour
         animator.PlayAnimation();
     }
 
-    void OnAnimationFinished()
+    void MakeSpawnRequests()
     {
-        if (spawnRequests.Count == 0)
+        if (!Utils.Verify(spawnRequests.Count != 0))
             return;
 
         SpawnRequest spawnRequest = spawnRequests.Dequeue();

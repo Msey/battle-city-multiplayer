@@ -95,6 +95,7 @@ public class PlayerTank : MonoBehaviour, ITank
             if (bulletComponent != null)
             {
                 bulletComponent.Direction = Direction;
+                bulletComponent.Velocity = Characteristics.BulletVelocity;
                 bulletComponent.Group = new EntityRelationGroup(this);
                 bulletComponent.Owner = this;
             }
