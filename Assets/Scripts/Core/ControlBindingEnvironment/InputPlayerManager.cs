@@ -172,11 +172,11 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
 
     void OnPlayerTankDestroyed(object sender, EventArgs e)
     {
-        var lastCreatedTank = (PlayerTank)sender;
+        var lastDestroyedTank = (PlayerTank)sender;
 
-        if (Utils.InRange(0, lastCreatedTank.PlayerIndex, GameConstants.PlayerTanksCount))
+        if (Utils.InRange(0, lastDestroyedTank.PlayerIndex, GameConstants.PlayerTanksCount))
         {
-            players[lastCreatedTank.PlayerIndex].Tank = null;
+            players[lastDestroyedTank.PlayerIndex].Tank = null;
         }
     }
 }
