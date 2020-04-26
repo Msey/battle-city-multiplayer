@@ -21,7 +21,18 @@ public static partial class GameUtils
 
     public static float DirectionAngle(Direction direction)
     {
-        return -Vector2.Angle(Vector2.up, DirectionVector(direction));
+        switch (direction)
+        {
+            case Direction.Up:
+                return 90.0f;
+            case Direction.Down:
+                return -90.0f;
+            case Direction.Left:
+                return 180.0f;
+            case Direction.Right:
+                return 0.0f;
+        }
+        return 0.0f;
     }
 
     public static bool IsDirectionAxisChanged(Direction oldDir, Direction newDir)

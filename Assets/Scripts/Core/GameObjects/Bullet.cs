@@ -41,7 +41,7 @@ public class Bullet : MonoBehaviour, IBullet
     private void Update()
     {
         transform.position = (Vector2)transform.position + Velocity * GameUtils.DirectionVector(Direction) * Time.deltaTime;
-        transform.rotation = Quaternion.Euler(0.0f, 0.0f, GameUtils.DirectionAngle(Direction));
+        transform.rotation = Quaternion.Euler(0.0f, 0.0f, GameUtils.DirectionAngle(Direction) - 90.0f);
 
         var obstacles = Physics2D.OverlapCircleAll(transform.position, Radius, ObstaclesMask);
 
