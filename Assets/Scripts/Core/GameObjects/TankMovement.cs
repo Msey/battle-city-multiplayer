@@ -62,6 +62,8 @@ public class TankMovement : MonoBehaviour
         }
     }
     public float Velocity { get; set; } = 0.0f;
+    [SerializeField]
+    private bool TransparentForTanks = true;
 
     CircleCollider2D circleCollider;
     Animator animator;
@@ -73,7 +75,7 @@ public class TankMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         animator.SetFloat("Velocity", 0.0f);
         animator.SetInteger("Direction", DirectionAnimationValue(direction));
-        obstaclesMask = LayerMask.GetMask("Water", "Brick", "Concrete", "LevelBorder");
+        obstaclesMask = LayerMask.GetMask("Water", "Brick", "Concrete", "LevelBorder", "Tank");
     }
 
     void Update()
@@ -85,8 +87,39 @@ public class TankMovement : MonoBehaviour
         transform.position = (Vector2)transform.position + Velocity * GameUtils.DirectionVector(Direction) * Time.deltaTime;
         UpdateColliderPosition();
 
-        var obstacle = Physics2D.OverlapCircle(FrontCellPosition(), ColliderScaledRadius(), obstaclesMask);
-        if (obstacle != null)
+        Collider2D[] obstacles = Physics2D.OverlapCircleAll(FrontCellPosition(), ColliderScaledRadius(), obstaclesMask);
+
+        bool makeMovement = true;
+        foreach (var obstacle in obstacles)
+        {
+            if (obstacle.gameObject == this.gameObject)
+                continue;
+
+            if (TransparentForTanks)
+            {
+                TankMovement obstacleTankMovement = obstacle.GetComponent<TankMovement>();
+                if (obstacleTankMovement != null)
+                {
+                    obstacleTankMovement.TransparentForTanks = true;
+                }
+                else
+                {
+                    makeMovement = false;
+                    TransparentForTanks = false;
+                    break;
+                }
+            }
+            else
+            {
+                makeMovement = false;
+                break;
+            }
+        }
+
+        if (obstacles.Length <= 1 && TransparentForTanks)
+            TransparentForTanks = false;
+
+        if (!makeMovement)
         {
             transform.position = oldCellPosition;
             UpdateColliderPosition();

@@ -57,7 +57,10 @@ public class Bullet : MonoBehaviour, IBullet
                     continue;
 
                 Owner?.OnMyBulletHit(this);
-                destroyCurrent = true;           
+                destroyCurrent = true;
+
+                if (bulletTarget is ITank)
+                    break;
             }
             else continue;
         }
