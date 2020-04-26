@@ -82,10 +82,10 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
         SpawnPoint spawnPoint = playerSpawnPoints[playerIndex];
         spawnPoint.Spawn((point) => {
-            PlayerTank tank = Instantiate(playerTankPrefab, point.position, Quaternion.identity).GetComponent<PlayerTank>();
-            tank.PlayerIndex = playerIndex;
             playerTankCreating[playerIndex] = false;
             playerTankLiving[playerIndex] = true;
+            PlayerTank tank = Instantiate(playerTankPrefab, point.position, Quaternion.identity).GetComponent<PlayerTank>();
+            tank.PlayerIndex = playerIndex;
         });
     }
 

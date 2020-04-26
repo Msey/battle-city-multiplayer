@@ -7,7 +7,7 @@ public class SpawnPointAnimatorController : MonoBehaviour
     public Action OnAnimationFinishedCallback = ()=> {};
 
     Animator animator;
-    void Start()
+    void Awake()
     {
         animator = GetComponent<Animator>();
     }
