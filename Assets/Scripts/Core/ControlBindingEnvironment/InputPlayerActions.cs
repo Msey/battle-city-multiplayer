@@ -10,9 +10,9 @@ public class InputPlayerActions : PlayerActionSet
     public PlayerAction Right;
     public PlayerAction Up;
     public PlayerAction Down;
-    public PlayerTwoAxisAction Direction;
     public PlayerAction Fire;
     public PlayerAction FireA;
+    public PlayerTwoAxisAction Direction;
 
     public InputPlayerActions()
     {
@@ -63,9 +63,6 @@ public class InputPlayerActions : PlayerActionSet
         actions.ListenOptions.IncludeUnknownControllers = true;
 
         actions.ListenOptions.MaxAllowedBindings = 1;
-
-        actions.ListenOptions.OnBindingAdded += (action, binding) =>
-           Debug.Log("Binding added... " + binding.DeviceName + ": " + binding.Name);
 
         return actions;
     }

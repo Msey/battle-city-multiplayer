@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class SetControlsMenuManager : MonoBehaviour
 {
+
+
     public Transform[] PlayerControlButtonSets;
 
     private InputPlayerManager PlayerManager;
@@ -19,25 +21,62 @@ public class SetControlsMenuManager : MonoBehaviour
 
     private void DefineKeyCodes()
     {
-        foreach (var buttonSet in PlayerControlButtonSets)
-        {
-            int i = buttonSet.GetSiblingIndex();
+        var components = new Dictionary<string, Text>[PlayerControlButtonSets.Length];
 
-            foreach (Transform child in buttonSet)
+        for (int setIndex = 0; setIndex < PlayerControlButtonSets.Length; setIndex++)
+        {
+
+            components[setIndex] = new Dictionary<string, Text>();
+
+            foreach (Transform child in PlayerControlButtonSets[setIndex])
             {
                 string keyCodeString = child.GetChild(0).name.Split('_')[0];
+
+                var textComponent = child.GetChild(0).GetComponent<Text>();
                 switch (keyCodeString)
                 {
-                    case "Left": child.GetChild(0).GetComponent<Text>().text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(i, InputPlayerManager.ActionType.Left); break;
-                    case "Right": child.GetChild(0).GetComponent<Text>().text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(i, InputPlayerManager.ActionType.Right); break;
-                    case "Up": child.GetChild(0).GetComponent<Text>().text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(i, InputPlayerManager.ActionType.Up); break;
-                    case "Down": child.GetChild(0).GetComponent<Text>().text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(i, InputPlayerManager.ActionType.Down); break;
-                    case "Fire": child.GetChild(0).GetComponent<Text>().text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(i, InputPlayerManager.ActionType.Fire); break;
-                    case "FireA": child.GetChild(0).GetComponent<Text>().text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(i, InputPlayerManager.ActionType.FireA); break;
+                    case "Left":
+                        {
+                            components[setIndex].Add(keyCodeString, textComponent);
+                            textComponent.text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.Left);
+                        }
+                        break;
+                    case "Right":
+                        {
+                            components[setIndex].Add(keyCodeString, textComponent);
+                            textComponent.text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.Right);
+                        }
+                        break;
+                    case "Up":
+                        {
+                            components[setIndex].Add(keyCodeString, textComponent);
+                            textComponent.text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.Up);
+                        }
+                        break;
+                    case "Down":
+                        {
+                            components[setIndex].Add(keyCodeString, textComponent);
+                            textComponent.text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.Down);
+                        }
+                        break;
+                    case "Fire":
+                        {
+                            components[setIndex].Add(keyCodeString, textComponent);
+                            textComponent.text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.Fire);
+                        }
+                        break;
+                    case "FireA":
+                        {
+                            components[setIndex].Add(keyCodeString, textComponent);
+                            textComponent.text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.FireA);
+                        }
+                        break;
                 }
+
             }
         }
 
+        PlayerManager.AssignButtonTextComponents(components);
     }
 
     public void p1_OnFireAKey_BindingClick()

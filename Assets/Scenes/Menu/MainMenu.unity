@@ -3779,7 +3779,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d664cc7bf1464df4bb054e9e066a322a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxPlayers: 4
 --- !u!4 &1300749356
 Transform:
   m_ObjectHideFlags: 0
@@ -4986,7 +4985,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1254187742}
-        m_MethodName: p3_OnDownKey_BindingClick
+        m_MethodName: p2_OnDownKey_BindingClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5863,7 +5862,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1254187742}
-        m_MethodName: p2_OnDownKey_BindingClick
+        m_MethodName: p1_OnDownKey_BindingClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
