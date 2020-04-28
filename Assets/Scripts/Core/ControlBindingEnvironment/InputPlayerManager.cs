@@ -48,9 +48,13 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
                 var component = this.components[cached_index][aName];
                 component.text = $"{aName}: {binding.Name}";
                 //print("Binding added... " + binding.DeviceName + ": " + binding.Name);
+
+                OnBindingAdded?.Invoke(cached_index, EventArgs.Empty);
             };
         }
     }
+
+    public static event EventHandler OnBindingAdded;
 
 
     private void Update()
