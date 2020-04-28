@@ -18,9 +18,13 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     List<SpawnPoint> enemySpawnPoints = new List<SpawnPoint>();
     List<SpawnPoint> playerSpawnPoints = new List<SpawnPoint>();
     Queue<EnemyTank.EnemyTankType> enemiesQueue = new Queue<EnemyTank.EnemyTankType>();
+    [SerializeField]
     int createdEnemyTanksCount = 0;
+    [SerializeField]
     int livedEnemyTanksCount = 0;
+    [SerializeField]
     int enemyTanksOnCreatingCount = 0;
+    [SerializeField]
     int levelEnemeyTanksCount = 0;
 
     public int LevelEnemeyTanksCount { get => levelEnemeyTanksCount; }
@@ -36,6 +40,21 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     bool[] playerTankCreating = new bool[GameConstants.PlayerTanksCount] { false, false, false, false };
     bool[] playerTankLiving = new bool[GameConstants.PlayerTanksCount] { false, false, false, false };
 
+    [SerializeField]
+    GameConstants.GameState gameState = GameConstants.GameState.NotStarted;
+    public GameConstants.GameState GameState
+    {
+        get => gameState;
+        protected set
+        {
+            if (gameState == value)
+                return;
+
+            gameState = value;
+            GameStateChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
     override protected void Awake()
     {
         Assert.IsNotNull(enemyTankPrefab);
@@ -43,11 +62,20 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
         base.Awake();
     }
-    private void Start() => LoadLevel();
+    private void Start() => StartGame();
+
     protected override void OnDestroy() => StopListeningEvents();
 
-    public event EventHandler GameStarted; //TODO, move to other place
-    public event EventHandler GameEnded; //TODO, move to other place
+    public event EventHandler GameStateChanged;
+
+    public void StartGame()
+    {
+        if (!Utils.Verify(GameState == GameConstants.GameState.NotStarted))
+            return;
+
+        LoadLevel();
+        GameState = GameConstants.GameState.Started;
+    }
 
     void LoadLevel()
     {
@@ -55,7 +83,6 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         LoadLevelObjects();
         CreateEnemyQueue();
         LoadSpawnPoints();
-        GameStarted?.Invoke(this, new EventArgs());
         GenerateEnemyTank();
         CreatePlayerTanks();
     }
@@ -142,7 +169,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     void GenerateEnemyTank()
     {
-        if (enemiesQueue.Count == 0)
+        if (enemiesQueue.Count - enemyTanksOnCreatingCount == 0)
             return;
         enemyTanksOnCreatingCount++;
         int spawnPointIndex = createdEnemyTanksCount % enemySpawnPoints.Count;
@@ -155,7 +182,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         if (spawnPoint == null)
             return;
 
-        if (enemiesQueue.Count == 0)
+        if (!Utils.Verify(enemiesQueue.Count != 0))
             return;
 
         EnemyTank tank = Instantiate(enemyTankPrefab, spawnPoint.position, Quaternion.identity).GetComponent<EnemyTank>();
@@ -169,6 +196,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         EnemyTank.TankDestroyed += OnEnemyTankDestroyed;
         PlayerTank.TankCreated += OnPlayerTankCreated;
         PlayerTank.TankDestroyed += OnPlayerTankDestroyed;
+        Eagle.EagleDestroyed += OnEagleDestroyed;
     }
 
     void StopListeningEvents()
@@ -177,6 +205,17 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         EnemyTank.TankDestroyed -= OnEnemyTankDestroyed;
         PlayerTank.TankCreated -= OnPlayerTankCreated;
         PlayerTank.TankDestroyed -= OnPlayerTankDestroyed;
+        Eagle.EagleDestroyed -= OnEagleDestroyed;
+    }
+
+    void WinGame()
+    {
+        GameState = GameConstants.GameState.Finished;
+    }
+
+    void LoseGame()
+    {
+        GameState = GameConstants.GameState.Finished;
     }
 
     void OnEnemyTankCreated(object sender, EventArgs e)
@@ -192,8 +231,11 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     void OnEnemyTankDestroyed(object sender, EventArgs e)
     {
         livedEnemyTanksCount--;
-        if (enemiesQueue.Count == 0)
-            return; //level ended
+        if (enemiesQueue.Count == 0 && livedEnemyTanksCount == 0 && enemyTanksOnCreatingCount == 0)
+        {
+            WinGame();
+            return;
+        }
         else if ((livedEnemyTanksCount + enemyTanksOnCreatingCount) < maxEnemyLivesTanksCount)
             GenerateEnemyTank();
     }
@@ -221,5 +263,10 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             return;
 
         playerTankLiving[tank.PlayerIndex] = false;
+    }
+
+    void OnEagleDestroyed(object sender, EventArgs e)
+    {
+        LoseGame();
     }
 }

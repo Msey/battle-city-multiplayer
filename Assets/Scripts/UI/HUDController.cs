@@ -6,7 +6,12 @@ using UnityEngine.Assertions;
 
 public class HUDController : MonoBehaviour
 {
-    public Text currentStageText;
+    public GameObject notStartedCanvas;
+    public GameObject inGameCanvas;
+    public GameObject finishedCanvas;
+
+    public Text currentStageHUDText;
+    public Text stageStartText;
     public LayoutGroup tanksCountLayout;
     public GameObject tanksPrefab;
     private List<GameObject> tanksIcons;
@@ -18,7 +23,12 @@ public class HUDController : MonoBehaviour
 
     protected void Awake()
     {
-        Assert.IsNotNull(currentStageText);
+        Assert.IsNotNull(notStartedCanvas);
+        Assert.IsNotNull(inGameCanvas);
+        Assert.IsNotNull(finishedCanvas);
+
+        Assert.IsNotNull(currentStageHUDText);
+        Assert.IsNotNull(stageStartText);
 
         tanksIcons = new List<GameObject>();
         Assert.IsNotNull(tanksCountLayout);
@@ -28,13 +38,15 @@ public class HUDController : MonoBehaviour
         Assert.IsNotNull(livesPanelLayout);
         Assert.IsNotNull(livesPanelPrefab);
 
-        ClassicGameManager.s_Instance.GameStarted += OnGameStarted;
+        SetStage(LevelsManager.s_Instance.CurrentGameInfo.CurrentStage);
+        ClassicGameManager.s_Instance.GameStateChanged += OnGameStateChanged;
         EnemyTank.TankCreated += OnEnemyTankCreated;
+        UpdateUIElementsVisibility();
     }
 
     private void OnDestroy()
     {
-        ClassicGameManager.s_Instance.GameStarted -= OnGameStarted;
+        ClassicGameManager.s_Instance.GameStateChanged -= OnGameStateChanged;
         EnemyTank.TankCreated -= OnEnemyTankCreated;
     }
 
@@ -43,10 +55,13 @@ public class HUDController : MonoBehaviour
         LevelsManager.s_Instance.OpenMainMenu();
     }
 
-    public void OnGameStarted(object sender, EventArgs e)
+    public void OnGameStateChanged(object sender, EventArgs e)
     {
-        SetStage(LevelsManager.s_Instance.CurrentGameInfo.CurrentStage);
-        LoadGameInfo();
+        GameConstants.GameState newGameState = ClassicGameManager.s_Instance.GameState;
+
+        if (newGameState == GameConstants.GameState.Started)
+            LoadGameInfo();
+        UpdateUIElementsVisibility();
     }
 
     private void LoadGameInfo()
@@ -59,14 +74,23 @@ public class HUDController : MonoBehaviour
         SetLivesPanelCount(LevelsManager.s_Instance.CurrentGameInfo.PlayersCount);
     }
 
-    void OnEnemyTankCreated(object sender, EventArgs e)
+    private void UpdateUIElementsVisibility()
+    {
+        GameConstants.GameState gameState = ClassicGameManager.s_Instance.GameState;
+
+        notStartedCanvas.SetActive(gameState == GameConstants.GameState.NotStarted);
+        inGameCanvas.SetActive(gameState == GameConstants.GameState.Started);
+        finishedCanvas.SetActive(gameState == GameConstants.GameState.Finished);
+    }
+    private void OnEnemyTankCreated(object sender, EventArgs e)
     {
         SetEnemyTanksCount(enemyTanksCount - 1);
     }
 
     public void SetStage(int stage)
     {
-        currentStageText.text = stage.ToString();
+        currentStageHUDText.text = stage.ToString();
+        stageStartText.text = String.Format("STAGE {0}", stage);
     }
 
     public void SetEnemyTanksCount(int count)

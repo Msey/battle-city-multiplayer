@@ -11,5 +11,12 @@ public static partial class GameConstants
         Right = 3,
     }
 
+    public enum GameState
+    {
+        NotStarted,
+        Started,
+        Finished,
+    }
+
     public const int PlayerTanksCount = 4;
 }
