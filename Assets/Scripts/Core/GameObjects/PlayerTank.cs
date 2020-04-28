@@ -17,10 +17,11 @@ public class PlayerTank : MonoBehaviour, ITank
     {
         get
         {
-            return (shootDelay <= 0 && ammoLeft > 0);
+            return (!isDead && shootDelay <= 0 && ammoLeft > 0);
         }
     }
 
+    private bool isDead;
     float shootDelay;
     private int ammoLeft;
 
@@ -102,6 +103,12 @@ public class PlayerTank : MonoBehaviour, ITank
 
             
         }
+        else if(isDead && Characteristics.GetTotalLives() > 0)
+        {
+            print("revive");
+
+            Characteristics.TakeLife();
+        }
     }
 
     void ChangeTankLevel()
@@ -111,6 +118,7 @@ public class PlayerTank : MonoBehaviour, ITank
 
     private void Destroy()
     {
+        isDead = true;
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
@@ -122,6 +130,11 @@ public class PlayerTank : MonoBehaviour, ITank
 
     public bool OnHit(IBullet bullet)
     {
+        if(bullet.Owner.Group.Current == EntityRelationGroup.GroupType.Enemies)
+        {
+            Destroy();
+        }
+
         return true;
     }
 

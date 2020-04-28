@@ -8,25 +8,25 @@
         Obstacles,
     }
 
-    GroupType CurrentGroup;
+    public GroupType Current;
 
     public EntityRelationGroup(object entity)
     {
         if (entity is PlayerTank)
         {
-            CurrentGroup = GroupType.Players;
+            Current = GroupType.Players;
         }
         else if (entity is EnemyTank)
         {
-            CurrentGroup = GroupType.Enemies;
+            Current = GroupType.Enemies;
         }
         else if (entity is Concrete ||
             entity is LevelBorder ||
             entity is Brick)
         {
-            CurrentGroup = GroupType.Obstacles;
+            Current = GroupType.Obstacles;
         }
-        else CurrentGroup = GroupType.Undefined;
+        else Current = GroupType.Undefined;
     }
 
     public override bool Equals(object obj)
@@ -46,11 +46,11 @@
 
     public static bool operator ==(EntityRelationGroup a, EntityRelationGroup b)
     {        
-        return a.CurrentGroup == b.CurrentGroup;
+        return a.Current == b.Current;
     }
 
     public static bool operator !=(EntityRelationGroup a, EntityRelationGroup b)
     {
-        return a.CurrentGroup != b.CurrentGroup;
+        return a.Current != b.Current;
     }
 }

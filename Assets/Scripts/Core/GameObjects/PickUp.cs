@@ -30,7 +30,16 @@ public class PickUp : MonoBehaviour
 
         if (tank != null)
         {
-            print("uspeh");
+            switch (Type)
+            {
+                case
+                 PickUpType.Tank:
+                    {
+                        tank.Characteristics.AddLife();
+                        print(tank.Characteristics.GetTotalLives());
+                    }
+                    break;
+            }
 
             Destroy(gameObject);
         }
