@@ -67,6 +67,14 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             SpawnPlayerTank(playerIndex);
     }
 
+    public bool PlayerTankIsLiving(int playerIndex)
+    {
+        if (!Utils.InRange(0, playerIndex, GameConstants.PlayerTanksCount))
+            return false;
+
+        return playerTankLiving[playerIndex];
+    }
+
     public void SpawnPlayerTank(int playerIndex)
     {
         if (!Utils.InRange(0, playerIndex, GameConstants.PlayerTanksCount))
@@ -154,8 +162,6 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         tank.Direction = GameConstants.Direction.Down;
         tank.TankType = enemiesQueue.Dequeue();
     }
-
-
 
     void StartListeningEvents()
     {
