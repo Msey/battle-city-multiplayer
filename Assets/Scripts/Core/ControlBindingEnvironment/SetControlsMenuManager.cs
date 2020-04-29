@@ -108,6 +108,12 @@ public class SetControlsMenuManager : MonoBehaviour
                             textComponent.text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.FireA);
                         }
                         break;
+                    case "Start":
+                        {
+                            components[setIndex].Add(keyCodeString, textComponent);
+                            textComponent.text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.Start);
+                        }
+                        break;
                 }
 
             }
@@ -153,6 +159,12 @@ public class SetControlsMenuManager : MonoBehaviour
         PlayerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Down);
     }
 
+    public void p1_OnStartKey_BindingClick(Button sender)
+    {
+        ButtonBeingClicked = sender;
+        PlayerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Start);
+    }
+
     public void p2_OnFireAKey_BindingClick(Button sender)
     {
         ButtonBeingClicked = sender;
@@ -187,6 +199,11 @@ public class SetControlsMenuManager : MonoBehaviour
     {
         ButtonBeingClicked = sender;
         PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Down);
+    }
+    public void p2_OnStartKey_BindingClick(Button sender)
+    {
+        ButtonBeingClicked = sender;
+        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Start);
     }
 
     public void p3_OnFireAKey_BindingClick(Button sender)
@@ -224,6 +241,11 @@ public class SetControlsMenuManager : MonoBehaviour
         ButtonBeingClicked = sender;
         PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Down);
     }
+    public void p3_OnStartKey_BindingClick(Button sender)
+    {
+        ButtonBeingClicked = sender;
+        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Start);
+    }
 
 
     public void p4_OnFireAKey_BindingClick(Button sender)
@@ -260,6 +282,11 @@ public class SetControlsMenuManager : MonoBehaviour
     {
         ButtonBeingClicked = sender;
         PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Down);
+    }
+    public void p4_OnStartKey_BindingClick(Button sender)
+    {
+        ButtonBeingClicked = sender;
+        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Start);
     }
 
 

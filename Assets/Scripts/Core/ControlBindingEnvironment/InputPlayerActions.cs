@@ -12,6 +12,7 @@ public class InputPlayerActions : PlayerActionSet
     public PlayerAction Down;
     public PlayerAction Fire;
     public PlayerAction FireA;
+    public PlayerAction Start;
     public PlayerTwoAxisAction Direction;
 
     public InputPlayerActions()
@@ -22,6 +23,7 @@ public class InputPlayerActions : PlayerActionSet
         Down = CreatePlayerAction("Down");
         Fire = CreatePlayerAction("Fire");
         FireA = CreatePlayerAction("FireA");
+        Start = CreatePlayerAction("Start");
         Direction = CreateTwoAxisPlayerAction(Left, Right, Down, Up);
     }
 
@@ -36,6 +38,7 @@ public class InputPlayerActions : PlayerActionSet
 
         actions.Fire.AddDefaultBinding(Key.Space);
         actions.FireA.AddDefaultBinding(Key.LeftControl);
+        actions.Start.AddDefaultBinding(Key.Q);
 
         return actions;
     }
@@ -51,6 +54,8 @@ public class InputPlayerActions : PlayerActionSet
 
         actions.Fire.AddDefaultBinding(Key.None);
         actions.FireA.AddDefaultBinding(Key.None);
+
+        actions.Start.AddDefaultBinding(Key.None);
 
         return actions;
     }

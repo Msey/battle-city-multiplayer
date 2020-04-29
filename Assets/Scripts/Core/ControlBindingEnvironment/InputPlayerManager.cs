@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using InControl;
 using UnityEngine.UI;
+using System.Collections;
 
 public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
 {
@@ -56,7 +57,7 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
 
     public static event EventHandler OnBindingAdded;
 
-
+    bool pauseDelayed;
     private void Update()
     {
         for (int i = 0; i < players.Length; i++)
@@ -64,8 +65,21 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
             if (players[i] != null && players[i].Tank != null)
             {
                 players[i].Update();
+
+                if (players[i].PlayerActionSet.Start.IsPressed && !pauseDelayed)
+                {
+                    pauseDelayed = true;
+                    ClassicGameManager.s_Instance.PauseGame();
+                    Debug.Log($"paused = {ClassicGameManager.s_Instance.IsPaused}");
+                    StartCoroutine(ReturnPauseAvaliability());
+                }
             }
         }
+    }
+    private IEnumerator ReturnPauseAvaliability()
+    {
+        yield return new WaitForSecondsRealtime(1f);
+        pauseDelayed = false;
     }
 
 
@@ -92,6 +106,9 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
 
             case ActionType.Down:
                 return player.PlayerActionSet.Down.Bindings[0].Name;
+
+            case ActionType.Start:
+                return player.PlayerActionSet.Start.Bindings[0].Name;
         }
 
         return null;
@@ -127,6 +144,10 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
                 player.PlayerActionSet.Down.ResetBindings();
                 player.PlayerActionSet.Down.ListenForBindingReplacing(player.PlayerActionSet.Down.Bindings[0]);
                 break;
+            case ActionType.Start:
+                player.PlayerActionSet.Start.ResetBindings();
+                player.PlayerActionSet.Start.ListenForBindingReplacing(player.PlayerActionSet.Start.Bindings[0]);
+                break;
         }
     }
 
@@ -137,7 +158,8 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
         Left,
         Right,
         Up,
-        Down
+        Down,
+        Start
     }
 
     private void OnApplicationQuit()

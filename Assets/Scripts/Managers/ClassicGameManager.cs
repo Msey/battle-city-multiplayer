@@ -42,6 +42,9 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     [SerializeField]
     GameConstants.GameState gameState = GameConstants.GameState.NotStarted;
+
+    public bool IsPaused { get; set; }
+
     public GameConstants.GameState GameState
     {
         get => gameState;
@@ -207,6 +210,26 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         PlayerTank.TankDestroyed -= OnPlayerTankDestroyed;
         Eagle.EagleDestroyed -= OnEagleDestroyed;
     }
+
+    public void PauseGame()
+    {
+        if (IsPaused)
+        {
+            Time.timeScale = 1;
+            //pausePanel.SetActive(true);
+            //Disable scripts that still work while timescale is set to 0
+            IsPaused = false;
+        }
+        else
+            if (GameState == GameConstants.GameState.Started)
+        {
+            Time.timeScale = 0;
+            //pausePanel.SetActive(false);
+            //Disable scripts that still work while timescale is set to 0
+            IsPaused = true;
+        }
+    }
+
 
     void WinGame()
     {
