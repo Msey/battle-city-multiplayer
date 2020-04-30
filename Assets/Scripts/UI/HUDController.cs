@@ -12,6 +12,7 @@ public class HUDController : MonoBehaviour
 
     public Text currentStageHUDText;
     public Text stageStartText;
+    public GameObject pauseText;
     public LayoutGroup tanksCountLayout;
     public GameObject tanksPrefab;
     private List<GameObject> tanksIcons;
@@ -29,6 +30,7 @@ public class HUDController : MonoBehaviour
 
         Assert.IsNotNull(currentStageHUDText);
         Assert.IsNotNull(stageStartText);
+        Assert.IsNotNull(pauseText);
 
         tanksIcons = new List<GameObject>();
         Assert.IsNotNull(tanksCountLayout);
@@ -40,6 +42,7 @@ public class HUDController : MonoBehaviour
 
         SetStage(LevelsManager.s_Instance.CurrentGameInfo.CurrentStage);
         ClassicGameManager.s_Instance.GameStateChanged += OnGameStateChanged;
+        ClassicGameManager.s_Instance.IsPausedChanged += OnGameStateChanged;
         EnemyTank.TankCreated += OnEnemyTankCreated;
         UpdateUIElementsVisibility();
     }
@@ -47,6 +50,7 @@ public class HUDController : MonoBehaviour
     private void OnDestroy()
     {
         ClassicGameManager.s_Instance.GameStateChanged -= OnGameStateChanged;
+        ClassicGameManager.s_Instance.IsPausedChanged -= OnGameStateChanged;
         EnemyTank.TankCreated -= OnEnemyTankCreated;
     }
 
@@ -81,6 +85,7 @@ public class HUDController : MonoBehaviour
         notStartedCanvas.SetActive(gameState == GameConstants.GameState.NotStarted);
         inGameCanvas.SetActive(gameState == GameConstants.GameState.Started);
         finishedCanvas.SetActive(gameState == GameConstants.GameState.Finished);
+        pauseText.SetActive(ClassicGameManager.s_Instance.IsPaused);
     }
     private void OnEnemyTankCreated(object sender, EventArgs e)
     {

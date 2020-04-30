@@ -64,15 +64,15 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
         {
             if (players[i] != null && players[i].Tank != null)
             {
-                players[i].Update();
-
                 if (players[i].PlayerActionSet.Start.IsPressed && !pauseDelayed)
                 {
                     pauseDelayed = true;
                     ClassicGameManager.s_Instance.PauseGame();
-                    Debug.Log($"paused = {ClassicGameManager.s_Instance.IsPaused}");
                     StartCoroutine(ReturnPauseAvaliability());
                 }
+
+                if (!ClassicGameManager.s_Instance.IsPaused)
+                    players[i].Update();
             }
         }
     }

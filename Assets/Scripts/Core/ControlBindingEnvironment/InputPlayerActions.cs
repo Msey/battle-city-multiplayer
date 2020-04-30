@@ -38,7 +38,7 @@ public class InputPlayerActions : PlayerActionSet
 
         actions.Fire.AddDefaultBinding(Key.Space);
         actions.FireA.AddDefaultBinding(Key.LeftControl);
-        actions.Start.AddDefaultBinding(Key.Q);
+        actions.Start.AddDefaultBinding(Key.PadEnter);
 
         return actions;
     }

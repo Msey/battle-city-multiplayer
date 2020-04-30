@@ -43,7 +43,20 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     [SerializeField]
     GameConstants.GameState gameState = GameConstants.GameState.NotStarted;
 
-    public bool IsPaused { get; set; }
+    public event EventHandler IsPausedChanged;
+    bool isPaused;
+    public bool IsPaused
+    {
+        get => isPaused;
+        protected set
+        {
+            if (isPaused == value)
+                return;
+
+            isPaused = value;
+            IsPausedChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
 
     public GameConstants.GameState GameState
     {
@@ -52,6 +65,9 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         {
             if (gameState == value)
                 return;
+
+            if (gameState != GameConstants.GameState.Started)
+                IsPaused = false;
 
             gameState = value;
             GameStateChanged?.Invoke(this, EventArgs.Empty);
@@ -216,16 +232,11 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         if (IsPaused)
         {
             Time.timeScale = 1;
-            //pausePanel.SetActive(true);
-            //Disable scripts that still work while timescale is set to 0
             IsPaused = false;
         }
-        else
-            if (GameState == GameConstants.GameState.Started)
+        else if (GameState == GameConstants.GameState.Started)
         {
             Time.timeScale = 0;
-            //pausePanel.SetActive(false);
-            //Disable scripts that still work while timescale is set to 0
             IsPaused = true;
         }
     }
