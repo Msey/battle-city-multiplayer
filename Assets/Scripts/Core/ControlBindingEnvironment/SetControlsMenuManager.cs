@@ -5,52 +5,47 @@ using UnityEngine.UI;
 
 public class SetControlsMenuManager : MonoBehaviour
 {
-
-
     public Transform[] PlayerControlButtonSets;
 
-    private InputPlayerManager PlayerManager;
+    private const float BINDING_BUTTON_COLOR_CHANGE_TIME = 0.5f;
+
+    private InputPlayerManager playerManager;
+    private Button buttonBeingClicked;
+    private float timerColorChange = BINDING_BUTTON_COLOR_CHANGE_TIME;
 
     private void Start()
     {
-        PlayerManager = GameObject.Find("PlayerManager")
+        playerManager = GameObject.Find("PlayerManager")
             .GetComponent<InputPlayerManager>();
 
         DefineKeyCodes();
 
-        InputPlayerManager.OnBindingAdded += (s,e) =>
+        InputPlayerManager.OnKeyBindingAdded += (s, e) =>
             {
-                ButtonBeingClicked.transform.GetChild(0).GetComponent<Text>().color = Color.white;
-                ButtonBeingClicked = null;
+                buttonBeingClicked.transform.GetChild(0).GetComponent<Text>().color = Color.white;
+                buttonBeingClicked = null;
             };
     }
 
-       
-    private Button ButtonBeingClicked;
-
-    const float TC = .5f;
-    float timerColorChange = TC;
-
-
     private void ChangeColor()
     {
-               
-            if (ButtonBeingClicked.transform.GetChild(0).GetComponent<Text>().color == Color.red)
-                ButtonBeingClicked.transform.GetChild(0).GetComponent<Text>().color = Color.white;
-            else
-                ButtonBeingClicked.transform.GetChild(0).GetComponent<Text>().color = Color.red;
-        
+        var cachedText = buttonBeingClicked.transform.GetChild(0).GetComponent<Text>().color;
+
+        if (cachedText == Color.red)
+            cachedText = Color.white;
+        else
+            cachedText = Color.red;
     }
 
     private void Update()
     {
-        if (ButtonBeingClicked != null)
+        if (buttonBeingClicked != null)
         {
             timerColorChange -= Time.deltaTime;
 
             if (timerColorChange < 0)
             {
-                timerColorChange = TC;
+                timerColorChange = BINDING_BUTTON_COLOR_CHANGE_TIME;
                 ChangeColor();
             }
         }
@@ -62,7 +57,6 @@ public class SetControlsMenuManager : MonoBehaviour
 
         for (int setIndex = 0; setIndex < PlayerControlButtonSets.Length; setIndex++)
         {
-
             components[setIndex] = new Dictionary<string, Text>();
 
             foreach (Transform child in PlayerControlButtonSets[setIndex])
@@ -73,221 +67,205 @@ public class SetControlsMenuManager : MonoBehaviour
                 switch (keyCodeString)
                 {
                     case "Left":
-                        {
-                            components[setIndex].Add(keyCodeString, textComponent);
-                            textComponent.text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.Left);
-                        }
+                        components[setIndex].Add(keyCodeString, textComponent);
+                        textComponent.text = keyCodeString + ": " + playerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.Left);
                         break;
                     case "Right":
-                        {
-                            components[setIndex].Add(keyCodeString, textComponent);
-                            textComponent.text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.Right);
-                        }
+                        components[setIndex].Add(keyCodeString, textComponent);
+                        textComponent.text = keyCodeString + ": " + playerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.Right);
                         break;
                     case "Up":
-                        {
-                            components[setIndex].Add(keyCodeString, textComponent);
-                            textComponent.text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.Up);
-                        }
+                        components[setIndex].Add(keyCodeString, textComponent);
+                        textComponent.text = keyCodeString + ": " + playerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.Up);
                         break;
                     case "Down":
-                        {
-                            components[setIndex].Add(keyCodeString, textComponent);
-                            textComponent.text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.Down);
-                        }
+                        components[setIndex].Add(keyCodeString, textComponent);
+                        textComponent.text = keyCodeString + ": " + playerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.Down);
                         break;
                     case "Fire":
-                        {
-                            components[setIndex].Add(keyCodeString, textComponent);
-                            textComponent.text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.Fire);
-                        }
+                        components[setIndex].Add(keyCodeString, textComponent);
+                        textComponent.text = keyCodeString + ": " + playerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.Fire);
                         break;
                     case "FireA":
-                        {
-                            components[setIndex].Add(keyCodeString, textComponent);
-                            textComponent.text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.FireA);
-                        }
+                        components[setIndex].Add(keyCodeString, textComponent);
+                        textComponent.text = keyCodeString + ": " + playerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.FireA);
                         break;
                     case "Start":
-                        {
-                            components[setIndex].Add(keyCodeString, textComponent);
-                            textComponent.text = keyCodeString + ": " + PlayerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.Start);
-                        }
+                        components[setIndex].Add(keyCodeString, textComponent);
+                        textComponent.text = keyCodeString + ": " + playerManager.GetPlayerActionCode(setIndex, InputPlayerManager.ActionType.Start);
                         break;
                 }
-
             }
         }
-
-        PlayerManager.AssignButtonTextComponents(components);
+        playerManager.AssignButtonTextComponents(components);
     }
 
-
+    #region button_click_responses
     public void p1_OnFireAKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.FireA);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.FireA);
     }
 
     public void p1_OnFireKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Fire);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Fire);
     }
 
     public void p1_OnLeftKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Left);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Left);
     }
 
     public void p1_OnRightKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Right);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Right);
     }
 
     public void p1_OnUpKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Up);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Up);
     }
 
     public void p1_OnDownKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Down);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Down);
     }
 
     public void p1_OnStartKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Start);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(0, InputPlayerManager.ActionType.Start);
     }
 
     public void p2_OnFireAKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.FireA);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.FireA);
     }
 
     public void p2_OnFireKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Fire);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Fire);
     }
 
     public void p2_OnLeftKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Left);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Left);
     }
 
     public void p2_OnRightKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Right);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Right);
     }
 
     public void p2_OnUpKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Up);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Up);
     }
 
     public void p2_OnDownKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Down);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Down);
     }
     public void p2_OnStartKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Start);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(1, InputPlayerManager.ActionType.Start);
     }
 
     public void p3_OnFireAKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.FireA);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.FireA);
     }
 
     public void p3_OnFireKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Fire);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Fire);
     }
 
     public void p3_OnLeftKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Left);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Left);
     }
 
     public void p3_OnRightKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Right);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Right);
     }
 
     public void p3_OnUpKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Up);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Up);
     }
 
     public void p3_OnDownKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Down);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Down);
     }
     public void p3_OnStartKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Start);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(2, InputPlayerManager.ActionType.Start);
     }
 
 
     public void p4_OnFireAKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.FireA);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.FireA);
     }
 
     public void p4_OnFireKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Fire);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Fire);
     }
 
     public void p4_OnLeftKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Left);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Left);
     }
 
     public void p4_OnRightKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Right);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Right);
     }
 
     public void p4_OnUpKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Up);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Up);
     }
 
     public void p4_OnDownKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Down);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Down);
     }
     public void p4_OnStartKey_BindingClick(Button sender)
     {
-        ButtonBeingClicked = sender;
-        PlayerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Start);
+        buttonBeingClicked = sender;
+        playerManager.BindPlayerKeyCode(3, InputPlayerManager.ActionType.Start);
     }
-
+    #endregion
 
 }

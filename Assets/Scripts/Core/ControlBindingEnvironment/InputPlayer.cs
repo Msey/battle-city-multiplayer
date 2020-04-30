@@ -7,8 +7,10 @@ public class InputPlayer
 {
     public InputPlayerActions PlayerActionSet { get; set; }
     public bool EnabledController { get; set; }
+    public ITank Tank;
 
     private string saveData;
+    private Direction lastDirection;
 
     void SaveBindings()
     {
@@ -25,8 +27,6 @@ public class InputPlayer
         }
     }
 
-    public ITank Tank;
-
     public void Update()
     {
         if (PlayerActionSet.Fire.IsPressed || PlayerActionSet.FireA.IsPressed)
@@ -41,8 +41,6 @@ public class InputPlayer
         Tank.Stopped = stopTank;
     }
 
-
-    private Direction lastDirection;
     public Direction GetStandartDirection(out bool stopTank)
     {
         stopTank = false;

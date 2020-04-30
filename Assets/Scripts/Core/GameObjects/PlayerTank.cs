@@ -75,8 +75,6 @@ public class PlayerTank : MonoBehaviour, ITank
 
     void Update()
     {
-        //UpdateMovement();
-
         if (shootDelay > 0)
             shootDelay -= Time.deltaTime;
     }
@@ -103,11 +101,11 @@ public class PlayerTank : MonoBehaviour, ITank
 
             
         }
-        else if(isDead && Characteristics.GetTotalLives() > 0)
+        else if(isDead && ClassicGameManager.s_Instance.GetTotalLives() > 0)
         {
             print("revive");
 
-            Characteristics.TakeLife();
+            ClassicGameManager.s_Instance.TakeLife();
         }
     }
 

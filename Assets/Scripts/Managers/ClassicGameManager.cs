@@ -18,14 +18,15 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     List<SpawnPoint> enemySpawnPoints = new List<SpawnPoint>();
     List<SpawnPoint> playerSpawnPoints = new List<SpawnPoint>();
     Queue<EnemyTank.EnemyTankType> enemiesQueue = new Queue<EnemyTank.EnemyTankType>();
+
     [SerializeField]
-    int createdEnemyTanksCount = 0;
+    int createdEnemyTanksCount;
     [SerializeField]
-    int livedEnemyTanksCount = 0;
+    int livedEnemyTanksCount;
     [SerializeField]
-    int enemyTanksOnCreatingCount = 0;
+    int enemyTanksOnCreatingCount;
     [SerializeField]
-    int levelEnemeyTanksCount = 0;
+    int levelEnemeyTanksCount;
 
     public int LevelEnemeyTanksCount { get => levelEnemeyTanksCount; }
 
@@ -83,6 +84,16 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     }
     private void Start() => StartGame();
 
+    private int playerLives = 2;
+
+    public void AddLife() => ++playerLives;
+    public void TakeLife() => --playerLives;
+
+    public int GetTotalLives()
+    {
+        return playerLives;
+    }
+
     protected override void OnDestroy() => StopListeningEvents();
 
     public event EventHandler GameStateChanged;
@@ -123,19 +134,17 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     public void SpawnPlayerTank(int playerIndex)
     {
-        if (!Utils.InRange(0, playerIndex, GameConstants.PlayerTanksCount))
+        if (!Utils.InRange(0, playerIndex, GameConstants.PlayerTanksCount)
+            || playerTankCreating[playerIndex]
+            || playerTankLiving[playerIndex])
             return;
 
-        if (playerTankCreating[playerIndex])
-            return;
-
-        if (playerTankLiving[playerIndex])
-            return;
 
         playerTankCreating[playerIndex] = true;
 
         SpawnPoint spawnPoint = playerSpawnPoints[playerIndex];
-        spawnPoint.Spawn((point) => {
+        spawnPoint.Spawn((point) =>
+        {
             playerTankCreating[playerIndex] = false;
             playerTankLiving[playerIndex] = true;
             PlayerTank tank = Instantiate(playerTankPrefab, point.position, Quaternion.identity).GetComponent<PlayerTank>();

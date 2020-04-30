@@ -7,64 +7,61 @@ using System.Collections;
 
 public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
 {
+    private const int MAX_PLAYERS = 4;
+    private const int PAUSE_AVALIABILITY_TIME = 1;
 
-    public const int maxPlayers = 4;
+    public bool IsBindingListening;
+    public Dictionary<string, Text>[] textComponents;
 
-    public bool IsBindingListening { get; }
+    public static event EventHandler OnKeyBindingAdded;
 
-    InputPlayer[] players;
+    private InputPlayer[] inputPlayers;
+    private bool pauseDelayed;
 
     void Start()
     {
-        players = new InputPlayer[maxPlayers];
+        inputPlayers = new InputPlayer[MAX_PLAYERS];
 
-        for (int i = 0; i < players.Length; i++)
+        for (int i = 0; i < inputPlayers.Length; i++)
         {
-            var player = new InputPlayer();
+            var inputPlayer = new InputPlayer();
 
-            player.PlayerActionSet = (i == 0)
+            inputPlayer.PlayerActionSet = (i == 0)
                 ? InputPlayerActions.CreateWithKeyboardBindings()
                 : InputPlayerActions.CreateWithEmptyBindings();
 
-            players[i] = player;
+            inputPlayers[i] = inputPlayer;
         }
 
         LoadBindings();
-
         WireTankEvents();
     }
 
-    public Dictionary<string, Text>[] components;
-    public void AssignButtonTextComponents(Dictionary<string, Text>[] components)
+    public void AssignButtonTextComponents(Dictionary<string, Text>[] textComponents)
     {
-        this.components = components;
-        for (int i = 0; i < players.Length; i++)
+        this.textComponents = textComponents;
+        for (int i = 0; i < inputPlayers.Length; i++)
         {
             int cached_index = i;
-            players[i].EnabledController = true;
+            inputPlayers[i].EnabledController = true;
 
-            players[i].PlayerActionSet.ListenOptions.OnBindingAdded += (action, binding) =>
+            inputPlayers[i].PlayerActionSet.ListenOptions.OnBindingAdded += (action, binding) =>
             {
                 var aName = action.Name;
-                var component = this.components[cached_index][aName];
+                var component = this.textComponents[cached_index][aName];
                 component.text = $"{aName}: {binding.Name}";
-                //print("Binding added... " + binding.DeviceName + ": " + binding.Name);
-
-                OnBindingAdded?.Invoke(cached_index, EventArgs.Empty);
+                OnKeyBindingAdded?.Invoke(cached_index, EventArgs.Empty);
             };
         }
     }
 
-    public static event EventHandler OnBindingAdded;
-
-    bool pauseDelayed;
     private void Update()
     {
-        for (int i = 0; i < players.Length; i++)
+        for (int i = 0; i < inputPlayers.Length; i++)
         {
-            if (players[i] != null && players[i].Tank != null)
+            if (inputPlayers[i] != null && inputPlayers[i].Tank != null)
             {
-                if (players[i].PlayerActionSet.Start.IsPressed && !pauseDelayed)
+                if (inputPlayers[i].PlayerActionSet.Start.IsPressed && !pauseDelayed)
                 {
                     pauseDelayed = true;
                     ClassicGameManager.s_Instance.PauseGame();
@@ -72,43 +69,30 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
                 }
 
                 if (!ClassicGameManager.s_Instance.IsPaused)
-                    players[i].Update();
+                    inputPlayers[i].Update();
             }
         }
     }
     private IEnumerator ReturnPauseAvaliability()
     {
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSecondsRealtime(PAUSE_AVALIABILITY_TIME);
         pauseDelayed = false;
     }
 
 
     public string GetPlayerActionCode(int playerNumber, ActionType actionType)
     {
-        var player = players[playerNumber];
+        var player = inputPlayers[playerNumber];
 
         switch (actionType)
         {
-            case ActionType.FireA:
-                return player.PlayerActionSet.FireA.Bindings[0].Name;
-
-            case ActionType.Fire:
-                return player.PlayerActionSet.Fire.Bindings[0].Name;
-
-            case ActionType.Left:
-                return player.PlayerActionSet.Left.Bindings[0].Name;
-
-            case ActionType.Right:
-                return player.PlayerActionSet.Right.Bindings[0].Name;
-
-            case ActionType.Up:
-                return player.PlayerActionSet.Up.Bindings[0].Name;
-
-            case ActionType.Down:
-                return player.PlayerActionSet.Down.Bindings[0].Name;
-
-            case ActionType.Start:
-                return player.PlayerActionSet.Start.Bindings[0].Name;
+            case ActionType.FireA: return player.PlayerActionSet.FireA.Bindings[0].Name;
+            case ActionType.Fire: return player.PlayerActionSet.Fire.Bindings[0].Name;
+            case ActionType.Left: return player.PlayerActionSet.Left.Bindings[0].Name;
+            case ActionType.Right: return player.PlayerActionSet.Right.Bindings[0].Name;
+            case ActionType.Up: return player.PlayerActionSet.Up.Bindings[0].Name;
+            case ActionType.Down: return player.PlayerActionSet.Down.Bindings[0].Name;
+            case ActionType.Start: return player.PlayerActionSet.Start.Bindings[0].Name;
         }
 
         return null;
@@ -116,7 +100,7 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
 
     public void BindPlayerKeyCode(int playerIndex, ActionType actionType)
     {
-        var player = players[playerIndex];
+        var player = inputPlayers[playerIndex];
 
         switch (actionType)
         {
@@ -171,9 +155,9 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
 
     void SaveBindings()
     {
-        for (int i = 0; i < players.Length; i++)
+        for (int i = 0; i < inputPlayers.Length; i++)
         {
-            saveData = players[i].PlayerActionSet.Save();
+            saveData = inputPlayers[i].PlayerActionSet.Save();
             PlayerPrefs.SetString("binding_control_" + i, saveData);
         }
     }
@@ -181,12 +165,12 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
 
     void LoadBindings()
     {
-        for (int i = 0; i < players.Length; i++)
+        for (int i = 0; i < inputPlayers.Length; i++)
         {
             if (PlayerPrefs.HasKey("binding_control_" + i))
             {
                 saveData = PlayerPrefs.GetString("binding_control_" + i);
-                players[i].PlayerActionSet.Load(saveData);
+                inputPlayers[i].PlayerActionSet.Load(saveData);
             }
         }
     }
@@ -203,7 +187,7 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
 
         if (Utils.InRange(0, lastCreatedTank.PlayerIndex, GameConstants.PlayerTanksCount))
         {
-            players[lastCreatedTank.PlayerIndex].Tank = lastCreatedTank;
+            inputPlayers[lastCreatedTank.PlayerIndex].Tank = lastCreatedTank;
         }
     }
 
@@ -213,7 +197,7 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
 
         if (Utils.InRange(0, lastDestroyedTank.PlayerIndex, GameConstants.PlayerTanksCount))
         {
-            players[lastDestroyedTank.PlayerIndex].Tank = null;
+            inputPlayers[lastDestroyedTank.PlayerIndex].Tank = null;
         }
     }
 }

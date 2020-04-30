@@ -35,8 +35,8 @@ public class PickUp : MonoBehaviour
                 case
                  PickUpType.Tank:
                     {
-                        tank.Characteristics.AddLife();
-                        print(tank.Characteristics.GetTotalLives());
+                        ClassicGameManager.s_Instance.AddLife();
+                        print(ClassicGameManager.s_Instance.GetTotalLives());
                     }
                     break;
             }
