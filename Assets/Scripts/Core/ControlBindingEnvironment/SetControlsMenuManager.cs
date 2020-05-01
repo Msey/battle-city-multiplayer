@@ -29,12 +29,12 @@ public class SetControlsMenuManager : MonoBehaviour
 
     private void ChangeColor()
     {
-        var cachedText = buttonBeingClicked.transform.GetChild(0).GetComponent<Text>().color;
+        var cachedText = buttonBeingClicked.transform.GetChild(0).GetComponent<Text>();
 
-        if (cachedText == Color.red)
-            cachedText = Color.white;
+        if (cachedText.color == Color.red)
+            cachedText.color = Color.white;
         else
-            cachedText = Color.red;
+            cachedText.color = Color.red;
     }
 
     private void Update()
