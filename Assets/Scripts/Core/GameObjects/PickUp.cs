@@ -34,10 +34,12 @@ public class PickUp : MonoBehaviour
             {
                 case
                  PickUpType.Tank:
-                    {
                         ClassicGameManager.s_Instance.AddLife();
                         print(ClassicGameManager.s_Instance.GetTotalLives());
-                    }
+                    break;
+                case
+                 PickUpType.Star:
+
                     break;
             }
 

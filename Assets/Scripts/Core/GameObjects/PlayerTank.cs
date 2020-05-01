@@ -98,15 +98,9 @@ public class PlayerTank : MonoBehaviour, ITank
                 bulletComponent.Group = new EntityRelationGroup(this);
                 bulletComponent.Owner = this;
             }
-
-            
         }
-        else if(isDead && ClassicGameManager.s_Instance.GetTotalLives() > 0)
-        {
-            print("revive");
-
-            ClassicGameManager.s_Instance.TakeLife();
-        }
+        else if (isDead)
+            ClassicGameManager.s_Instance.RespawnPlayer(playerIndex);
     }
 
     void ChangeTankLevel()

@@ -32,16 +32,19 @@ public class EnemyTank : MonoBehaviour, ITank
     TankMovement tankMovement;
     EnemyTankAnimator tankAnimator;
 
-    public Direction Direction {
+    public Direction Direction
+    {
         get => tankMovement.Direction;
         set => tankMovement.Direction = value;
     }
+
     public bool Stopped
     {
         get => tankMovement.Stopped;
         set => tankMovement.Stopped = value;
     }
-    public EntityRelationGroup Group { get ; set; }
+
+    public EntityRelationGroup Group { get; set; }
     public TankCharacteristicSet Characteristics { get; set; }
 
 
@@ -108,7 +111,7 @@ public class EnemyTank : MonoBehaviour, ITank
         const float SHOOT_DELAY_CONSTANT = 0.6f; // TODO: need to be replaced with Level_Upgrade_Constants (later probably)
         if (shootDelay <= 0)
         {
-            IBullet bulletComponent = 
+            IBullet bulletComponent =
                 Instantiate(bulletPrefab, transform.position, transform.rotation)
                 .GetComponent<IBullet>();
 
@@ -117,7 +120,7 @@ public class EnemyTank : MonoBehaviour, ITank
                 bulletComponent.Direction = Direction;
                 bulletComponent.Group = new EntityRelationGroup(this);
                 bulletComponent.Owner = this;
-            }                
+            }
 
             shootDelay = SHOOT_DELAY_CONSTANT;
         }

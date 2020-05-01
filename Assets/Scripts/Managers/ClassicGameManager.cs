@@ -132,7 +132,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         return playerTankLiving[playerIndex];
     }
 
-    public void SpawnPlayerTank(int playerIndex)
+    private void SpawnPlayerTank(int playerIndex)
     {
         if (!Utils.InRange(0, playerIndex, GameConstants.PlayerTanksCount)
             || playerTankCreating[playerIndex]
@@ -150,6 +150,15 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             PlayerTank tank = Instantiate(playerTankPrefab, point.position, Quaternion.identity).GetComponent<PlayerTank>();
             tank.PlayerIndex = playerIndex;
         });
+    }
+
+    public void RespawnPlayer(int playerIndex)
+    {
+        if (GetTotalLives() > 0)
+        {
+            TakeLife();
+            SpawnPlayerTank(playerIndex);
+        }
     }
 
     void LoadLevelObjects()

@@ -10,7 +10,7 @@
     {
         BulletStrength = 1;
         Velocity = 5.4f;
-        BulletVelocity = 16.0f;
+        BulletVelocity = 16f;
         AmmoLimit = 2;
         ShootDelay = 2f;
     }

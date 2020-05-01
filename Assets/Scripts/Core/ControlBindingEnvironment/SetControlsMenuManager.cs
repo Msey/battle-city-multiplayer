@@ -19,12 +19,7 @@ public class SetControlsMenuManager : MonoBehaviour
             .GetComponent<InputPlayerManager>();
 
         DefineKeyCodes();
-
-        InputPlayerManager.OnKeyBindingAdded += (s, e) =>
-            {
-                buttonBeingClicked.transform.GetChild(0).GetComponent<Text>().color = Color.white;
-                buttonBeingClicked = null;
-            };
+        InputPlayerManager.OnKeyBindingAdded += FlushButtonBeingClicked;
     }
 
     private void ChangeColor()
@@ -98,6 +93,12 @@ public class SetControlsMenuManager : MonoBehaviour
             }
         }
         playerManager.AssignButtonTextComponents(components);
+    }
+
+    private void FlushButtonBeingClicked(object sender, System.EventArgs e)
+    {
+        buttonBeingClicked.transform.GetChild(0).GetComponent<Text>().color = Color.white;
+        buttonBeingClicked = null;
     }
 
     #region button_click_responses
