@@ -2,17 +2,6 @@
 
 public class PickUp : MonoBehaviour
 {
-    public enum PickUpType
-    {
-        Tank,
-        Helmet,
-        Star,
-        Shovel,
-        Clock,
-        Grenade,
-        Pistol
-    };
-
     public PickUpType Type;
 
     public Sprite Sprite;
@@ -32,18 +21,28 @@ public class PickUp : MonoBehaviour
         {
             switch (Type)
             {
-                case
-                 PickUpType.Tank:
-                        ClassicGameManager.s_Instance.AddLife();
-                        print(ClassicGameManager.s_Instance.GetTotalLives());
+                case PickUpType.Tank:
+                    ClassicGameManager.s_Instance.AddLife();
+                    print(ClassicGameManager.s_Instance.GetTotalLives());
                     break;
-                case
-                 PickUpType.Star:
-
+                case PickUpType.Star:
+                case PickUpType.Pistol:
+                    tank.Characteristics.AddUpgrade(new Upgrade(Type));
                     break;
             }
 
             Destroy(gameObject);
         }
     }
+
+    public enum PickUpType
+    {
+        Tank,
+        Helmet,
+        Star,
+        Shovel,
+        Clock,
+        Grenade,
+        Pistol
+    };
 }

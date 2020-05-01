@@ -60,8 +60,8 @@ public class PlayerTank : MonoBehaviour, ITank
         Assert.IsNotNull(explosionPrefab);
         tankMovement = GetComponent<TankMovement>();
         tankAnimator = GetComponent<PlayerTankAnimator>();
-        Group = new EntityRelationGroup(this);
         Characteristics = new TankCharacteristicSet();
+        Group = new EntityRelationGroup(this);
     }
 
     void Start()
