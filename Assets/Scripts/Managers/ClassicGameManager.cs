@@ -2,6 +2,7 @@
 using UnityEngine.Assertions;
 using UnityEngine;
 using System;
+using System.Collections;
 
 [Serializable]
 public class ClassicGameLevelInfo
@@ -75,6 +76,18 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         }
     }
 
+    public bool CanUserControlsTanks
+    {
+        get => !(isEagleDestroyed && !isAllEnemyTanksDestroyed) && !isPaused; 
+    }
+
+    private bool isAllEnemyTanksDestroyed;
+    private bool isEagleDestroyed;
+    public bool IsEagleDestroyed
+    {
+        get => isEagleDestroyed;
+    }
+
     override protected void Awake()
     {
         Assert.IsNotNull(enemyTankPrefab);
@@ -85,7 +98,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     private void Start()
     {
         if (!LevelsManager.s_Instance.CurrentGameInfo.IsFirstGame)
-            StartGame();
+            LoadGame();
     }
 
     private int playerLives = 2;
@@ -102,9 +115,18 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     public event EventHandler GameStateChanged;
 
-    public void StartGame()
+    public void LoadGame()
     {
         if (!Utils.Verify(GameState == GameConstants.GameState.NotStarted))
+            return;
+
+        GameState = GameConstants.GameState.Loading;
+        StartCoroutine(LoadLevelCoroutine());
+    }
+
+    private void StartGame()
+    {
+        if (!Utils.Verify(GameState == GameConstants.GameState.Loading))
             return;
 
         LoadLevel();
@@ -263,14 +285,15 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         }
     }
 
-
-    void WinGame()
+    void PreFinishGame()
     {
-        GameState = GameConstants.GameState.Finished;
+        GameState = GameConstants.GameState.PreFinished;
+        StartCoroutine(PreFinishCoroutine());
     }
 
-    void LoseGame()
+    void FinishGame()
     {
+        LevelsManager.s_Instance.CurrentGameInfo.IsGameOver = isEagleDestroyed;
         GameState = GameConstants.GameState.Finished;
     }
 
@@ -289,7 +312,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         livedEnemyTanksCount--;
         if (enemiesQueue.Count == 0 && livedEnemyTanksCount == 0 && enemyTanksOnCreatingCount == 0)
         {
-            WinGame();
+            PreFinishGame();
             return;
         }
         else if ((livedEnemyTanksCount + enemyTanksOnCreatingCount) < maxEnemyLivesTanksCount)
@@ -323,6 +346,22 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     void OnEagleDestroyed(object sender, EventArgs e)
     {
-        LoseGame();
+        isEagleDestroyed = true;
+        if (gameState == GameConstants.GameState.Started)
+        {
+            PreFinishGame();
+        }
+    }
+
+    private IEnumerator LoadLevelCoroutine()
+    {
+        yield return new WaitForSeconds(2.0f);
+        StartGame();
+    }
+
+    private IEnumerator PreFinishCoroutine()
+    {
+        yield return new WaitForSeconds(5.0f);
+        FinishGame();
     }
 }

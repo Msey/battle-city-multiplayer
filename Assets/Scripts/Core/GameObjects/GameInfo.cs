@@ -23,4 +23,5 @@ public class GameInfo
     }
     public int PlayersCount { get; set; }
     public bool IsFirstGame { get; set; }
+    public bool IsGameOver { get; set; }
 }

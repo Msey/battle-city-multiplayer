@@ -27,8 +27,14 @@ public class InputPlayer
         }
     }
 
-    public void Update()
+    public void Update(bool canUserControlsTanks)
     {
+        if (!canUserControlsTanks)
+        {
+            Tank.Stopped = true;
+            return;
+        }
+
         if (PlayerActionSet.Fire.WasPressed || PlayerActionSet.FireA.IsPressed)
             Tank.Shoot();
 

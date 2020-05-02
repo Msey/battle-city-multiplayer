@@ -75,7 +75,7 @@ public class TankMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         animator.SetFloat("Velocity", 0.0f);
         animator.SetInteger("Direction", DirectionAnimationValue(direction));
-        obstaclesMask = LayerMask.GetMask("Water", "Brick", "Concrete", "LevelBorder", "Tank");
+        obstaclesMask = LayerMask.GetMask("Water", "Brick", "Concrete", "LevelBorder", "Tank", "EagleFortress");
     }
 
     void Update()

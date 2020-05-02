@@ -25,7 +25,6 @@ public class LevelsManager : PersistentSingleton<LevelsManager>
 
     public void OpenClassicGame()
     {
-        CurrentGameInfo.IsFirstGame = true;
         SceneManager.LoadScene(classicGameSceneName);
     }
 
@@ -36,6 +35,8 @@ public class LevelsManager : PersistentSingleton<LevelsManager>
             if (!Utils.Verify(CurrentGameInfo.PlayersCount > 0))
                 return;
 
+            CurrentGameInfo.IsFirstGame = true;
+            CurrentGameInfo.CurrentStage = 0;
             OpenClassicGame();
         }
         else

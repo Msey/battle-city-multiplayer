@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
+using System.Collections;
 
 public class HUDController : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class HUDController : MonoBehaviour
 
     public Text currentStageHUDText;
     public Text stageStartText;
+    public GameObject gameOverText;
     public GameObject pauseText;
     public LayoutGroup tanksCountLayout;
     public GameObject tanksPrefab;
@@ -31,6 +33,7 @@ public class HUDController : MonoBehaviour
 
         Assert.IsNotNull(currentStageHUDText);
         Assert.IsNotNull(stageStartText);
+        Assert.IsNotNull(gameOverText);
         Assert.IsNotNull(pauseText);
 
         Assert.IsNotNull(curtain);
@@ -45,7 +48,7 @@ public class HUDController : MonoBehaviour
 
         SetStage(LevelsManager.s_Instance.CurrentGameInfo.CurrentStage);
         ClassicGameManager.s_Instance.GameStateChanged += OnGameStateChanged;
-        ClassicGameManager.s_Instance.IsPausedChanged += OnGameStateChanged;
+        ClassicGameManager.s_Instance.IsPausedChanged += OnPauseChanged;
         EnemyTank.TankCreated += OnEnemyTankCreated;
         UpdateUIElementsVisibility();
     }
@@ -58,7 +61,7 @@ public class HUDController : MonoBehaviour
     private void OnDestroy()
     {
         ClassicGameManager.s_Instance.GameStateChanged -= OnGameStateChanged;
-        ClassicGameManager.s_Instance.IsPausedChanged -= OnGameStateChanged;
+        ClassicGameManager.s_Instance.IsPausedChanged -= OnPauseChanged;
         EnemyTank.TankCreated -= OnEnemyTankCreated;
     }
 
@@ -71,11 +74,31 @@ public class HUDController : MonoBehaviour
     {
         GameConstants.GameState newGameState = ClassicGameManager.s_Instance.GameState;
 
-        if (newGameState == GameConstants.GameState.Started)
+        switch (newGameState)
         {
-            curtain.Open();
-            LoadGameInfo();
+            case GameConstants.GameState.Started:
+            {
+                curtain.Open();
+                LoadGameInfo();
+                break;
+            }
+            case GameConstants.GameState.PreFinished:
+            {
+                if (ClassicGameManager.s_Instance.IsEagleDestroyed)
+                    ShowGameOverLabel();
+                break;
+            }
+            case GameConstants.GameState.Finished:
+            {
+                StartCoroutine(FinishGameCoroutine());
+                break;
+            }
         }
+        UpdateUIElementsVisibility();
+    }
+
+    public void OnPauseChanged(object sender, EventArgs e)
+    {
         UpdateUIElementsVisibility();
     }
 
@@ -93,8 +116,8 @@ public class HUDController : MonoBehaviour
     {
         GameConstants.GameState gameState = ClassicGameManager.s_Instance.GameState;
 
-        notStartedCanvas.SetActive(gameState == GameConstants.GameState.NotStarted);
-        inGameCanvas.SetActive(gameState == GameConstants.GameState.Started);
+        notStartedCanvas.SetActive(gameState == GameConstants.GameState.NotStarted || gameState == GameConstants.GameState.Loading);
+        inGameCanvas.SetActive(gameState == GameConstants.GameState.Started || gameState == GameConstants.GameState.PreFinished);
         finishedCanvas.SetActive(gameState == GameConstants.GameState.Finished);
         pauseText.SetActive(ClassicGameManager.s_Instance.IsPaused);
     }
@@ -192,11 +215,43 @@ public class HUDController : MonoBehaviour
                     }
                     else if (InputPlayerManager.s_Instance.AnyPlayerActionWasPressed(InputPlayerManager.ActionType.Start))
                     {
-                        ClassicGameManager.s_Instance.StartGame();
+                        ClassicGameManager.s_Instance.LoadGame();
                     }
                 }
                 break;
             }
+            case GameConstants.GameState.Started:
+            {
+                if (InputPlayerManager.s_Instance.AnyPlayerActionWasPressed(InputPlayerManager.ActionType.Start))
+                {
+                    ClassicGameManager.s_Instance.PauseGame();
+                }
+                break;
+            }
+        }
+    }
+
+    private void ShowGameOverLabel()
+    {
+        gameOverText.SetActive(true);
+        Animator gameOverAnimator = gameOverText.GetComponent<Animator>();
+        if (gameOverAnimator)
+            gameOverAnimator.SetTrigger("Show");
+    }
+
+    private IEnumerator FinishGameCoroutine()
+    {
+        yield return new WaitForSeconds(2.0f);
+        GameInfo currentGameInfo = LevelsManager.s_Instance.CurrentGameInfo;
+        if (currentGameInfo.IsGameOver)
+        {
+            LevelsManager.s_Instance.OpenMainMenu();
+        }
+        else
+        {
+            currentGameInfo.IsFirstGame = false;
+            currentGameInfo.CurrentStage++;
+            LevelsManager.s_Instance.OpenClassicGame();
         }
     }
 }

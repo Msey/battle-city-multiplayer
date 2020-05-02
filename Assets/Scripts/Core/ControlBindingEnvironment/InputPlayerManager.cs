@@ -56,15 +56,11 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
 
     private void Update()
     {
-        for (int i = 0; i < inputPlayers.Length; i++)
+        foreach (var input in inputPlayers)
         {
-            if (inputPlayers[i] != null && inputPlayers[i].Tank != null)
+            if (input != null && input.Tank != null)
             {
-                if (inputPlayers[i].PlayerActionSet.Start.WasPressed)
-                    ClassicGameManager.s_Instance.PauseGame();
-
-                if (!ClassicGameManager.s_Instance.IsPaused)
-                    inputPlayers[i].Update();
+                input.Update(ClassicGameManager.s_Instance.CanUserControlsTanks);
             }
         }
     }
