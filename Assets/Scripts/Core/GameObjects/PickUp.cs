@@ -6,15 +6,12 @@ public class PickUp : MonoBehaviour
 
     public Sprite Sprite;
 
-    private float radius;
-
     private void Start()
     {
-        radius = GetComponent<CircleCollider2D>().radius;
     }
     void Update()
     {
-        var tank = Physics2D.OverlapCircle(transform.position, radius)
+        var tank = Physics2D.OverlapCircle(transform.position, 0.16f)
             .GetComponent<ITank>();
 
         if (tank != null)
@@ -27,7 +24,7 @@ public class PickUp : MonoBehaviour
                     break;
                 case PickUpType.Star:
                 case PickUpType.Pistol:
-                    tank.Characteristics.AddUpgrade(new Upgrade(Type));
+                    tank.Characteristics.AddUpgrade(Type);
                     break;
             }
 

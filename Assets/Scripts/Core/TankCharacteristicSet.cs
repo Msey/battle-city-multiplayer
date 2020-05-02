@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
+using static PickUp;
 
 public class TankCharacteristicSet
 {
@@ -8,20 +10,28 @@ public class TankCharacteristicSet
     public int AmmoLimit { get; set; }
     public float ShootDelay { get; set; }
 
-    private HashSet<Upgrade> upgrades;
+    private HashSet<PickUpType> upgrades;
+    private int starUpgradeLevel = 0;
 
-    public void AddUpgrade(Upgrade upgrade)
+    public void AddUpgrade(PickUpType pickUp)
     {
-
-        if(upgrades.Add(upgrade))
+        if (!upgrades.Add(pickUp))
         {
-            //upgrades.First(x => x == upgrade);
+            if(pickUp == PickUpType.Star && starUpgradeLevel < 2)
+                starUpgradeLevel++;
         }
+
+        Recalculate();
+    }
+
+    public void Recalculate()
+    {
+        // TODO: recalculate characteristics
     }
 
     public TankCharacteristicSet()
     {
-        upgrades = new HashSet<Upgrade>();
+        upgrades = new HashSet<PickUpType>();
 
         BulletStrength = 1;
         Velocity = 5.4f;
