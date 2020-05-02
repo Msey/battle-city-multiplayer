@@ -7385,7 +7385,7 @@ PrefabInstance:
     - target: {fileID: 6584541067736040912, guid: e8c05ab6dce3ca54e88745bf0cd5fa71,
         type: 3}
       propertyPath: m_Text
-      value: Tensor Games 2020
+      value: Tensor Games 2019-2020
       objectReference: {fileID: 0}
     - target: {fileID: 6584541067813091205, guid: e8c05ab6dce3ca54e88745bf0cd5fa71,
         type: 3}

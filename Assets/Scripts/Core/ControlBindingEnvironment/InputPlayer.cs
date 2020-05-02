@@ -29,7 +29,7 @@ public class InputPlayer
 
     public void Update()
     {
-        if (PlayerActionSet.Fire.IsPressed || PlayerActionSet.FireA.IsPressed)
+        if (PlayerActionSet.Fire.WasPressed || PlayerActionSet.FireA.IsPressed)
             Tank.Shoot();
 
         bool stopTank;
