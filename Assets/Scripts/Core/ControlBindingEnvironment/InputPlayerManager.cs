@@ -16,7 +16,6 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
     public static event EventHandler OnKeyBindingAdded;
 
     private InputPlayer[] inputPlayers;
-    private bool pauseDelayed;
 
     void Start()
     {
@@ -61,24 +60,14 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
         {
             if (inputPlayers[i] != null && inputPlayers[i].Tank != null)
             {
-                if (inputPlayers[i].PlayerActionSet.Start.IsPressed && !pauseDelayed)
-                {
-                    pauseDelayed = true;
+                if (inputPlayers[i].PlayerActionSet.Start.WasPressed)
                     ClassicGameManager.s_Instance.PauseGame();
-                    StartCoroutine(ReturnPauseAvaliability());
-                }
 
                 if (!ClassicGameManager.s_Instance.IsPaused)
                     inputPlayers[i].Update();
             }
         }
     }
-    private IEnumerator ReturnPauseAvaliability()
-    {
-        yield return new WaitForSecondsRealtime(PAUSE_AVALIABILITY_TIME);
-        pauseDelayed = false;
-    }
-
 
     public string GetPlayerActionCode(int playerNumber, ActionType actionType)
     {
