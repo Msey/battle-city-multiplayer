@@ -1,7 +1,5 @@
 ﻿using InControl;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine.Assertions;
 
 public class InputPlayerActions : PlayerActionSet
 {
@@ -14,6 +12,30 @@ public class InputPlayerActions : PlayerActionSet
     public PlayerAction FireA;
     public PlayerAction Start;
     public PlayerTwoAxisAction Direction;
+
+    public PlayerAction PlayerAction(InputPlayerManager.ActionType action)
+    {
+        switch (action)
+        {
+            case InputPlayerManager.ActionType.FireA:
+                return FireA;
+            case InputPlayerManager.ActionType.Fire:
+                return Fire;
+            case InputPlayerManager.ActionType.Left:
+                return Left;
+            case InputPlayerManager.ActionType.Right:
+                return Right;
+            case InputPlayerManager.ActionType.Up:
+                return Up;
+            case InputPlayerManager.ActionType.Down:
+                return Down;
+            case InputPlayerManager.ActionType.Start:
+                return Start;
+        }
+
+        Assert.IsTrue(false);
+        return null;
+    }
 
     public InputPlayerActions()
     {

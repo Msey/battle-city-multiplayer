@@ -90,38 +90,12 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
     public void BindPlayerKeyCode(int playerIndex, ActionType actionType)
     {
         var player = inputPlayers[playerIndex];
+        PlayerAction playerAction = player.PlayerActionSet.PlayerAction(actionType);
+        if (playerAction == null)
+            return;
 
-        switch (actionType)
-        {
-            case ActionType.FireA:
-                player.PlayerActionSet.FireA.ResetBindings();
-                player.PlayerActionSet.FireA.ListenForBindingReplacing(player.PlayerActionSet.FireA.Bindings[0]);
-                break;
-            case ActionType.Fire:
-                player.PlayerActionSet.Fire.ResetBindings();
-                player.PlayerActionSet.Fire.ListenForBindingReplacing(player.PlayerActionSet.Fire.Bindings[0]);
-                break;
-            case ActionType.Left:
-                player.PlayerActionSet.Left.ResetBindings();
-                player.PlayerActionSet.Left.ListenForBindingReplacing(player.PlayerActionSet.Left.Bindings[0]);
-                break;
-            case ActionType.Right:
-                player.PlayerActionSet.Right.ResetBindings();
-                player.PlayerActionSet.Right.ListenForBindingReplacing(player.PlayerActionSet.Right.Bindings[0]);
-                break;
-            case ActionType.Up:
-                player.PlayerActionSet.Up.ResetBindings();
-                player.PlayerActionSet.Up.ListenForBindingReplacing(player.PlayerActionSet.Up.Bindings[0]);
-                break;
-            case ActionType.Down:
-                player.PlayerActionSet.Down.ResetBindings();
-                player.PlayerActionSet.Down.ListenForBindingReplacing(player.PlayerActionSet.Down.Bindings[0]);
-                break;
-            case ActionType.Start:
-                player.PlayerActionSet.Start.ResetBindings();
-                player.PlayerActionSet.Start.ListenForBindingReplacing(player.PlayerActionSet.Start.Bindings[0]);
-                break;
-        }
+        playerAction.ResetBindings();
+        playerAction.ListenForBindingReplacing(playerAction.Bindings[0]);
     }
 
     public enum ActionType
@@ -133,6 +107,30 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
         Up,
         Down,
         Start
+    }
+
+    bool AnyPlayerActionWasPressed(ActionType action)
+    {
+        for (int playerIndex = 0; playerIndex < inputPlayers.Length; playerIndex++)
+        {
+            var player = inputPlayers[playerIndex];
+            PlayerAction playerAction = player.PlayerActionSet.PlayerAction(action);
+            if (playerAction.WasPressed)
+                return true;
+        }
+        return false;
+    }
+
+    bool AnyPlayerActionIsPressed(ActionType action)
+    {
+        for (int playerIndex = 0; playerIndex < inputPlayers.Length; playerIndex++)
+        {
+            var player = inputPlayers[playerIndex];
+            PlayerAction playerAction = player.PlayerActionSet.PlayerAction(action);
+            if (playerAction.IsPressed)
+                return true;
+        }
+        return false;
     }
 
     private void OnApplicationQuit()
