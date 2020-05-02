@@ -109,7 +109,7 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
         Start
     }
 
-    bool AnyPlayerActionWasPressed(ActionType action)
+    public bool AnyPlayerActionWasPressed(ActionType action)
     {
         for (int playerIndex = 0; playerIndex < inputPlayers.Length; playerIndex++)
         {
@@ -121,7 +121,7 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
         return false;
     }
 
-    bool AnyPlayerActionIsPressed(ActionType action)
+    public bool AnyPlayerActionIsPressed(ActionType action)
     {
         for (int playerIndex = 0; playerIndex < inputPlayers.Length; playerIndex++)
         {

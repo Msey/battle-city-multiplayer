@@ -9,6 +9,18 @@ public class GameInfo
         Classic,
     }
     public EGameMode GameMode { get; set; }
-    public int CurrentStage { get; set; }
+
+    private int currentStage;
+    public int CurrentStage
+    {
+        get => currentStage;
+        set
+        {
+            if (value < 0)
+                return;
+            currentStage = value;
+        }
+    }
     public int PlayersCount { get; set; }
+    public bool IsFirstGame { get; set; }
 }

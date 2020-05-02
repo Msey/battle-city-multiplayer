@@ -15,6 +15,7 @@ public class HUDController : MonoBehaviour
     public GameObject pauseText;
     public LayoutGroup tanksCountLayout;
     public GameObject tanksPrefab;
+    public Curtain curtain;
     private List<GameObject> tanksIcons;
     private int enemyTanksCount = 0;
 
@@ -32,6 +33,8 @@ public class HUDController : MonoBehaviour
         Assert.IsNotNull(stageStartText);
         Assert.IsNotNull(pauseText);
 
+        Assert.IsNotNull(curtain);
+
         tanksIcons = new List<GameObject>();
         Assert.IsNotNull(tanksCountLayout);
         Assert.IsNotNull(tanksPrefab);
@@ -45,6 +48,11 @@ public class HUDController : MonoBehaviour
         ClassicGameManager.s_Instance.IsPausedChanged += OnGameStateChanged;
         EnemyTank.TankCreated += OnEnemyTankCreated;
         UpdateUIElementsVisibility();
+    }
+
+    private void Update()
+    {
+        HandleInput();
     }
 
     private void OnDestroy()
@@ -64,7 +72,10 @@ public class HUDController : MonoBehaviour
         GameConstants.GameState newGameState = ClassicGameManager.s_Instance.GameState;
 
         if (newGameState == GameConstants.GameState.Started)
+        {
+            curtain.Open();
             LoadGameInfo();
+        }
         UpdateUIElementsVisibility();
     }
 
@@ -94,8 +105,8 @@ public class HUDController : MonoBehaviour
 
     public void SetStage(int stage)
     {
-        currentStageHUDText.text = stage.ToString();
-        stageStartText.text = String.Format("STAGE {0}", stage);
+        currentStageHUDText.text = (stage + 1).ToString();
+        stageStartText.text = String.Format("STAGE {0}", stage + 1);
     }
 
     public void SetEnemyTanksCount(int count)
@@ -157,5 +168,35 @@ public class HUDController : MonoBehaviour
             return;
 
         livesPanel.SetLives(lives);
+    }
+
+    void HandleInput()
+    {
+        GameInfo currentGameInfo = LevelsManager.s_Instance.CurrentGameInfo;
+
+        switch (ClassicGameManager.s_Instance.GameState)
+        {
+            case GameConstants.GameState.NotStarted:
+            {
+                if (currentGameInfo.IsFirstGame)
+                {
+                    if (InputPlayerManager.s_Instance.AnyPlayerActionWasPressed(InputPlayerManager.ActionType.Down))
+                    {
+                        currentGameInfo.CurrentStage--;
+                        SetStage(currentGameInfo.CurrentStage);
+                    }
+                    else if (InputPlayerManager.s_Instance.AnyPlayerActionWasPressed(InputPlayerManager.ActionType.Up))
+                    {
+                        currentGameInfo.CurrentStage++;
+                        SetStage(currentGameInfo.CurrentStage);
+                    }
+                    else if (InputPlayerManager.s_Instance.AnyPlayerActionWasPressed(InputPlayerManager.ActionType.Start))
+                    {
+                        ClassicGameManager.s_Instance.StartGame();
+                    }
+                }
+                break;
+            }
+        }
     }
 }

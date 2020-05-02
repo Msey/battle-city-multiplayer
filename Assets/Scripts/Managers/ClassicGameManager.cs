@@ -82,7 +82,11 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
         base.Awake();
     }
-    private void Start() => StartGame();
+    private void Start()
+    {
+        if (!LevelsManager.s_Instance.CurrentGameInfo.IsFirstGame)
+            StartGame();
+    }
 
     private int playerLives = 2;
 

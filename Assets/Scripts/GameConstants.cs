@@ -14,7 +14,9 @@ public static partial class GameConstants
     public enum GameState
     {
         NotStarted,
+        Loading,
         Started,
+        PreFinished,
         Finished,
     }
 
