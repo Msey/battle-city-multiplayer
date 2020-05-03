@@ -44,7 +44,7 @@ public class PlayerTank : MonoBehaviour, ITank
         set
         {
             playerIndex = value;
-            tankAnimator.AnimationColorIndex = playerIndex % tankAnimator.AnimationColorCount;
+            Characteristics.Animator.AnimationColorIndex = playerIndex % Characteristics.Animator.AnimationColorCount;
         }
     }
 
@@ -59,8 +59,9 @@ public class PlayerTank : MonoBehaviour, ITank
         Assert.IsNotNull(bulletPrefab);
         Assert.IsNotNull(explosionPrefab);
         tankMovement = GetComponent<TankMovement>();
-        tankAnimator = GetComponent<PlayerTankAnimator>();
-        Characteristics = new TankCharacteristicSet();
+
+        Characteristics = new TankCharacteristicSet(GetComponent<PlayerTankAnimator>());
+
         Group = new EntityRelationGroup(this);
     }
 
@@ -101,12 +102,7 @@ public class PlayerTank : MonoBehaviour, ITank
         }
         else if (isDead)
             ClassicGameManager.s_Instance.RespawnPlayer(playerIndex);
-    }
-
-    void ChangeTankLevel()
-    {
-        tankAnimator.LevelType = (PlayerTankAnimator.TankLevelType)(int)(tankAnimator.LevelType) + 1;
-    }
+    }    
 
     private void Destroy()
     {
@@ -122,9 +118,15 @@ public class PlayerTank : MonoBehaviour, ITank
 
     public bool OnHit(IBullet bullet)
     {
-        if(bullet.Owner.Group.Current == EntityRelationGroup.GroupType.Enemies)
+        if (bullet.Owner.Group.Current == EntityRelationGroup.GroupType.Enemies)
         {
-            Destroy();
+            if (Characteristics.HasGun)
+            {
+                Characteristics.HasGun = false;
+                Characteristics.StarBonusLevel = 1;
+                Characteristics.Recalculate();
+            }
+            else Destroy();
         }
 
         return true;

@@ -59,7 +59,7 @@ public class EnemyTank : MonoBehaviour, ITank
         Group = new EntityRelationGroup(this);
         tankMovement = GetComponent<TankMovement>();
         tankAnimator = GetComponent<EnemyTankAnimator>();
-        Characteristics = new TankCharacteristicSet();
+        Characteristics = new TankCharacteristicSet(null);
     }
 
     void Start()

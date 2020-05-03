@@ -9,35 +9,51 @@ public class TankCharacteristicSet
     public float BulletVelocity { get; set; } 
     public int AmmoLimit { get; set; }
     public float ShootDelay { get; set; }
+    public bool HasGun { get; set; }
+    public int StarBonusLevel { get; set; }
 
-    private HashSet<PickUpType> upgrades;
-    private int starUpgradeLevel = 0;
-
-    public void AddUpgrade(PickUpType pickUp)
-    {
-        if (!upgrades.Add(pickUp))
-        {
-            if(pickUp == PickUpType.Star && starUpgradeLevel < 2)
-                starUpgradeLevel++;
-        }
-
-        Recalculate();
-    }
+    public PlayerTankAnimator Animator;
 
     public void Recalculate()
     {
-        // TODO: recalculate characteristics
+        BulletStrength = HasGun ? 2 : (StarBonusLevel > 0 ? StarBonusLevel : 1);
+        Velocity = 5.4f;
+        BulletVelocity = 16f * (StarBonusLevel > 0 || HasGun ? 2 : 1);
+        AmmoLimit = 1 + (HasGun ? 2 : (StarBonusLevel > 0 ? 1 : 0));
+        ShootDelay = 2f;
+
+        Debug.Log(
+          $"BulletStrength = {BulletStrength} " +
+          $"BulletVelocity = {BulletVelocity} " +
+          $"AmmoLimit = {AmmoLimit}");
+
+        UpdateTankAppearance();
     }
 
-    public TankCharacteristicSet()
+    private void UpdateTankAppearance()
     {
-        upgrades = new HashSet<PickUpType>();
+        if (Animator is null) return;
 
-        BulletStrength = 1;
-        Velocity = 5.4f;
-        BulletVelocity = 16f;
-        AmmoLimit = 2;
-        ShootDelay = 2f;
+        PlayerTankAnimator.TankLevelType
+            currentAnimationLevelType = default;
+
+        if (HasGun)
+            currentAnimationLevelType = PlayerTankAnimator.TankLevelType.Heavy;
+        else
+            if (StarBonusLevel == 1)
+            currentAnimationLevelType = PlayerTankAnimator.TankLevelType.Light;
+        else
+            if (StarBonusLevel == 2)
+            currentAnimationLevelType = PlayerTankAnimator.TankLevelType.Medium;
+
+        //Animator.LevelType = (PlayerTankAnimator.TankLevelType)(int)(Animator.LevelType) + 1;
+        Animator.LevelType = currentAnimationLevelType;
+    }
+
+    public TankCharacteristicSet(PlayerTankAnimator animator)
+    {
+        Animator = animator;
+        Recalculate();
     }
 }
 

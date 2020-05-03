@@ -23,11 +23,14 @@ public class PickUp : MonoBehaviour
                     print(ClassicGameManager.s_Instance.GetTotalLives());
                     break;
                 case PickUpType.Star:
+                    if (tank.Characteristics.StarBonusLevel < 2)
+                        tank.Characteristics.StarBonusLevel++;
+                    break;
                 case PickUpType.Pistol:
-                    tank.Characteristics.AddUpgrade(Type);
+                    tank.Characteristics.HasGun = true;
                     break;
             }
-
+            tank.Characteristics.Recalculate();
             Destroy(gameObject);
         }
     }
