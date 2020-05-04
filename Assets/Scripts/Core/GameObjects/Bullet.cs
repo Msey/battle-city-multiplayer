@@ -65,16 +65,14 @@ public class Bullet : MonoBehaviour, IBullet
         }
 
         if (destroyCurrent)
-        {
-            Owner?.OnMyBulletHit(this);
             Die();
-        }
     }
 
     public void Die()
     {
         if (needCreateExplosion)
             Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        Owner?.OnMyBulletHit(this);
         Destroy(gameObject);
     }
 
