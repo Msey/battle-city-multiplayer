@@ -3,5 +3,12 @@ public interface IBulletTarget
 {
     bool OnHit(IBullet bullet);
 
-    EntityRelationGroup Group { get; set; }
+    GroupType Group { get; set; }
+}
+
+public enum GroupType
+{
+    Other,
+    Enemies,
+    Players
 }

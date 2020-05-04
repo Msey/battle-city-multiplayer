@@ -44,7 +44,7 @@ public class EnemyTank : MonoBehaviour, ITank
         set => tankMovement.Stopped = value;
     }
 
-    public EntityRelationGroup Group { get; set; }
+    public GroupType Group { get; set; }
     public TankCharacteristicSet Characteristics { get; set; }
 
 
@@ -56,7 +56,7 @@ public class EnemyTank : MonoBehaviour, ITank
         Assert.IsNotNull(bulletPrefab);
         Assert.IsNotNull(explosionPrefab);
 
-        Group = new EntityRelationGroup(this);
+        Group = GroupType.Enemies; ;
         tankMovement = GetComponent<TankMovement>();
         tankAnimator = GetComponent<EnemyTankAnimator>();
         Characteristics = new TankCharacteristicSet(null);
@@ -118,7 +118,7 @@ public class EnemyTank : MonoBehaviour, ITank
             if (bulletComponent != null)
             {
                 bulletComponent.Direction = Direction;
-                bulletComponent.Group = new EntityRelationGroup(this);
+                bulletComponent.Group = this.Group;
                 bulletComponent.Owner = this;
             }
 

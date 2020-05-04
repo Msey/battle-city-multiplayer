@@ -7,14 +7,13 @@ public class Eagle : MonoBehaviour, IBulletTarget
 {
     public Sprite destroyedTexture;
     public GameObject explosionPrefab;
-    public EntityRelationGroup Group { get; set; }
+    public GroupType Group { get; set; }
     static public event EventHandler EagleDestroyed;
     private SpriteRenderer spriteRenderer;
     private bool isDestroyed = false;
     void Awake()
     {
         Assert.IsNotNull(explosionPrefab);
-        Group = new EntityRelationGroup(this);
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 

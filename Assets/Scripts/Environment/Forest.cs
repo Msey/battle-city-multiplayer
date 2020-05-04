@@ -2,7 +2,7 @@
 
 public class Forest : MonoBehaviour, IBulletTarget
 {
-    public EntityRelationGroup Group { get; set; } // TODO: Implement init here
+    public GroupType Group { get; set; }
     public void Die()
     {
         Destroy(gameObject);

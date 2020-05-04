@@ -48,7 +48,7 @@ public class PlayerTank : MonoBehaviour, ITank
         }
     }
 
-    public EntityRelationGroup Group { get; set; }
+    public GroupType Group { get; set; }
     public TankCharacteristicSet Characteristics { get; set; }
 
     public static event EventHandler TankCreated;
@@ -62,7 +62,7 @@ public class PlayerTank : MonoBehaviour, ITank
 
         Characteristics = new TankCharacteristicSet(GetComponent<PlayerTankAnimator>());
 
-        Group = new EntityRelationGroup(this);
+        Group = GroupType.Players;
     }
 
     void Start()
@@ -96,7 +96,7 @@ public class PlayerTank : MonoBehaviour, ITank
             {
                 bulletComponent.Direction = Direction;
                 bulletComponent.Velocity = Characteristics.BulletVelocity;
-                bulletComponent.Group = new EntityRelationGroup(this);
+                bulletComponent.Group = this.Group;
                 bulletComponent.Owner = this;
             }
         }
@@ -118,7 +118,7 @@ public class PlayerTank : MonoBehaviour, ITank
 
     public bool OnHit(IBullet bullet)
     {
-        if (bullet.Owner.Group.Current == EntityRelationGroup.GroupType.Enemies)
+        if (bullet.Owner.Group == GroupType.Enemies)
         {
             if (Characteristics.HasGun)
             {

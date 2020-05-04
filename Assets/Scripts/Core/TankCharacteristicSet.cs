@@ -18,9 +18,9 @@ public class TankCharacteristicSet
     {
         BulletStrength = HasGun ? 2 : (StarBonusLevel > 0 ? StarBonusLevel : 1);
         Velocity = 5.4f;
-        BulletVelocity = 16f * (StarBonusLevel > 0 || HasGun ? 2 : 1);
+        BulletVelocity = 8f * (StarBonusLevel > 0 || HasGun ? 2 : 1);
         AmmoLimit = 1 + (HasGun ? 2 : (StarBonusLevel > 0 ? 1 : 0));
-        ShootDelay = 2f;
+        ShootDelay = 1f - (HasGun ? 0.6f : (StarBonusLevel > 0 ? StarBonusLevel * 0.3f : 0));
 
         Debug.Log(
           $"BulletStrength = {BulletStrength} " +

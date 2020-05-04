@@ -25,7 +25,7 @@ public class Bullet : MonoBehaviour, IBullet
         get { return obstaclesMask; }
     }
 
-    public EntityRelationGroup Group { get; set; }
+    public GroupType Group { get; set; }
 
     void Awake()
     {

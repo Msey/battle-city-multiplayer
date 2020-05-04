@@ -16,11 +16,9 @@ public class Brick : MonoBehaviour, IBulletTarget
     private BrickState brickState = BrickState.Full;
     private Animator animator;
 
-    public EntityRelationGroup Group { get; set; }
-
+    public GroupType Group { get; set; }
     void Awake()
     {
-        Group = new EntityRelationGroup(this);
         animator = GetComponent<Animator>();
     }
 
