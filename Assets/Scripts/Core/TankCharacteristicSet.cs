@@ -4,7 +4,6 @@ using static PickUp;
 
 public class TankCharacteristicSet
 {
-    public int BulletStrength { get; set; } 
     public float Velocity { get; set; } 
     public float BulletVelocity { get; set; } 
     public int AmmoLimit { get; set; }
@@ -16,15 +15,13 @@ public class TankCharacteristicSet
 
     public void Recalculate()
     {
-        BulletStrength = HasGun ? 2 : (StarBonusLevel > 0 ? StarBonusLevel : 1);
         Velocity = 5.4f;
         BulletVelocity = 8f * (StarBonusLevel > 0 || HasGun ? 2 : 1);
-        AmmoLimit = 1 + (HasGun ? 2 : (StarBonusLevel > 0 ? 1 : 0));
-        ShootDelay = 1f - (HasGun ? 0.6f : (StarBonusLevel > 0 ? StarBonusLevel * 0.3f : 0));
+        AmmoLimit = 1 + (HasGun ? 1 : (StarBonusLevel > 1 ? 1 : 0));
+        ShootDelay = 1f - (HasGun ? 0.75f : (StarBonusLevel > 0 ? StarBonusLevel * 0.375f : 0));
 
         Debug.Log(
-          $"BulletStrength = {BulletStrength} " +
-          $"BulletVelocity = {BulletVelocity} " +
+          $"BulletVelocity = {BulletVelocity} " + '\n' +
           $"AmmoLimit = {AmmoLimit}");
 
         UpdateTankAppearance();

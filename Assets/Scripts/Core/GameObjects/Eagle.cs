@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Assertions;
+using static GameConstants;
+
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class Eagle : MonoBehaviour, IBulletTarget

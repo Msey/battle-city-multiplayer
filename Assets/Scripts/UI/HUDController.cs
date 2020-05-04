@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
 using System.Collections;
+using static GameConstants;
 
 public class HUDController : MonoBehaviour
 {
@@ -72,23 +73,23 @@ public class HUDController : MonoBehaviour
 
     public void OnGameStateChanged(object sender, EventArgs e)
     {
-        GameConstants.GameState newGameState = ClassicGameManager.s_Instance.GameState;
+        GameState newGameState = ClassicGameManager.s_Instance.GameState;
 
         switch (newGameState)
         {
-            case GameConstants.GameState.Started:
+            case GameState.Started:
             {
                 curtain.Open();
                 LoadGameInfo();
                 break;
             }
-            case GameConstants.GameState.PreFinished:
+            case GameState.PreFinished:
             {
                 if (ClassicGameManager.s_Instance.IsEagleDestroyed)
                     ShowGameOverLabel();
                 break;
             }
-            case GameConstants.GameState.Finished:
+            case GameState.Finished:
             {
                 StartCoroutine(FinishGameCoroutine());
                 break;
@@ -114,11 +115,11 @@ public class HUDController : MonoBehaviour
 
     private void UpdateUIElementsVisibility()
     {
-        GameConstants.GameState gameState = ClassicGameManager.s_Instance.GameState;
+        GameState gameState = ClassicGameManager.s_Instance.GameState;
 
-        notStartedCanvas.SetActive(gameState == GameConstants.GameState.NotStarted || gameState == GameConstants.GameState.Loading);
-        inGameCanvas.SetActive(gameState == GameConstants.GameState.Started || gameState == GameConstants.GameState.PreFinished);
-        finishedCanvas.SetActive(gameState == GameConstants.GameState.Finished);
+        notStartedCanvas.SetActive(gameState == GameState.NotStarted || gameState == GameState.Loading);
+        inGameCanvas.SetActive(gameState == GameState.Started || gameState == GameState.PreFinished);
+        finishedCanvas.SetActive(gameState == GameState.Finished);
         pauseText.SetActive(ClassicGameManager.s_Instance.IsPaused);
     }
     private void OnEnemyTankCreated(object sender, EventArgs e)
@@ -199,7 +200,7 @@ public class HUDController : MonoBehaviour
 
         switch (ClassicGameManager.s_Instance.GameState)
         {
-            case GameConstants.GameState.NotStarted:
+            case GameState.NotStarted:
             {
                 if (currentGameInfo.IsFirstGame)
                 {
@@ -220,7 +221,7 @@ public class HUDController : MonoBehaviour
                 }
                 break;
             }
-            case GameConstants.GameState.Started:
+            case GameState.Started:
             {
                 if (InputPlayerManager.s_Instance.AnyPlayerActionWasPressed(InputPlayerManager.ActionType.Start))
                 {

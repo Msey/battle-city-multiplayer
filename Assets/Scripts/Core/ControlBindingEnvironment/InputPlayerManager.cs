@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using InControl;
 using UnityEngine.UI;
-using System.Collections;
+using static GameConstants;
 
 public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
 {
-    private const int MAX_PLAYERS = 4;
-    private const int PAUSE_AVALIABILITY_TIME = 1;
-
     public bool IsBindingListening;
     public Dictionary<string, Text>[] textComponents;
 
@@ -168,7 +165,7 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
     {
         var lastCreatedTank = (PlayerTank)sender;
 
-        if (Utils.InRange(0, lastCreatedTank.PlayerIndex, GameConstants.PlayerTanksCount))
+        if (Utils.InRange(0, lastCreatedTank.PlayerIndex, GameConstants.MAX_PLAYERS))
         {
             inputPlayers[lastCreatedTank.PlayerIndex].Tank = lastCreatedTank;
         }
@@ -178,7 +175,7 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
     {
         var lastDestroyedTank = (PlayerTank)sender;
 
-        if (Utils.InRange(0, lastDestroyedTank.PlayerIndex, GameConstants.PlayerTanksCount))
+        if (Utils.InRange(0, lastDestroyedTank.PlayerIndex, GameConstants.MAX_PLAYERS))
         {
             inputPlayers[lastDestroyedTank.PlayerIndex].Tank = null;
         }

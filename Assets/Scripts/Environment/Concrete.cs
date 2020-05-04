@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static GameConstants;
 
 public class Concrete : MonoBehaviour, IBulletTarget
 {

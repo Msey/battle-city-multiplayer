@@ -164,8 +164,8 @@ public class TankMovement : MonoBehaviour
         }
 
         return new Vector2(
-            Utils.RoundByFactor(currentPosition.x, cellSize),
-            Utils.RoundByFactor(currentPosition.y, cellSize));
+            Utils.RoundByFactor(currentPosition.x, CELL_SIZE),
+            Utils.RoundByFactor(currentPosition.y, CELL_SIZE));
     }
 
     private Vector2 FrontCellPosition()
@@ -176,20 +176,20 @@ public class TankMovement : MonoBehaviour
         {
             case Direction.Up:
                 return new Vector2(
-                    Utils.RoundByFactor(currentPosition.x, cellSize),
-                    Utils.CeilByFactor(currentPosition.y, cellSize));
+                    Utils.RoundByFactor(currentPosition.x, CELL_SIZE),
+                    Utils.CeilByFactor(currentPosition.y, CELL_SIZE));
             case Direction.Down:
                 return new Vector2(
-                    Utils.RoundByFactor(currentPosition.x, cellSize),
-                    Utils.FloorByFactor(currentPosition.y, cellSize));
+                    Utils.RoundByFactor(currentPosition.x, CELL_SIZE),
+                    Utils.FloorByFactor(currentPosition.y, CELL_SIZE));
             case Direction.Left:
                 return new Vector2(
-                    Utils.FloorByFactor(currentPosition.x, cellSize),
-                    Utils.RoundByFactor(currentPosition.y, cellSize));
+                    Utils.FloorByFactor(currentPosition.x, CELL_SIZE),
+                    Utils.RoundByFactor(currentPosition.y, CELL_SIZE));
             case Direction.Right:
                 return new Vector2(
-                    Utils.CeilByFactor(currentPosition.x, cellSize),
-                    Utils.RoundByFactor(currentPosition.y, cellSize));
+                    Utils.CeilByFactor(currentPosition.x, CELL_SIZE),
+                    Utils.RoundByFactor(currentPosition.y, CELL_SIZE));
         }
         return Vector2.zero;
     }

@@ -3,6 +3,7 @@ using UnityEngine.Assertions;
 using UnityEngine;
 using System;
 using System.Collections;
+using static GameConstants;
 
 [Serializable]
 public class ClassicGameLevelInfo
@@ -39,11 +40,11 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     [SerializeField]
     ClassicGameLevelInfo[] levels;
 
-    bool[] playerTankCreating = new bool[GameConstants.PlayerTanksCount] { false, false, false, false };
-    bool[] playerTankLiving = new bool[GameConstants.PlayerTanksCount] { false, false, false, false };
+    bool[] playerTankCreating = new bool[MAX_PLAYERS] { false, false, false, false };
+    bool[] playerTankLiving = new bool[MAX_PLAYERS] { false, false, false, false };
 
     [SerializeField]
-    GameConstants.GameState gameState = GameConstants.GameState.NotStarted;
+    GameState gameState = GameState.NotStarted;
 
     public event EventHandler IsPausedChanged;
     bool isPaused;
@@ -60,7 +61,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         }
     }
 
-    public GameConstants.GameState GameState
+    public GameState GameState
     {
         get => gameState;
         protected set
@@ -68,7 +69,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             if (gameState == value)
                 return;
 
-            if (gameState != GameConstants.GameState.Started)
+            if (gameState != GameState.Started)
                 IsPaused = false;
 
             gameState = value;
@@ -117,20 +118,20 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     public void LoadGame()
     {
-        if (!Utils.Verify(GameState == GameConstants.GameState.NotStarted))
+        if (!Utils.Verify(GameState == GameState.NotStarted))
             return;
 
-        GameState = GameConstants.GameState.Loading;
+        GameState = GameState.Loading;
         StartCoroutine(LoadLevelCoroutine());
     }
 
     private void StartGame()
     {
-        if (!Utils.Verify(GameState == GameConstants.GameState.Loading))
+        if (!Utils.Verify(GameState == GameState.Loading))
             return;
 
         LoadLevel();
-        GameState = GameConstants.GameState.Started;
+        GameState = GameState.Started;
     }
 
     void LoadLevel()
@@ -152,7 +153,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     public bool PlayerTankIsLiving(int playerIndex)
     {
-        if (!Utils.InRange(0, playerIndex, GameConstants.PlayerTanksCount))
+        if (!Utils.InRange(0, playerIndex, MAX_PLAYERS))
             return false;
 
         return playerTankLiving[playerIndex];
@@ -160,7 +161,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     private void SpawnPlayerTank(int playerIndex)
     {
-        if (!Utils.InRange(0, playerIndex, GameConstants.PlayerTanksCount)
+        if (!Utils.InRange(0, playerIndex, MAX_PLAYERS)
             || playerTankCreating[playerIndex]
             || playerTankLiving[playerIndex])
             return;
@@ -227,7 +228,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
                 playerSpawnPoints.Add(spawnPoint);
         }
 
-        Assert.AreEqual(playerSpawnPoints.Count, GameConstants.PlayerTanksCount);
+        Assert.AreEqual(playerSpawnPoints.Count, MAX_PLAYERS);
     }
 
     void GenerateEnemyTank()
@@ -249,7 +250,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             return;
 
         EnemyTank tank = Instantiate(enemyTankPrefab, spawnPoint.position, Quaternion.identity).GetComponent<EnemyTank>();
-        tank.Direction = GameConstants.Direction.Down;
+        tank.Direction = Direction.Down;
         tank.TankType = enemiesQueue.Dequeue();
     }
 
@@ -278,7 +279,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             Time.timeScale = 1;
             IsPaused = false;
         }
-        else if (GameState == GameConstants.GameState.Started)
+        else if (GameState == GameState.Started)
         {
             Time.timeScale = 0;
             IsPaused = true;
@@ -287,14 +288,14 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     void PreFinishGame()
     {
-        GameState = GameConstants.GameState.PreFinished;
+        GameState = GameState.PreFinished;
         StartCoroutine(PreFinishCoroutine());
     }
 
     void FinishGame()
     {
         LevelsManager.s_Instance.CurrentGameInfo.IsGameOver = isEagleDestroyed;
-        GameState = GameConstants.GameState.Finished;
+        GameState = GameState.Finished;
     }
 
     void OnEnemyTankCreated(object sender, EventArgs e)
@@ -325,7 +326,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         if (tank == null)
             return;
 
-        if (tank.PlayerIndex < 0 || tank.PlayerIndex >= GameConstants.PlayerTanksCount)
+        if (tank.PlayerIndex < 0 || tank.PlayerIndex >= MAX_PLAYERS)
             return;
 
         playerTankCreating[tank.PlayerIndex] = false;
@@ -338,7 +339,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         if (tank == null)
             return;
 
-        if (tank.PlayerIndex < 0 || tank.PlayerIndex >= GameConstants.PlayerTanksCount)
+        if (tank.PlayerIndex < 0 || tank.PlayerIndex >= MAX_PLAYERS)
             return;
 
         playerTankLiving[tank.PlayerIndex] = false;
@@ -347,7 +348,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     void OnEagleDestroyed(object sender, EventArgs e)
     {
         isEagleDestroyed = true;
-        if (gameState == GameConstants.GameState.Started)
+        if (gameState == GameState.Started)
         {
             PreFinishGame();
         }

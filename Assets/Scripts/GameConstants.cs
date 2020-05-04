@@ -2,7 +2,10 @@
 
 public static partial class GameConstants
 {
-    public const float cellSize = 1.28f;
+    public const float CELL_SIZE = 1.28f;
+    public const int MAX_PLAYERS = 4;
+    public const int PAUSE_AVALIABILITY_TIME = 1;
+
     public enum Direction
     {
         Up = 0,
@@ -20,5 +23,10 @@ public static partial class GameConstants
         Finished,
     }
 
-    public const int PlayerTanksCount = 4;
+    public enum GroupType
+    {
+        Other,
+        Enemies,
+        Players
+    }
 }
