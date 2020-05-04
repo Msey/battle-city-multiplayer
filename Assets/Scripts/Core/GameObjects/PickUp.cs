@@ -24,7 +24,7 @@ public class PickUp : MonoBehaviour
                     break;
                 case PickUpType.Star:
                     if (tank.Characteristics.StarBonusLevel < 2)
-                        tank.Characteristics.StarBonusLevel++;
+                        tank.Characteristics.StarBonusLevel = tank.Characteristics.StarBonusLevel + 1;
                     break;
                 case PickUpType.Pistol:
                     tank.Characteristics.HasGun = true;

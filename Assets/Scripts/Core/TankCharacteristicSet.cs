@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using static PickUp;
 
@@ -6,23 +7,51 @@ public class TankCharacteristicSet
 {
     public float Velocity { get; set; } 
     public float BulletVelocity { get; set; } 
-    public int AmmoLimit { get; set; }
     public float ShootDelay { get; set; }
-    public bool HasGun { get; set; }
-    public int StarBonusLevel { get; set; }
+
+    private bool hasGun;
+    public bool HasGun
+      { get => hasGun;
+        set
+        {
+            if (hasGun == value) return;
+
+            int appendix = value ? 1 : -1;
+            hasGun = value;
+
+            if (!(starBonusLevel == 2))
+                UpdateAmmo(appendix);
+
+            starBonusLevel = 0;
+        }
+    }
+
+    private int starBonusLevel;
+    public int StarBonusLevel
+    {
+        get => starBonusLevel;
+        set
+        {
+            if (starBonusLevel == value || hasGun) return;
+
+            int appendix = value < starBonusLevel ? -1 : 1;
+            int prevStarLevel = starBonusLevel;
+            starBonusLevel = value;
+
+            if (!(prevStarLevel + value == 1))
+                UpdateAmmo(appendix);
+        }
+    }
 
     public PlayerTankAnimator Animator;
+
+    public Action<int> UpdateAmmo;
 
     public void Recalculate()
     {
         Velocity = 5.4f;
         BulletVelocity = 8f * (StarBonusLevel > 0 || HasGun ? 2 : 1);
-        AmmoLimit = 1 + (HasGun ? 1 : (StarBonusLevel > 1 ? 1 : 0));
-        ShootDelay = 1f - (HasGun ? 0.75f : (StarBonusLevel > 0 ? StarBonusLevel * 0.375f : 0));
-
-        Debug.Log(
-          $"BulletVelocity = {BulletVelocity} " + '\n' +
-          $"AmmoLimit = {AmmoLimit}");
+        ShootDelay = 0.2f;
 
         UpdateTankAppearance();
     }

@@ -17,7 +17,9 @@ public class PlayerTank : MonoBehaviour, ITank
     {
         get
         {
-            return (!isDead && shootDelay <= 0 && ammoLeft > 0);
+            return (!isDead 
+                && shootDelay <= 0
+                && ammoLeft > 0);
         }
     }
 
@@ -71,7 +73,9 @@ public class PlayerTank : MonoBehaviour, ITank
 
         tankMovement.Velocity = Characteristics.Velocity;
 
-        ammoLeft = Characteristics.AmmoLimit;
+        ammoLeft = 1;
+
+        Characteristics.UpdateAmmo = (appendix) => { ammoLeft += appendix; print(ammoLeft + " " + appendix); };
     }
 
     void Update()
@@ -135,11 +139,6 @@ public class PlayerTank : MonoBehaviour, ITank
     public void OnMyBulletHit(IBullet bullet)
     {
         ammoLeft++;
-
-        if (ammoLeft >= Characteristics.AmmoLimit)
-        {
-            shootDelay = 0;
-            ammoLeft = Characteristics.AmmoLimit;
-        }
+        shootDelay = 0;
     }
 }
