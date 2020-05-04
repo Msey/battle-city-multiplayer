@@ -187,7 +187,6 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             || playerTankLiving[playerIndex])
             return;
 
-
         playerTankCreating[playerIndex] = true;
 
         SpawnPoint spawnPoint = playerSpawnPoints[playerIndex];
@@ -197,6 +196,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             playerTankLiving[playerIndex] = true;
             PlayerTank tank = Instantiate(playerTankPrefab, point.position, Quaternion.identity).GetComponent<PlayerTank>();
             tank.PlayerIndex = playerIndex;
+            tank.Direction = Direction.Up;
         });
     }
 

@@ -53,11 +53,16 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
 
     private void Update()
     {
-        foreach (var input in inputPlayers)
+        for (int playerIndex = 0; playerIndex < inputPlayers.Length; playerIndex++)
         {
-            if (input != null && input.Tank != null)
+            var input = inputPlayers[playerIndex];
+            if (input != null)
             {
-                input.Update(ClassicGameManager.s_Instance.CanUserControlsTanks);
+                if (input.Tank != null)
+                    input.Update(ClassicGameManager.s_Instance.CanUserControlsTanks);
+                else if ((input.PlayerActionSet.Fire.WasPressed || input.PlayerActionSet.FireA.WasPressed) 
+                    && ClassicGameManager.s_Instance.GameState == GameState.Started)
+                    ClassicGameManager.s_Instance.RespawnPlayer(playerIndex);
             }
         }
     }

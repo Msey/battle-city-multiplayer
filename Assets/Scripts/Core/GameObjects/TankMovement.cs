@@ -108,7 +108,8 @@ public class TankMovement : MonoBehaviour
                 TankMovement obstacleTankMovement = obstacle.GetComponent<TankMovement>();
                 if (obstacleTankMovement != null)
                 {
-                    obstacleTankMovement.TransparentForTanks = true;
+                    //obstacleTankMovement.TransparentForTanks = true;
+                    //hasBarrier = true;
                 }
                 else
                 {
