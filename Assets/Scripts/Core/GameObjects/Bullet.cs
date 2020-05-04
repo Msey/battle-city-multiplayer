@@ -56,7 +56,6 @@ public class Bullet : MonoBehaviour, IBullet
                 if (!bulletTarget.OnHit(this))
                     continue;
 
-                Owner?.OnMyBulletHit(this);
                 destroyCurrent = true;
 
                 if (bulletTarget is ITank)
@@ -65,7 +64,11 @@ public class Bullet : MonoBehaviour, IBullet
             else continue;
         }
 
-        if (destroyCurrent) Die();
+        if (destroyCurrent)
+        {
+            Owner?.OnMyBulletHit(this);
+            Die();
+        }
     }
 
     public void Die()
