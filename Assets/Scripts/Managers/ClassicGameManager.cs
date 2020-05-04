@@ -100,19 +100,13 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             return time;
         }
     }
+    public HashSet<PlayerTank> ActivePlayersTanks { get; } = new HashSet<PlayerTank>();
+    public HashSet<EnemyTank> ActiveEmemiesTanks { get; } = new HashSet<EnemyTank>();
 
-    override protected void Awake()
-    {
-        Assert.IsNotNull(enemyTankPrefab);
-        Assert.IsNotNull(playerTankPrefab);
+    public List<Eagle> Eagles { get; } = new List<Eagle>();
 
-        base.Awake();
-    }
-    private void Start()
-    {
-        if (!LevelsManager.s_Instance.CurrentGameInfo.IsFirstGame)
-            LoadGame();
-    }
+    EnemyTanksAISystem enemyTanksAISystem;
+
 
     private int playerLives = 2;
 
@@ -124,13 +118,26 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         return playerLives;
     }
 
+
+    override protected void Awake()
+    {
+        Assert.IsNotNull(enemyTankPrefab);
+        Assert.IsNotNull(playerTankPrefab);
+        enemyTanksAISystem = new EnemyTanksAISystem(this);
+        base.Awake();
+    }
+    private void Start()
+    {
+        if (!LevelsManager.s_Instance.CurrentGameInfo.IsFirstGame)
+            LoadGame();
+    }
+
     protected override void OnDestroy() => StopListeningEvents();
 
     public event EventHandler GameStateChanged;
 
     public void LoadGame()
     {
-        print(RespawnTime);
         if (!Utils.Verify(GameState == GameState.NotStarted))
             return;
 
@@ -145,6 +152,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
         LoadLevel();
         GameState = GameState.Started;
+        enemyTanksAISystem.Start();
     }
 
     void LoadLevel()
@@ -206,6 +214,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         ClassicGameLevelInfo levelInfo = levels[LevelsManager.s_Instance.CurrentGameInfo.CurrentStage % levels.Length];
         var levelObjects = Instantiate(levelInfo.levelPrefab, Vector3.zero, Quaternion.identity);
         levelObjects.name = "Level";
+        Eagles.AddRange(FindObjectsOfType<Eagle>());
     }
 
     void CreateEnemyQueue()
@@ -266,6 +275,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
         EnemyTank tank = Instantiate(enemyTankPrefab, spawnPoint.position, Quaternion.identity).GetComponent<EnemyTank>();
         tank.Direction = Direction.Down;
+        tank.TankIndex = createdEnemyTanksCount;
         tank.TankType = enemiesQueue.Dequeue();
     }
 
@@ -315,6 +325,11 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     void OnEnemyTankCreated(object sender, EventArgs e)
     {
+        EnemyTank tank = sender as EnemyTank;
+        if (tank == null)
+            return;
+
+        ActiveEmemiesTanks.Add(tank);
         createdEnemyTanksCount++;
         livedEnemyTanksCount++;
         enemyTanksOnCreatingCount--;
@@ -325,14 +340,22 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     void OnEnemyTankDestroyed(object sender, EventArgs e)
     {
+        EnemyTank tank = sender as EnemyTank;
+        if (tank == null)
+            return;
+
+        ActiveEmemiesTanks.Remove(tank);
         livedEnemyTanksCount--;
         if (enemiesQueue.Count == 0 && livedEnemyTanksCount == 0 && enemyTanksOnCreatingCount == 0)
         {
+            isAllEnemyTanksDestroyed = true;
             PreFinishGame();
             return;
         }
         else if ((livedEnemyTanksCount + enemyTanksOnCreatingCount) < maxEnemyLivesTanksCount)
+        {
             StartCoroutine(GenerateEnemyTank());
+        }
     }
 
     void OnPlayerTankCreated(object sender, EventArgs e)
@@ -344,6 +367,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         if (tank.PlayerIndex < 0 || tank.PlayerIndex >= MAX_PLAYERS)
             return;
 
+        ActivePlayersTanks.Add(tank);
         playerTankCreating[tank.PlayerIndex] = false;
         playerTankLiving[tank.PlayerIndex] = true;
     }
@@ -357,6 +381,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         if (tank.PlayerIndex < 0 || tank.PlayerIndex >= MAX_PLAYERS)
             return;
 
+        ActivePlayersTanks.Remove(tank);
         playerTankLiving[tank.PlayerIndex] = false;
     }
 

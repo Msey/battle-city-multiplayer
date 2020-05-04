@@ -61,7 +61,14 @@ public class TankMovement : MonoBehaviour
             }
         }
     }
+
+    private bool hasBarrier;
+    public bool HasBarrier
+    {
+        get => hasBarrier;
+    }
     public float Velocity { get; set; } = 0.0f;
+
     [SerializeField]
     private bool TransparentForTanks = true;
 
@@ -80,6 +87,7 @@ public class TankMovement : MonoBehaviour
 
     void Update()
     {
+        hasBarrier = false;
         if (Stopped)
             return;
 
@@ -123,6 +131,7 @@ public class TankMovement : MonoBehaviour
         {
             transform.position = oldCellPosition;
             UpdateColliderPosition();
+            hasBarrier = true;
         }
     }
 

@@ -12,7 +12,7 @@ public class PickUp : MonoBehaviour
     void Update()
     {
         var tank = Physics2D.OverlapCircle(transform.position, 0.16f)
-            .GetComponent<ITank>();
+            .GetComponent<PlayerTank>();
 
         if (tank != null)
         {

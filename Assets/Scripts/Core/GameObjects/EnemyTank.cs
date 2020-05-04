@@ -26,10 +26,15 @@ public class EnemyTank : MonoBehaviour, ITank
         }
     }
 
-    float shootDelay;
     public GameObject bulletPrefab;
     public GameObject explosionPrefab;
-    TankMovement tankMovement;
+
+    private TankMovement tankMovement;
+    public TankMovement TankMovement
+    {
+        get => tankMovement;
+    }
+
     EnemyTankAnimator tankAnimator;
 
     public Direction Direction
@@ -45,8 +50,9 @@ public class EnemyTank : MonoBehaviour, ITank
     }
 
     public GroupType Group { get; set; }
-    public TankCharacteristicSet Characteristics { get; set; }
+    public int TankIndex { get; set; }
 
+    bool canShoot = true;
 
     static public event EventHandler TankCreated;
     static public event EventHandler TankDestroyed;
@@ -56,60 +62,20 @@ public class EnemyTank : MonoBehaviour, ITank
         Assert.IsNotNull(bulletPrefab);
         Assert.IsNotNull(explosionPrefab);
 
-        Group = GroupType.Enemies; ;
+        Group = GroupType.Enemies;
         tankMovement = GetComponent<TankMovement>();
         tankAnimator = GetComponent<EnemyTankAnimator>();
-        Characteristics = new TankCharacteristicSet(null);
     }
 
     void Start()
     {
         TankCreated?.Invoke(this, EventArgs.Empty);
-        tankMovement.Velocity = Characteristics.Velocity;
-    }
-
-    void Update()
-    {
-        UpdateMovement();
-
-        if (shootDelay > 0)
-            shootDelay -= Time.deltaTime;
-    }
-
-    void UpdateMovement()
-    {
-        /*
-         * TODO:
-         *      1. code below must be removed
-         *      2. here should be an AI controller
-         *      3. ???
-         */
-
-        float verticalAxis = Input.GetAxis("Vertical");
-        float horizontalAxis = Input.GetAxis("Horizontal");
-
-        tankMovement.Stopped = false;
-        if (verticalAxis > 0.0f)
-            tankMovement.Direction = Direction.Up;
-        else if (verticalAxis < 0.0f)
-            tankMovement.Direction = Direction.Down;
-        else if (horizontalAxis < 0.0f)
-            tankMovement.Direction = Direction.Left;
-        else if (horizontalAxis > 0.0f)
-            tankMovement.Direction = Direction.Right;
-        else
-            tankMovement.Stopped = true;
-    }
-
-    void ChangeTankLevel()
-    {
-        //tankAnimator.LevelType = (PlayerTankAnimator.TankLevelType)(int)(tankAnimator.LevelType) + 1;
+        tankMovement.Velocity = 5.4f;
     }
 
     public void Shoot()
     {
-        const float SHOOT_DELAY_CONSTANT = 0.6f; // TODO: need to be replaced with Level_Upgrade_Constants (later probably)
-        if (shootDelay <= 0)
+        if (canShoot)
         {
             IBullet bulletComponent =
                 Instantiate(bulletPrefab, transform.position, transform.rotation)
@@ -120,9 +86,10 @@ public class EnemyTank : MonoBehaviour, ITank
                 bulletComponent.Direction = Direction;
                 bulletComponent.Group = this.Group;
                 bulletComponent.Owner = this;
+                bulletComponent.Velocity = 16.0f;
             }
 
-            shootDelay = SHOOT_DELAY_CONSTANT;
+            canShoot = false;
         }
     }
 
@@ -145,6 +112,6 @@ public class EnemyTank : MonoBehaviour, ITank
 
     public void OnMyBulletHit(IBullet bullet)
     {
-
+        canShoot = true;
     }
 }

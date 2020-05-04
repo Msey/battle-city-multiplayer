@@ -49,9 +49,12 @@ public class Bullet : MonoBehaviour, IBullet
 
         foreach (var obstacle in obstacles)
         {
+            if (obstacle.gameObject == this.gameObject)
+                continue;
+
             IBulletTarget bulletTarget = obstacle.gameObject.GetComponent<IBulletTarget>();
 
-            if (bulletTarget?.Group != this.Group)
+            if (bulletTarget?.Group != this.Group || bulletTarget is Bullet)
             {
                 if (!bulletTarget.OnHit(this))
                     continue;
