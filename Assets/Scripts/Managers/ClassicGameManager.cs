@@ -89,6 +89,18 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         get => isEagleDestroyed;
     }
 
+    public float RespawnTime
+    {
+        get
+        {
+            GameInfo currentGameInfo = LevelsManager.s_Instance.CurrentGameInfo;
+            float time = (190 - currentGameInfo.CurrentStage * 4 - (currentGameInfo.PlayersCount - 1) * 20) / 60;
+            if (time < 0)
+                return 0;
+            return time;
+        }
+    }
+
     override protected void Awake()
     {
         Assert.IsNotNull(enemyTankPrefab);
@@ -118,6 +130,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     public void LoadGame()
     {
+        print(RespawnTime);
         if (!Utils.Verify(GameState == GameState.NotStarted))
             return;
 
@@ -140,7 +153,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         LoadLevelObjects();
         CreateEnemyQueue();
         LoadSpawnPoints();
-        GenerateEnemyTank();
+        StartCoroutine(GenerateEnemyTank());
         CreatePlayerTanks();
     }
 
@@ -231,14 +244,16 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         Assert.AreEqual(playerSpawnPoints.Count, MAX_PLAYERS);
     }
 
-    void GenerateEnemyTank()
-    {
-        if (enemiesQueue.Count - enemyTanksOnCreatingCount == 0)
-            return;
-        enemyTanksOnCreatingCount++;
-        int spawnPointIndex = createdEnemyTanksCount % enemySpawnPoints.Count;
-        SpawnPoint spawnPoint = enemySpawnPoints[spawnPointIndex];
-        spawnPoint.Spawn(SpawnEnemyTank);
+    IEnumerator GenerateEnemyTank()
+     {
+        if (enemiesQueue.Count - enemyTanksOnCreatingCount != 0)
+        {
+            enemyTanksOnCreatingCount++;
+            yield return new WaitForSeconds(createdEnemyTanksCount == 0 ? 0 : RespawnTime);
+            int spawnPointIndex = createdEnemyTanksCount % enemySpawnPoints.Count;
+            SpawnPoint spawnPoint = enemySpawnPoints[spawnPointIndex];
+            spawnPoint.Spawn(SpawnEnemyTank);
+        }
     }
 
     void SpawnEnemyTank(Transform spawnPoint)
@@ -305,7 +320,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         enemyTanksOnCreatingCount--;
 
         if ((livedEnemyTanksCount + enemyTanksOnCreatingCount) < maxEnemyLivesTanksCount)
-            GenerateEnemyTank();
+            StartCoroutine(GenerateEnemyTank());
     }
 
     void OnEnemyTankDestroyed(object sender, EventArgs e)
@@ -317,7 +332,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             return;
         }
         else if ((livedEnemyTanksCount + enemyTanksOnCreatingCount) < maxEnemyLivesTanksCount)
-            GenerateEnemyTank();
+            StartCoroutine(GenerateEnemyTank());
     }
 
     void OnPlayerTankCreated(object sender, EventArgs e)
@@ -364,5 +379,13 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     {
         yield return new WaitForSeconds(5.0f);
         FinishGame();
+    }
+
+    private IEnumerator GenerateEnemyTankTimer()
+    {
+        yield return new WaitForSeconds(RespawnTime);
+        int spawnPointIndex = createdEnemyTanksCount % enemySpawnPoints.Count;
+        SpawnPoint spawnPoint = enemySpawnPoints[spawnPointIndex];
+        spawnPoint.Spawn(SpawnEnemyTank);
     }
 }
