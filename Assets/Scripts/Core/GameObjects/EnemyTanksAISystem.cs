@@ -132,6 +132,9 @@ class EnemyTanksAISystem
     Eagle ComputeTargetEagle(int tankIndex)
     {
         var eagles = gameManager.Eagles;
+        if (eagles == null)
+            return null;
+
         if (eagles.Count == 0)
             return null;
         return eagles[eagles.Count % (tankIndex + 1) - 1];
@@ -140,6 +143,9 @@ class EnemyTanksAISystem
     PlayerTank ComputeTargetTank(int tankIndex)
     {
         var playerTanks = gameManager.ActivePlayersTanks;
+        if (playerTanks == null)
+            return null;
+
         if (playerTanks.Count == 0)
             return null;
         return playerTanks.GetEnumerator().Current; //TODO
