@@ -32,7 +32,7 @@ class EnemyTanksAISystem
     {
         while (true)
         {
-            foreach (EnemyTank tank in gameManager.ActiveEmemiesTanks)
+            foreach (EnemyTank tank in gameManager.ActiveEnemyTanks)
                 HandleTank(tank);
             yield return new WaitForSeconds(1.0f / 60.0f);
         }
@@ -142,7 +142,7 @@ class EnemyTanksAISystem
 
     PlayerTank ComputeTargetTank(int tankIndex)
     {
-        var playerTanks = gameManager.ActivePlayersTanks;
+        var playerTanks = gameManager.ActivePlayerTanks;
         if (playerTanks == null)
             return null;
 

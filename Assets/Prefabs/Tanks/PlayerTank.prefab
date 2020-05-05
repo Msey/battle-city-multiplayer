@@ -72,7 +72,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -598994931
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -9014633916290698030, guid: e0e78549e6927e04886d1de24bc73e08,
     type: 3}
@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: 0
-  velocity: 5.4
+  TransparentForTanks: 1
 --- !u!114 &2473230439682506926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,6 +151,9 @@ MonoBehaviour:
     type: 3}
   explosionPrefab: {fileID: 5257524347701420840, guid: c3cbfc46606c6ee438a33be6583d13e4,
     type: 3}
+  invulnerabilityPrefab: {fileID: 3529514569791366676, guid: ec4c203a276325f4d9044ff1c25cb59f,
+    type: 3}
+  HelmetTimer: 0
 --- !u!114 &2473230439682506924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,4 +207,3 @@ MonoBehaviour:
     - {fileID: 7400000, guid: 202fc2001b11af347af8aacabd3f9474, type: 2}
     - {fileID: 7400000, guid: e27256a1d3f44c246ab1b73cbc087b4b, type: 2}
     - {fileID: 7400000, guid: 7eba31fb26d7c864ab6b04d0168984c2, type: 2}
-  animationIndex: 0

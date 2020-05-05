@@ -8,6 +8,9 @@ public class PlayerTank : MonoBehaviour, ITank
 {
     public GameObject bulletPrefab;
     public GameObject explosionPrefab;
+    public GameObject invulnerabilityPrefab;
+
+    private GameObject tempInvulnerabilityPrefab = null;
 
 
     private TankMovement tankMovement;
@@ -52,6 +55,9 @@ public class PlayerTank : MonoBehaviour, ITank
 
     public GroupType Group { get; set; }
     public TankCharacteristicSet Characteristics { get; set; }
+    public float HelmetTimer;
+    public bool Invulnerable => HelmetTimer > 0;
+
 
     public static event EventHandler TankCreated;
     public static event EventHandler TankDestroyed;
@@ -60,6 +66,8 @@ public class PlayerTank : MonoBehaviour, ITank
     {
         Assert.IsNotNull(bulletPrefab);
         Assert.IsNotNull(explosionPrefab);
+        Assert.IsNotNull(invulnerabilityPrefab);
+
         tankMovement = GetComponent<TankMovement>();
 
         Characteristics = new TankCharacteristicSet(GetComponent<PlayerTankAnimator>());
@@ -75,13 +83,27 @@ public class PlayerTank : MonoBehaviour, ITank
 
         ammoLeft = 1;
 
-        Characteristics.UpdateAmmo = (appendix) => { ammoLeft += appendix; print(ammoLeft + " " + appendix); };
+        Characteristics.UpdateAmmo = (appendix) => ammoLeft += appendix;
     }
 
     void Update()
     {
         if (shootDelay > 0)
             shootDelay -= Time.deltaTime;
+
+        if (Invulnerable)
+        {
+            HelmetTimer -= Time.deltaTime;
+            if(!tempInvulnerabilityPrefab)
+            tempInvulnerabilityPrefab = Instantiate(invulnerabilityPrefab, transform.position, Quaternion.identity);
+
+            tempInvulnerabilityPrefab.transform.position = transform.position;
+        }
+        else if(tempInvulnerabilityPrefab)
+        {
+            Destroy(tempInvulnerabilityPrefab);
+            tempInvulnerabilityPrefab = null;
+        }
     }
 
 
@@ -125,7 +147,7 @@ public class PlayerTank : MonoBehaviour, ITank
 
     public bool OnHit(IBullet bullet)
     {
-        if (bullet.Owner.Group == GroupType.Enemies)
+        if (bullet.Owner.Group == GroupType.Enemies && !Invulnerable)
         {
             if (Characteristics.HasGun)
             {

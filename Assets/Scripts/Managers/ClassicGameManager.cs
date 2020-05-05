@@ -100,8 +100,8 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             return time;
         }
     }
-    public HashSet<PlayerTank> ActivePlayersTanks { get; } = new HashSet<PlayerTank>();
-    public HashSet<EnemyTank> ActiveEmemiesTanks { get; } = new HashSet<EnemyTank>();
+    public HashSet<PlayerTank> ActivePlayerTanks { get; } = new HashSet<PlayerTank>();
+    public HashSet<EnemyTank> ActiveEnemyTanks { get; } = new HashSet<EnemyTank>();
 
     public List<Eagle> Eagles { get; } = new List<Eagle>();
 
@@ -329,7 +329,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         if (tank == null)
             return;
 
-        ActiveEmemiesTanks.Add(tank);
+        ActiveEnemyTanks.Add(tank);
         createdEnemyTanksCount++;
         livedEnemyTanksCount++;
         enemyTanksOnCreatingCount--;
@@ -344,7 +344,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         if (tank == null)
             return;
 
-        ActiveEmemiesTanks.Remove(tank);
+        ActiveEnemyTanks.Remove(tank);
         livedEnemyTanksCount--;
         if (enemiesQueue.Count == 0 && livedEnemyTanksCount == 0 && enemyTanksOnCreatingCount == 0)
         {
@@ -367,7 +367,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         if (tank.PlayerIndex < 0 || tank.PlayerIndex >= MAX_PLAYERS)
             return;
 
-        ActivePlayersTanks.Add(tank);
+        ActivePlayerTanks.Add(tank);
         playerTankCreating[tank.PlayerIndex] = false;
         playerTankLiving[tank.PlayerIndex] = true;
     }
@@ -381,7 +381,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         if (tank.PlayerIndex < 0 || tank.PlayerIndex >= MAX_PLAYERS)
             return;
 
-        ActivePlayersTanks.Remove(tank);
+        ActivePlayerTanks.Remove(tank);
         playerTankLiving[tank.PlayerIndex] = false;
     }
 

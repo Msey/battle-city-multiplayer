@@ -93,7 +93,7 @@ public class EnemyTank : MonoBehaviour, ITank
         }
     }
 
-    private void Destroy()
+    public void Destroy()
     {
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);

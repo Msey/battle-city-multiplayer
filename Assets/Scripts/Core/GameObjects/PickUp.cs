@@ -4,8 +4,6 @@ public class PickUp : MonoBehaviour
 {
     public PickUpType Type;
 
-    public Sprite Sprite;
-
     private void Start()
     {
     }
@@ -28,6 +26,17 @@ public class PickUp : MonoBehaviour
                     break;
                 case PickUpType.Pistol:
                     tank.Characteristics.HasGun = true;
+                    break;
+                case PickUpType.Grenade:
+                    foreach (var enemy in ClassicGameManager.s_Instance.ActiveEnemyTanks)
+                        enemy.Destroy();
+                    break;
+                case PickUpType.Helmet:
+                    tank.HelmetTimer = 10f;
+                    break;
+                case PickUpType.Clock:
+                    //foreach (var enemy in ClassicGameManager.s_Instance.ActiveEnemyTanks)
+                    //    enemy.SleepTimer = 10f;
                     break;
             }
             tank.Characteristics.Recalculate();
