@@ -98,6 +98,9 @@ public class PlayerTank : MonoBehaviour, ITank
 
             if (bulletComponent != null)
             {
+                bulletComponent.CanDestroyConcrete = 
+                    (Characteristics.StarBonusLevel == 2 || Characteristics.HasGun);
+                bulletComponent.CanDestroyForest = Characteristics.HasGun;
                 bulletComponent.Direction = Direction;
                 bulletComponent.Velocity = Characteristics.BulletVelocity;
                 bulletComponent.Group = this.Group;

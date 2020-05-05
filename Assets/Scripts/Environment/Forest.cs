@@ -11,7 +11,8 @@ public class Forest : MonoBehaviour, IBulletTarget
 
     public bool OnHit(IBullet bullet)
     {
-        Die();
-        return true;
+        if (bullet.CanDestroyForest) Die();
+
+        return false;
     }
 }

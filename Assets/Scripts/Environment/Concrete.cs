@@ -15,7 +15,8 @@ public class Concrete : MonoBehaviour, IBulletTarget
     
     public bool OnHit(IBullet bullet)
     {
-        Die();
+        if(bullet.CanDestroyConcrete) Die();
+
         return true;
     }
 }

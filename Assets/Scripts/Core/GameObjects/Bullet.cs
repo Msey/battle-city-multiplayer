@@ -9,6 +9,10 @@ public class Bullet : MonoBehaviour, IBullet
     public ITank Owner { get; set; }
 
     public float Velocity { get; set; } = 5.4f;
+
+    public bool CanDestroyConcrete { get; set; }
+    public bool CanDestroyForest { get; set; }
+
     public GameObject explosionPrefab;
 
     private CircleCollider2D circleCollider;
