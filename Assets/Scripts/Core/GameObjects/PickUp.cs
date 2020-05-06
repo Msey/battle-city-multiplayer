@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PickUp : MonoBehaviour
 {
@@ -28,8 +29,12 @@ public class PickUp : MonoBehaviour
                     tank.Characteristics.HasGun = true;
                     break;
                 case PickUpType.Grenade:
-                    foreach (var enemy in ClassicGameManager.s_Instance.ActiveEnemyTanks)
-                        enemy.Destroy();
+                    ClassicGameManager.s_Instance.ActiveEnemyTanks.RemoveWhere(
+                        enemy => ((Func<bool>)(() =>
+                        {
+                            enemy.Destroy();
+                            return true;
+                        })).Invoke());
                     break;
                 case PickUpType.Helmet:
                     tank.HelmetTimer = 10f;
