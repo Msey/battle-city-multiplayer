@@ -106,7 +106,10 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     public List<Eagle> Eagles { get; } = new List<Eagle>();
 
     EnemyTanksAISystem enemyTanksAISystem;
-
+    public EnemyTanksAISystem EnemyTanksAISystem
+    {
+        get => enemyTanksAISystem;
+    }
 
     private int playerLives = 2;
 

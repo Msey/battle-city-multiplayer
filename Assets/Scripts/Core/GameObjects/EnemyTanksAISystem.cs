@@ -3,9 +3,11 @@ using System.Collections;
 using UnityEngine;
 using static GameConstants;
 
-class EnemyTanksAISystem
+public class EnemyTanksAISystem
 {
     ClassicGameManager gameManager;
+    float sleepTime;
+
     float FrameScale
     {
         get => Time.deltaTime / (1.0f / 60.0f);
@@ -25,10 +27,23 @@ class EnemyTanksAISystem
     {
         if (gameManager == null)
             return;
-        gameManager.StartCoroutine(Update());
+        gameManager.StartCoroutine(UpdateSystem());
     }
 
-    IEnumerator Update()
+    void Update()
+    {
+        if (sleepTime > 0)
+            sleepTime -= Time.deltaTime;
+        if (sleepTime < 0)
+            sleepTime = 0;
+    }
+
+    public void SleepFor(float time)
+    {
+        sleepTime = time;
+    }
+
+    IEnumerator UpdateSystem()
     {
         while (true)
         {
@@ -40,6 +55,11 @@ class EnemyTanksAISystem
 
     void HandleTank(EnemyTank tank)
     {
+        if (sleepTime > 0)
+        {
+            tank.Stopped = true;
+            return;
+        }
         tank.Stopped = false;
         if (TankIsOnCellPosition(tank) && BooleanRand(0.0625f))
         {
@@ -137,7 +157,7 @@ class EnemyTanksAISystem
 
         if (eagles.Count == 0)
             return null;
-        return eagles[eagles.Count % (tankIndex + 1) - 1];
+        return eagles[tankIndex % eagles.Count];
     }
 
     PlayerTank ComputeTargetTank(int tankIndex)

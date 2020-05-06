@@ -35,8 +35,7 @@ public class PickUp : MonoBehaviour
                     tank.HelmetTimer = 10f;
                     break;
                 case PickUpType.Clock:
-                    //foreach (var enemy in ClassicGameManager.s_Instance.ActiveEnemyTanks)
-                    //    enemy.SleepTimer = 10f;
+                    ClassicGameManager.s_Instance.EnemyTanksAISystem.SleepFor(10f);
                     break;
             }
             tank.Characteristics.Recalculate();
