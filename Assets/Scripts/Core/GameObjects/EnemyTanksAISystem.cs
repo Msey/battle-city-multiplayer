@@ -30,14 +30,6 @@ public class EnemyTanksAISystem
         gameManager.StartCoroutine(UpdateSystem());
     }
 
-    void Update()
-    {
-        if (sleepTime > 0)
-            sleepTime -= Time.deltaTime;
-        if (sleepTime < 0)
-            sleepTime = 0;
-    }
-
     public void SleepFor(float time)
     {
         sleepTime = time;
@@ -47,6 +39,11 @@ public class EnemyTanksAISystem
     {
         while (true)
         {
+            if (sleepTime > 0)
+                sleepTime -= Time.deltaTime;
+            if (sleepTime < 0)
+                sleepTime = 0;
+
             foreach (EnemyTank tank in gameManager.ActiveEnemyTanks)
                 HandleTank(tank);
             yield return new WaitForSeconds(1.0f / 60.0f);
