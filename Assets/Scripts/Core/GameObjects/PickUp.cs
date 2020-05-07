@@ -5,14 +5,16 @@ public class PickUp : MonoBehaviour
 {
     public PickUpType Type;
 
-    private Vector2 collisionSize = new Vector2(0.16f, 0.16f);
+    private Vector2 collisionSize = new Vector2(0.17f, 0.17f);
+    int tankMask;
 
     private void Start()
     {
+        tankMask = LayerMask.GetMask("Tank");
     }
     void Update()
     {
-        var tank = Physics2D.OverlapBox(transform.position, collisionSize, 0)
+        var tank = Physics2D.OverlapBox(transform.position, collisionSize, 0, tankMask)?
             .GetComponent<PlayerTank>();
 
         if (tank != null)
