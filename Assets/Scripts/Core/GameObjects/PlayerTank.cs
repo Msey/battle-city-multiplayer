@@ -20,13 +20,11 @@ public class PlayerTank : MonoBehaviour, ITank
     {
         get
         {
-            return (!isDead 
-                && shootDelay <= 0
+            return ( shootDelay <= 0
                 && ammoLeft > 0);
         }
     }
 
-    private bool isDead;
     float shootDelay;
     private int ammoLeft;
 
@@ -57,6 +55,7 @@ public class PlayerTank : MonoBehaviour, ITank
     public TankCharacteristicSet Characteristics { get; set; }
     public float HelmetTimer;
     public bool Invulnerable => HelmetTimer > 0;
+    public bool IsDestroyed { get; private set; }
 
 
     public static event EventHandler TankCreated;
@@ -106,6 +105,11 @@ public class PlayerTank : MonoBehaviour, ITank
         }
     }
 
+    void LateUpdate()
+    {
+        if (IsDestroyed)
+            Destroy(gameObject);
+    }
 
     public void Shoot()
     {
@@ -129,15 +133,14 @@ public class PlayerTank : MonoBehaviour, ITank
                 bulletComponent.Owner = this;
             }
         }
-        else if (isDead)
-            ClassicGameManager.s_Instance.RespawnPlayer(playerIndex);
     }    
 
     private void Destroy()
     {
-        isDead = true;
+        if (IsDestroyed)
+            return;
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-        Destroy(gameObject);
+        IsDestroyed = true;
     }
 
     void OnDestroy()

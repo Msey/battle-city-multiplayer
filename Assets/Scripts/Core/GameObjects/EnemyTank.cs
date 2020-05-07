@@ -52,6 +52,8 @@ public class EnemyTank : MonoBehaviour, ITank
     public GroupType Group { get; set; }
     public int TankIndex { get; set; }
 
+    public bool IsDestroyed { get; private set; }
+
     bool canShoot = true;
 
     static public event EventHandler TankCreated;
@@ -71,6 +73,12 @@ public class EnemyTank : MonoBehaviour, ITank
     {
         TankCreated?.Invoke(this, EventArgs.Empty);
         tankMovement.Velocity = 5.4f;
+    }
+
+    void LateUpdate()
+    {
+        if (IsDestroyed)
+            Destroy(gameObject);
     }
 
     public void Shoot()
@@ -93,20 +101,13 @@ public class EnemyTank : MonoBehaviour, ITank
         }
     }
 
-    public bool Destroy()
+    public void Destroy()
     {
-        try
-        {
-            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-            Destroy(gameObject);
-        }
-        catch
-        {
-            Debug.Log("Exception occured while destroying an enemy tank");
-            return false;
-        }
+        if (IsDestroyed)
+            return;
 
-        return true;
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        IsDestroyed = true;
     }
 
     void OnDestroy()
@@ -116,7 +117,8 @@ public class EnemyTank : MonoBehaviour, ITank
 
     public bool OnHit(IBullet bullet)
     {
-        return Destroy(); 
+        Destroy();
+        return true;
     }
 
     public void OnMyBulletHit(IBullet bullet)
