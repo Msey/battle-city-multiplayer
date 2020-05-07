@@ -1,11 +1,12 @@
 ﻿using System;
 using UnityEngine;
+using static GameConstants;
 
 public class PickUp : MonoBehaviour
 {
     public PickUpType Type;
 
-    private Vector2 collisionSize = new Vector2(0.17f, 0.17f);
+    private Vector2 collisionSize = new Vector2(CELL_SIZE, CELL_SIZE);
     int tankMask;
 
     private void Start()
