@@ -200,6 +200,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             PlayerTank tank = Instantiate(playerTankPrefab, point.position, Quaternion.identity).GetComponent<PlayerTank>();
             tank.PlayerIndex = playerIndex;
             tank.Direction = Direction.Up;
+            tank.HelmetTimer = 3f;
         });
     }
 

@@ -56,8 +56,40 @@ public class EnemyTank : MonoBehaviour, ITank
 
     bool canShoot = true;
 
+    int armorLevel;
+    public int ArmorLevel
+    {
+        get => armorLevel;
+        set
+        {
+            if (armorLevel < 0)
+                armorLevel = 0;
+
+            if (armorLevel == value)
+                return;
+
+            armorLevel = value;
+            tankAnimator.ArmorColor = ArmorLevelToArmorColor(armorLevel);
+        }
+    }
+
+    bool isBounusTank;
+    public bool IsBounusTank
+    {
+        get => isBounusTank;
+        set
+        {
+            if (isBounusTank == value)
+                return;
+
+            isBounusTank = value;
+            tankAnimator.Blinking = isBounusTank;
+        }
+    }
+
     static public event EventHandler TankCreated;
     static public event EventHandler TankDestroyed;
+    static public event EventHandler BonusTankHit;
 
     private void Awake()
     {
@@ -117,12 +149,35 @@ public class EnemyTank : MonoBehaviour, ITank
 
     public bool OnHit(IBullet bullet)
     {
-        Destroy();
+        if (IsBounusTank)
+        {
+            IsBounusTank = false;
+            BonusTankHit?.Invoke(this, EventArgs.Empty);
+            return true;
+        }
+
+        if (ArmorLevel == 0)
+            Destroy();
+        else
+            ArmorLevel--;
+
         return true;
     }
 
     public void OnMyBulletHit(IBullet bullet)
     {
         canShoot = true;
+    }
+
+    static EnemyTankAnimator.eArmorColor ArmorLevelToArmorColor(int level)
+    {
+        switch (level)
+        {
+            case 0: return EnemyTankAnimator.eArmorColor.Default;
+            case 1: return EnemyTankAnimator.eArmorColor.Yellow;
+            case 2: return EnemyTankAnimator.eArmorColor.Brown;
+            case 3: return EnemyTankAnimator.eArmorColor.Green;
+        }
+        return EnemyTankAnimator.eArmorColor.Default;
     }
 }

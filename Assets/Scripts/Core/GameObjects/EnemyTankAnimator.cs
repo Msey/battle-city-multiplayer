@@ -57,14 +57,16 @@ public class EnemyTankAnimator : MonoBehaviour
         set
         {
             animator.SetBool("Blinking", value);
+            ChangeAnimationClips();
         }
     }
 
     public enum eArmorColor
     {
         Default,
-        Green,
         Yellow,
+        Brown,
+        Green,
     }
     eArmorColor armorColor = eArmorColor.Default;
     public eArmorColor ArmorColor
@@ -79,6 +81,7 @@ public class EnemyTankAnimator : MonoBehaviour
                 return;
             armorColor = value;
             UpdateArmorColorByBlinkState();
+            ChangeAnimationClips();
         }
     }
 
@@ -87,16 +90,21 @@ public class EnemyTankAnimator : MonoBehaviour
     AnimationClipOverrides clipOverrides;
     SpriteRenderer spriteRenderer;
 
-    void Start()
+    private void Awake()
     {
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    void Start()
+    {
         animatorOverrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
         animator.runtimeAnimatorController = animatorOverrideController;
 
         clipOverrides = new AnimationClipOverrides(animatorOverrideController.overridesCount);
         animatorOverrideController.GetOverrides(clipOverrides);
         ChangeAnimationClips();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        UpdateArmorColorByBlinkState();
     }
 
     void CheckAnimations()
@@ -111,7 +119,10 @@ public class EnemyTankAnimator : MonoBehaviour
 
     void ChangeAnimationClips()
     {
-        var tankStateClips = enemyTankAnimations[tankIndex].GetClip(inBlinkFrameState);
+        if (animatorOverrideController == null)
+            return;
+
+        var tankStateClips = enemyTankAnimations[tankIndex].GetClip(inBlinkFrameState && Blinking);
         clipOverrides["PlayerTankUp"] = tankStateClips[0]; //TODO rename
         clipOverrides["PlayerTankDown"] = tankStateClips[1];
         clipOverrides["PlayerTankLeft"] = tankStateClips[2];
@@ -127,17 +138,30 @@ public class EnemyTankAnimator : MonoBehaviour
                 return Color.white;
             case eArmorColor.Green:
                 return new Color32(159, 231, 156, 255);
+            case eArmorColor.Brown:
+                return new Color32(251, 202, 119, 255);
             case eArmorColor.Yellow:
-                return new Color32(219, 212, 55, 255);
+                return new Color32(217, 206, 107, 255);
         }
         return Color.white;
     }
 
     void UpdateArmorColorByBlinkState()
     {
-        if (inBlinkFrameState)
-            spriteRenderer.color = ArmorColorToUnityColor(eArmorColor.Default);
+        bool bonusTankColorIsDefault = true;
+        if (bonusTankColorIsDefault)
+        {
+            if (Blinking)
+                spriteRenderer.color = ArmorColorToUnityColor(eArmorColor.Default);
+            else
+                spriteRenderer.color = ArmorColorToUnityColor(armorColor);
+        }
         else
-            spriteRenderer.color = ArmorColorToUnityColor(armorColor);
+        {
+            if (inBlinkFrameState)
+                spriteRenderer.color = ArmorColorToUnityColor(eArmorColor.Default);
+            else
+                spriteRenderer.color = ArmorColorToUnityColor(armorColor);
+        }
     }
 }
