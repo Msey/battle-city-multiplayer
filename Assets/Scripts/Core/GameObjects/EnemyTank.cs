@@ -93,10 +93,20 @@ public class EnemyTank : MonoBehaviour, ITank
         }
     }
 
-    public void Destroy()
+    public bool Destroy()
     {
-        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-        Destroy(gameObject);
+        try
+        {
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
+        catch
+        {
+            Debug.Log("Exception occured while destroying an enemy tank");
+            return false;
+        }
+
+        return true;
     }
 
     void OnDestroy()
@@ -106,8 +116,7 @@ public class EnemyTank : MonoBehaviour, ITank
 
     public bool OnHit(IBullet bullet)
     {
-        Destroy();
-        return true;
+        return Destroy(); 
     }
 
     public void OnMyBulletHit(IBullet bullet)

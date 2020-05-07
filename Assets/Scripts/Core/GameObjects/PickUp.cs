@@ -29,12 +29,8 @@ public class PickUp : MonoBehaviour
                     tank.Characteristics.HasGun = true;
                     break;
                 case PickUpType.Grenade:
-                    ClassicGameManager.s_Instance.ActiveEnemyTanks.RemoveWhere(
-                        enemy => ((Func<bool>)(() =>
-                        {
-                            enemy.Destroy();
-                            return true;
-                        })).Invoke());
+                    ClassicGameManager.s_Instance
+                        .ActiveEnemyTanks.RemoveWhere(enemy => enemy.Destroy());
                     break;
                 case PickUpType.Helmet:
                     tank.HelmetTimer = 10f;
