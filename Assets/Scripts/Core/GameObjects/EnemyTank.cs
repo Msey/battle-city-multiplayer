@@ -26,6 +26,8 @@ public class EnemyTank : MonoBehaviour, ITank
         }
     }
 
+    public readonly static int MaxArmorLevel = 3;
+
     public GameObject bulletPrefab;
     public GameObject explosionPrefab;
 
@@ -54,6 +56,8 @@ public class EnemyTank : MonoBehaviour, ITank
 
     public bool IsDestroyed { get; private set; }
 
+    public bool CanDestroyConcrete { get; set; }
+
     bool canShoot = true;
 
     int armorLevel;
@@ -64,6 +68,8 @@ public class EnemyTank : MonoBehaviour, ITank
         {
             if (armorLevel < 0)
                 armorLevel = 0;
+            else if (armorLevel > MaxArmorLevel)
+                armorLevel = MaxArmorLevel;
 
             if (armorLevel == value)
                 return;
@@ -127,6 +133,7 @@ public class EnemyTank : MonoBehaviour, ITank
                 bulletComponent.Group = this.Group;
                 bulletComponent.Owner = this;
                 bulletComponent.Velocity = 16.0f;
+                bulletComponent.CanDestroyConcrete = CanDestroyConcrete;
             }
 
             canShoot = false;

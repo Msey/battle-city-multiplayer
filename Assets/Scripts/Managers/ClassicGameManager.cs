@@ -32,7 +32,10 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     public int LevelEnemeyTanksCount { get => levelEnemeyTanksCount; }
 
-    public int maxEnemyLivesTanksCount = 4;
+    public int MaxEnemyLivesTanksCount
+    {
+        get => 2 + LevelsManager.s_Instance.CurrentGameInfo.PlayersCount * 2;
+    }
 
     public GameObject enemyTankPrefab;
     public GameObject playerTankPrefab;
@@ -281,6 +284,28 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         tank.Direction = Direction.Down;
         tank.TankIndex = createdEnemyTanksCount;
         tank.TankType = enemiesQueue.Dequeue();
+        tank.IsBounusTank = IsBonusEnemyTank(tank.TankIndex);
+        if (!tank.IsBounusTank)
+            tank.ArmorLevel = GenerateEnemyTankArmorLevel(tank.TankType);
+    }
+
+    static bool IsBonusEnemyTank(int tankIndex)
+    {
+        if (tankIndex < 4)
+            return false;
+        tankIndex -= 4;
+        return tankIndex % 7 == 0;
+    }
+
+    int GenerateEnemyTankArmorLevel(EnemyTank.EnemyTankType tankType)
+    {
+        if (tankType == EnemyTank.EnemyTankType.Armor)
+            return EnemyTank.MaxArmorLevel;
+
+        if (LevelsManager.s_Instance.CurrentGameInfo.CurrentStage < 5)
+            return 0;
+
+        return GameUtils.Rand(0, EnemyTank.MaxArmorLevel + 1);
     }
 
     void StartListeningEvents()
@@ -338,7 +363,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         livedEnemyTanksCount++;
         enemyTanksOnCreatingCount--;
 
-        if ((livedEnemyTanksCount + enemyTanksOnCreatingCount) < maxEnemyLivesTanksCount)
+        if ((livedEnemyTanksCount + enemyTanksOnCreatingCount) < MaxEnemyLivesTanksCount)
             StartCoroutine(GenerateEnemyTank());
     }
 
@@ -356,7 +381,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             PreFinishGame();
             return;
         }
-        else if ((livedEnemyTanksCount + enemyTanksOnCreatingCount) < maxEnemyLivesTanksCount)
+        else if ((livedEnemyTanksCount + enemyTanksOnCreatingCount) < MaxEnemyLivesTanksCount)
         {
             StartCoroutine(GenerateEnemyTank());
         }
