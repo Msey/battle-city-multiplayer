@@ -135,7 +135,7 @@ public class PlayerTank : MonoBehaviour, ITank
         }
     }    
 
-    private void Destroy()
+    public void Destroy()
     {
         if (IsDestroyed)
             return;

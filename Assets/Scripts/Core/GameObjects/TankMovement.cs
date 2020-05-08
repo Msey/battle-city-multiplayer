@@ -109,7 +109,7 @@ public class TankMovement : MonoBehaviour
                 if (obstacleTankMovement != null)
                 {
                     //obstacleTankMovement.TransparentForTanks = true;
-                    //hasBarrier = true;
+                    obstacleTankMovement.hasBarrier = true;
                 }
                 else
                 {
