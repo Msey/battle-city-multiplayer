@@ -35,14 +35,14 @@ public class Eagle : MonoBehaviour, IBulletTarget
         return true;
     }
 
-    const int CONCRETE_WALL_TIMER = 10;
+    const int CONCRETE_WALL_TIMER = 12;
     const int CONCRETE_WALL_BLINK_TIMER = 4;
     const float CONCRETE_WALL_CHANGE_TEXTURE_TIMER = 0.5f;
 
     float wallTimer;
-    float wallChangeTextureTimer;
+    float wallToggleTimer;
 
-    bool startedChangeTexture;
+    bool switchTexture;
 
     public void ActivateShowelEffect(bool positive = true)
     {
@@ -51,6 +51,8 @@ public class Eagle : MonoBehaviour, IBulletTarget
             if (positive)
             {
                 wallTimer = CONCRETE_WALL_TIMER;
+                wallToggleTimer = 0;
+                MapBuilder.s_Instance.WrapEagle(transform.position);
             }
 
         }
@@ -59,22 +61,23 @@ public class Eagle : MonoBehaviour, IBulletTarget
 
     private void Update()
     {
+
         wallTimer -= Time.deltaTime;
 
-        if (wallTimer <= CONCRETE_WALL_BLINK_TIMER)
+        if (wallTimer > 0 && wallTimer <= CONCRETE_WALL_BLINK_TIMER)
         {
-            if (!startedChangeTexture)
+            if (!switchTexture)
             {
-                startedChangeTexture = true;
-                wallChangeTextureTimer = CONCRETE_WALL_CHANGE_TEXTURE_TIMER;
+                switchTexture = true;
+                wallToggleTimer = CONCRETE_WALL_CHANGE_TEXTURE_TIMER;
                 print(test);
                 test *= -1;
             }
-            else if (wallChangeTextureTimer > 0)
+            else if (wallToggleTimer > 0)
             {
-                wallChangeTextureTimer -= Time.deltaTime;
+                wallToggleTimer -= Time.deltaTime;
             }
-            else startedChangeTexture = true;
+            else switchTexture = false;
         }
-    }
+    }   
 }

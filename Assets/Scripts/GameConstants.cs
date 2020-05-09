@@ -28,4 +28,43 @@ public static partial class GameConstants
         Enemies,
         Players
     }
+
+    public enum PickUpType
+    {
+        Tank,
+        Helmet,
+        Star,
+        Shovel,
+        Clock,
+        Grenade,
+        Pistol
+    }
+
+    public enum EnemyTankType
+    {
+        Basic,
+        Fast,
+        Power,
+        Armor,
+    }
+
+    public enum MapElementType
+    {
+        Nothing,
+        Concrete,
+        Forest,
+        Brick,
+        Water,
+        Ice
+    }
+
+    public enum BuildSide
+    {
+        Up = Direction.Up,
+        Down = Direction.Down,
+        Left = Direction.Left,
+        Right = Direction.Right,
+        Full,
+        Point
+    }
 }

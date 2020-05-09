@@ -19,7 +19,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 {
     List<SpawnPoint> enemySpawnPoints = new List<SpawnPoint>();
     List<SpawnPoint> playerSpawnPoints = new List<SpawnPoint>();
-    Queue<EnemyTank.EnemyTankType> enemiesQueue = new Queue<EnemyTank.EnemyTankType>();
+    Queue<EnemyTankType> enemiesQueue = new Queue<EnemyTankType>();
 
     [SerializeField]
     int createdEnemyTanksCount;
@@ -230,16 +230,16 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         ClassicGameLevelInfo levelInfo = levels[LevelsManager.s_Instance.CurrentGameInfo.CurrentStage % levels.Length];
 
         for (int basicTank = 0; basicTank < levelInfo.basicTanksCount; ++basicTank)
-            enemiesQueue.Enqueue(EnemyTank.EnemyTankType.Basic);
+            enemiesQueue.Enqueue(EnemyTankType.Basic);
 
         for (int armorTank = 0; armorTank < levelInfo.armorTanksCount; ++armorTank)
-            enemiesQueue.Enqueue(EnemyTank.EnemyTankType.Armor);
+            enemiesQueue.Enqueue(EnemyTankType.Armor);
 
         for (int fastTank = 0; fastTank < levelInfo.fastTanksCount; ++fastTank)
-            enemiesQueue.Enqueue(EnemyTank.EnemyTankType.Fast);
+            enemiesQueue.Enqueue(EnemyTankType.Fast);
 
         for (int powerTank = 0; powerTank < levelInfo.powerTanksCount; ++powerTank)
-            enemiesQueue.Enqueue(EnemyTank.EnemyTankType.Power);
+            enemiesQueue.Enqueue(EnemyTankType.Power);
 
         levelEnemeyTanksCount = enemiesQueue.Count;
     }
@@ -297,9 +297,9 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         return tankIndex % 7 == 0;
     }
 
-    int GenerateEnemyTankArmorLevel(EnemyTank.EnemyTankType tankType)
+    int GenerateEnemyTankArmorLevel(EnemyTankType tankType)
     {
-        if (tankType == EnemyTank.EnemyTankType.Armor)
+        if (tankType == EnemyTankType.Armor)
             return EnemyTank.MaxArmorLevel;
 
         if (LevelsManager.s_Instance.CurrentGameInfo.CurrentStage < 5)

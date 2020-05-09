@@ -17,6 +17,8 @@ public class PickUp : MonoBehaviour
     {
         var tank = Physics2D.OverlapBox(transform.position, collisionSize, 0, tankMask);
 
+        if (!tank) return;
+
         PlayerTank playerTank = tank.GetComponent<PlayerTank>();
         if (playerTank != null)
             HandlePlayerTank(playerTank);
@@ -56,6 +58,10 @@ public class PickUp : MonoBehaviour
                 break;
             case PickUpType.Clock:
                 ClassicGameManager.s_Instance.EnemyTanksAISystem.SleepFor(10f);
+                break;
+            case PickUpType.Shovel:
+                foreach (var eagle in ClassicGameManager.s_Instance.Eagles)
+                    eagle.ActivateShowelEffect(true);
                 break;
         }
         tank.Characteristics.Recalculate();
@@ -98,17 +104,10 @@ public class PickUp : MonoBehaviour
             case PickUpType.Clock:
                 print("Enemy take clock pickup");
                 break;
+            case PickUpType.Shovel:
+                foreach (var eagle in ClassicGameManager.s_Instance.Eagles)
+                    eagle.ActivateShowelEffect(false);
+                break;
         }
     }
-
-    public enum PickUpType
-    {
-        Tank,
-        Helmet,
-        Star,
-        Shovel,
-        Clock,
-        Grenade,
-        Pistol
-    };
 }

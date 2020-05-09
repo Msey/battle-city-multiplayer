@@ -494,6 +494,7 @@ GameObject:
   m_Component:
   - component: {fileID: 63463354}
   - component: {fileID: 63463355}
+  - component: {fileID: 63463356}
   m_Layer: 0
   m_Name: LevelsManager
   m_TagString: Untagged
@@ -529,6 +530,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuSceneName: Scenes/Menu/MainMenu
   classicGameSceneName: Scenes/Game/Classic
+--- !u!114 &63463356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 63463353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e05c31071fd4ccc4a8fb07e895ce2ec8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Concrete: {fileID: 56741159798910579, guid: 44f0b19e9a068044e97d084336d873d7, type: 3}
+  Forest: {fileID: 5187395085170027178, guid: efe0f0ee36237e8499f9660e3bce7a74, type: 3}
+  Brick: {fileID: 4530499783066822928, guid: 0b725c615c572cc4e8c4f5b87df04b24, type: 3}
+  Water: {fileID: 8632335372518868976, guid: 7c3f65258fdb946448434aaab2683911, type: 3}
+  Ice: {fileID: 8398664685909552917, guid: a49bff78c95924a48b563c916ea6badb, type: 3}
 --- !u!1 &125904924
 GameObject:
   m_ObjectHideFlags: 0

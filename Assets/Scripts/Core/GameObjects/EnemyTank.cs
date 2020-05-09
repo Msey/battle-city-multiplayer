@@ -6,14 +6,6 @@ using static GameConstants;
 [RequireComponent(typeof(TankMovement), typeof(EnemyTankAnimator))]
 public class EnemyTank : MonoBehaviour, ITank
 {
-    public enum EnemyTankType
-    {
-        Basic,
-        Fast,
-        Power,
-        Armor,
-    }
-
     [SerializeField]
     EnemyTankType tankType = EnemyTankType.Basic;
     public EnemyTankType TankType
