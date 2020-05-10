@@ -165,6 +165,6 @@ public class EnemyTanksAISystem
 
         if (playerTanks.Count == 0)
             return null;
-        return playerTanks.GetEnumerator().Current; //TODO
+        return playerTanks.GetEnumerator().Current; //TODO what?
     }
 }

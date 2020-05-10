@@ -30,10 +30,6 @@ public class Eagle : MonoBehaviour, IBulletTarget
         return true;
     }
 
-    const int CONCRETE_WALL_TIMER = 12;
-    const int CONCRETE_WALL_BLINK_TIMER = 4;
-    const float CONCRETE_WALL_CHANGE_TEXTURE_TIMER = 0.5f;
-
     float wallTimer;
     float wallToggleTimer;
 
@@ -58,7 +54,7 @@ public class Eagle : MonoBehaviour, IBulletTarget
 
         wallTimer -= Time.deltaTime;
 
-        if (wallTimer > 0 && wallTimer <= CONCRETE_WALL_BLINK_TIMER)
+        if (Utils.InRange(0, wallTimer, CONCRETE_WALL_BLINK_TIMER))
         {
             if (!switchTexture)
             {

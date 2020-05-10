@@ -12,13 +12,9 @@ public class MapBuilder : PersistentSingleton<MapBuilder>
 
     Vector2[] circleSide;
 
-
-
     public void WrapEagle(Transform eagle, MapElementType element/*, BuildSide side*/)
     {
-        int mask = LayerMask.GetMask("Brick", "Concrete", "Forest", "Ice", "Water", "LevelBorder", "Tank", "EagleFortress");
-
-        Vector2 position = eagle.localPosition;
+        Vector2 eagleLocalPoint = eagle.localPosition;
 
         var Tilemap = GameObject.Find("Tilemap").transform;
         var Level = Tilemap.parent;
@@ -27,29 +23,29 @@ public class MapBuilder : PersistentSingleton<MapBuilder>
 
         circleSide = new Vector2[]
         {
-            new Vector2(position.x - 1.5f, position.y + 0.5f),
-            new Vector2(position.x - 1.5f, position.y - 0.5f),
+            new Vector2(eagleLocalPoint.x - BUILD_THRESHOLD_MAX, eagleLocalPoint.y + BUILD_THRESHOLD_MIN),
+            new Vector2(eagleLocalPoint.x - BUILD_THRESHOLD_MAX, eagleLocalPoint.y - BUILD_THRESHOLD_MIN),
 
-            new Vector2(position.x + 1.5f, position.y + 0.5f),
-            new Vector2(position.x + 1.5f, position.y - 0.5f),
+            new Vector2(eagleLocalPoint.x + BUILD_THRESHOLD_MAX, eagleLocalPoint.y + BUILD_THRESHOLD_MIN),
+            new Vector2(eagleLocalPoint.x + BUILD_THRESHOLD_MAX, eagleLocalPoint.y - BUILD_THRESHOLD_MIN),
 
-            new Vector2(position.x + 0.5f, position.y + 1.5f),
-            new Vector2(position.x - 0.5f, position.y + 1.5f),
+            new Vector2(eagleLocalPoint.x + BUILD_THRESHOLD_MIN, eagleLocalPoint.y + BUILD_THRESHOLD_MAX),
+            new Vector2(eagleLocalPoint.x - BUILD_THRESHOLD_MIN, eagleLocalPoint.y + BUILD_THRESHOLD_MAX),
 
-            new Vector2(position.x + 0.5f, position.y - 1.5f),
-            new Vector2(position.x - 0.5f, position.y - 1.5f),
+            new Vector2(eagleLocalPoint.x + BUILD_THRESHOLD_MIN, eagleLocalPoint.y - BUILD_THRESHOLD_MAX),
+            new Vector2(eagleLocalPoint.x - BUILD_THRESHOLD_MIN, eagleLocalPoint.y - BUILD_THRESHOLD_MAX),
 
-            new Vector2(position.x - 1.5f, position.y - 1.5f),
-            new Vector2(position.x - 1.5f, position.y + 1.5f),
-            new Vector2(position.x + 1.5f, position.y - 1.5f),
-            new Vector2(position.x + 1.5f, position.y + 1.5f),
+            new Vector2(eagleLocalPoint.x - BUILD_THRESHOLD_MAX, eagleLocalPoint.y - BUILD_THRESHOLD_MAX),
+            new Vector2(eagleLocalPoint.x - BUILD_THRESHOLD_MAX, eagleLocalPoint.y + BUILD_THRESHOLD_MAX),
+            new Vector2(eagleLocalPoint.x + BUILD_THRESHOLD_MAX, eagleLocalPoint.y - BUILD_THRESHOLD_MAX),
+            new Vector2(eagleLocalPoint.x + BUILD_THRESHOLD_MAX, eagleLocalPoint.y + BUILD_THRESHOLD_MAX),
         };
 
 
         foreach (var point in circleSide)
         {
-            var v = Level.TransformVector(point);
-            Collider2D[] objects = Physics2D.OverlapPointAll(v, mask);
+            var eagleGlobalPoint = Level.TransformVector(point);
+            Collider2D[] objects = Physics2D.OverlapPointAll(eagleGlobalPoint);
 
             bool canbuild = objects.Length == 0;
 
@@ -68,8 +64,8 @@ public class MapBuilder : PersistentSingleton<MapBuilder>
 
             if (canbuild && material != null)
             {
-                var a = Instantiate(material, Vector2.zero, Quaternion.identity, Tilemap);
-                a.transform.localPosition = point;
+                Instantiate(material, Vector2.zero, Quaternion.identity, Tilemap)
+                    .transform.localPosition = point;
             }
         }
     }
@@ -88,5 +84,11 @@ public class MapBuilder : PersistentSingleton<MapBuilder>
             default: return null;
         }
     }
+
+
+    //private Vector2 GetVectorBySide() // TODO: procedural build
+    //{
+    //    return Vector2.zero;
+    //}
 }
 
