@@ -72,7 +72,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -598994931
-  m_SortingLayer: 1
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 8800215112676780193, guid: e0e78549e6927e04886d1de24bc73e08,
     type: 3}
@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: 0
-  velocity: 5.4
+  TransparentForTanks: 1
 --- !u!114 &7186440764920074312
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8781527447343677623}
   - component: {fileID: 573474919707659422}
   m_Layer: 17
-  m_Name: Pistol 6
+  m_Name: Tank
   m_TagString: PickUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70,7 +70,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1619852937
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: -7406656027069839061, guid: 3b395365f0c552d47aeb1b10083f2b7a,
     type: 3}
@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   time: 0.25
+  useRealTime: 0
 --- !u!61 &8781527447343677623
 BoxCollider2D:
   m_ObjectHideFlags: 0

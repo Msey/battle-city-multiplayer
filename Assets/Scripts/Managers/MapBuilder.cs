@@ -10,11 +10,20 @@ public class MapBuilder : PersistentSingleton<MapBuilder>
     public GameObject Water;
     public GameObject Ice;
 
-    public void WrapEagle(Vector2 position/*, MapElementType element, BuildSide side*/)
-    {
-        object[] objects = Physics2D.OverlapPointAll(position);
+    Vector2[] circleSide;
 
-        Vector2[] circleSide = new Vector2[]
+
+
+    public void WrapEagle(Transform eagle/*, MapElementType element, BuildSide side*/)
+    {
+        int mask = LayerMask.GetMask("Brick", "Concrete", "Forest", "Ice", "Water", "LevelBorder", "Tank", "EagleFortress");
+
+        Vector2 position = eagle.localPosition;
+
+        var Tilemap = GameObject.Find("Tilemap").transform;
+        var Level = Tilemap.parent;
+
+        circleSide = new Vector2[]
         {
             new Vector2(position.x - 1.5f, position.y + 0.5f),
             new Vector2(position.x - 1.5f, position.y - 0.5f),
@@ -36,11 +45,31 @@ public class MapBuilder : PersistentSingleton<MapBuilder>
 
 
         foreach (var point in circleSide)
-            Instantiate(Concrete, point, Quaternion.identity);
+        {
+            var v = Level.TransformVector(point);
+            Collider2D[] objects = Physics2D.OverlapPointAll(v, mask);
+
+            bool canbuild = objects.Length == 0;
+
+            foreach (var obj in objects)
+            {
+                if (!obj.GetComponent<PlayerTank>()
+                    && !obj.GetComponent<EnemyTank>()
+                    && !obj.GetComponent<LevelBorder>()
+                    && !obj.GetComponent<Eagle>())
+                {
+                    Destroy(obj.gameObject);
+                    canbuild = true;
+                }
+                else canbuild = false;
+            }
+
+            if (canbuild)
+            {
+                var a = Instantiate(Concrete, Vector2.zero, Quaternion.identity, Tilemap);
+                a.transform.localPosition = point;
+            }
+        }
     }
-
-
-
-
 }
 

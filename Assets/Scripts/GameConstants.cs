@@ -5,6 +5,9 @@ public static partial class GameConstants
     public const float CELL_SIZE = 1.28f;
     public const int MAX_PLAYERS = 4;
 
+    public const float BUILD_THRESHOLD_MAX = 1.5f;
+    public const float BUILD_THRESHOLD_MIN = 0.5f;
+
     public enum Direction
     {
         Up = 0,
@@ -46,25 +49,5 @@ public static partial class GameConstants
         Fast,
         Power,
         Armor,
-    }
-
-    public enum MapElementType
-    {
-        Nothing,
-        Concrete,
-        Forest,
-        Brick,
-        Water,
-        Ice
-    }
-
-    public enum BuildSide
-    {
-        Up = Direction.Up,
-        Down = Direction.Down,
-        Left = Direction.Left,
-        Right = Direction.Right,
-        Full,
-        Point
     }
 }
