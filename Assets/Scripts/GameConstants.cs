@@ -50,4 +50,14 @@ public static partial class GameConstants
         Power,
         Armor,
     }
+
+    public enum MapElementType
+    {
+        Nothing,
+        Concrete,
+        Forest,
+        Brick,
+        Water,
+        Ice
+    }
 }

@@ -19,11 +19,6 @@ public class Eagle : MonoBehaviour, IBulletTarget
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    private void Start()
-    {
-        wallTimer = CONCRETE_WALL_TIMER; 
-    }
-
     public bool OnHit(IBullet bullet)
     {
         if (isDestroyed)
@@ -43,7 +38,7 @@ public class Eagle : MonoBehaviour, IBulletTarget
     float wallToggleTimer;
 
     bool switchTexture;
-
+    MapElementType currentElementType = MapElementType.Concrete;
     public void ActivateShowelEffect(bool positive = true)
     {
         if (!isDestroyed)
@@ -52,7 +47,7 @@ public class Eagle : MonoBehaviour, IBulletTarget
             {
                 wallTimer = CONCRETE_WALL_TIMER;
                 wallToggleTimer = 0;
-                MapBuilder.s_Instance.WrapEagle(transform);
+                MapBuilder.s_Instance.WrapEagle(transform, currentElementType);
             }
         }
     }
@@ -69,8 +64,8 @@ public class Eagle : MonoBehaviour, IBulletTarget
             {
                 switchTexture = true;
                 wallToggleTimer = CONCRETE_WALL_CHANGE_TEXTURE_TIMER;
-                print(test);
-                test *= -1;
+                ToggleElement();
+                MapBuilder.s_Instance.WrapEagle(transform, currentElementType);
             }
             else if (wallToggleTimer > 0)
             {
@@ -78,5 +73,11 @@ public class Eagle : MonoBehaviour, IBulletTarget
             }
             else switchTexture = false;
         }
-    }   
+    }
+
+
+    private MapElementType ToggleElement()
+        => currentElementType == MapElementType.Brick
+        ? currentElementType = MapElementType.Concrete
+        : currentElementType = MapElementType.Brick;
 }

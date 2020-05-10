@@ -14,7 +14,7 @@ public class MapBuilder : PersistentSingleton<MapBuilder>
 
 
 
-    public void WrapEagle(Transform eagle/*, MapElementType element, BuildSide side*/)
+    public void WrapEagle(Transform eagle, MapElementType element/*, BuildSide side*/)
     {
         int mask = LayerMask.GetMask("Brick", "Concrete", "Forest", "Ice", "Water", "LevelBorder", "Tank", "EagleFortress");
 
@@ -22,6 +22,8 @@ public class MapBuilder : PersistentSingleton<MapBuilder>
 
         var Tilemap = GameObject.Find("Tilemap").transform;
         var Level = Tilemap.parent;
+
+        var material = GetMaterial(element);
 
         circleSide = new Vector2[]
         {
@@ -64,11 +66,26 @@ public class MapBuilder : PersistentSingleton<MapBuilder>
                 else canbuild = false;
             }
 
-            if (canbuild)
+            if (canbuild && material != null)
             {
-                var a = Instantiate(Concrete, Vector2.zero, Quaternion.identity, Tilemap);
+                var a = Instantiate(material, Vector2.zero, Quaternion.identity, Tilemap);
                 a.transform.localPosition = point;
             }
+        }
+    }
+
+    private GameObject GetMaterial(MapElementType element)
+    {
+        switch (element)
+        {
+            case MapElementType.Brick: return Brick;
+            case MapElementType.Concrete: return Concrete;
+            case MapElementType.Forest: return Forest;
+            case MapElementType.Ice: return Ice;
+            case MapElementType.Water: return Water;
+
+            case MapElementType.Nothing:
+            default: return null;
         }
     }
 }
