@@ -8,10 +8,12 @@ public class TankCharacteristicSet
     public float Velocity { get; set; } 
     public float BulletVelocity { get; set; } 
     public float ShootDelay { get; set; }
-
+    public bool CanDestroyConcrete => (StarBonusLevel == 2 || HasGun);
+    public bool CanDestroyForest => HasGun;
     private bool hasGun;
     public bool HasGun
-      { get => hasGun;
+    {
+        get => hasGun;
         set
         {
             if (hasGun == value) return;

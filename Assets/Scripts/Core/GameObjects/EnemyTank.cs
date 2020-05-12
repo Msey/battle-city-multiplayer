@@ -49,6 +49,7 @@ public class EnemyTank : MonoBehaviour, ITank
     public bool IsDestroyed { get; private set; }
 
     public bool CanDestroyConcrete { get; set; }
+    public bool CanDestroyForest { get; set; }
 
     bool canShoot = true;
 
@@ -85,9 +86,9 @@ public class EnemyTank : MonoBehaviour, ITank
         }
     }
 
-    static public event EventHandler TankCreated;
-    static public event EventHandler TankDestroyed;
-    static public event EventHandler BonusTankHit;
+    public static event EventHandler TankCreated;
+    public static event EventHandler TankDestroyed;
+    public static event EventHandler BonusTankHit;
 
     private void Awake()
     {
@@ -126,6 +127,7 @@ public class EnemyTank : MonoBehaviour, ITank
                 bulletComponent.Owner = this;
                 bulletComponent.Velocity = 16.0f;
                 bulletComponent.CanDestroyConcrete = CanDestroyConcrete;
+                bulletComponent.CanDestroyForest = CanDestroyForest;
             }
 
             canShoot = false;

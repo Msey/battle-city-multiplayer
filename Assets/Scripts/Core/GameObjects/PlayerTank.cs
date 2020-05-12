@@ -38,12 +38,11 @@ public class PlayerTank : MonoBehaviour, ITank
         {
             if (CanMove)
                 tankMovement.Direction = value;
-            else Stopped = true;
         }
     }
     public bool Stopped
     {
-        get => tankMovement.Stopped;
+        get => tankMovement.Stopped && CanMove;
         set => tankMovement.Stopped = value;
     }
 
@@ -135,9 +134,8 @@ public class PlayerTank : MonoBehaviour, ITank
 
             if (bulletComponent != null)
             {
-                bulletComponent.CanDestroyConcrete =
-                    (Characteristics.StarBonusLevel == 2 || Characteristics.HasGun);
-                bulletComponent.CanDestroyForest = Characteristics.HasGun;
+                bulletComponent.CanDestroyConcrete = Characteristics.CanDestroyConcrete;
+                bulletComponent.CanDestroyForest = Characteristics.CanDestroyForest;
                 bulletComponent.Direction = Direction;
                 bulletComponent.Velocity = Characteristics.BulletVelocity;
                 bulletComponent.Group = this.Group;

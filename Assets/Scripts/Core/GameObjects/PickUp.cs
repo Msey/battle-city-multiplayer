@@ -63,6 +63,7 @@ public class PickUp : MonoBehaviour
                     {
                         enemy.ArmorLevel = EnemyTank.MaxArmorLevel;
                         enemy.CanDestroyConcrete = true;
+                        enemy.CanDestroyForest = true;
                     }
 
                     break;
