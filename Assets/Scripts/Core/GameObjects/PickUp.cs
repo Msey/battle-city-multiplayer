@@ -31,12 +31,18 @@ public class PickUp : MonoBehaviour
 
     private void HandleAnyTankPickup(PlayerTank player, EnemyTank enemy)
     {
+    RESWITCH:
         switch (Type)
         {
             case PickUpType.Tank:
                 {
                     if (player)
                         ClassicGameManager.s_Instance.AddLife();
+                    else
+                    {
+                        Type = PickUpType.Helmet;
+                        goto RESWITCH;
+                    }
                     break;
                 }
 
@@ -72,23 +78,18 @@ public class PickUp : MonoBehaviour
             case PickUpType.Grenade:
                 {
                     if (player)
-                    {
                         foreach (var enemyTank in ClassicGameManager.s_Instance.ActiveEnemyTanks)
                             enemyTank.Destroy();
-                    }
                     else
-                    {
                         foreach (PlayerTank playerTank in ClassicGameManager.s_Instance.ActivePlayerTanks)
                             playerTank.Destroy();
-                    }
+
                     break;
                 }
 
             case PickUpType.Helmet:
                 {
-                    if (player)
-                        player.HelmetTimer = 10f;
-                    else
+                    if (enemy)
                         foreach (EnemyTank enemyTank in ClassicGameManager.s_Instance.ActiveEnemyTanks)
                         {
                             if (enemyTank.IsBounusTank)
@@ -99,6 +100,8 @@ public class PickUp : MonoBehaviour
                             else
                                 enemyTank.IsBounusTank = true;
                         }
+                    else
+                        player.HelmetTimer = 10f;
                     break;
                 }
 
