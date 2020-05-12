@@ -20,18 +20,26 @@ public class PlayerTank : MonoBehaviour, ITank
     {
         get
         {
-            return ( shootDelay <= 0
+            return (shootDelay <= 0
                 && ammoLeft > 0);
         }
     }
 
+    public bool CanMove => freezeTime <= 0;
+
     float shootDelay;
     private int ammoLeft;
+    private float freezeTime;
 
     public Direction Direction
     {
         get => tankMovement.Direction;
-        set => tankMovement.Direction = value;
+        set
+        {
+            if (CanMove)
+                tankMovement.Direction = value;
+            else Stopped = true;
+        }
     }
     public bool Stopped
     {
@@ -90,15 +98,18 @@ public class PlayerTank : MonoBehaviour, ITank
         if (shootDelay > 0)
             shootDelay -= Time.deltaTime;
 
+        if (freezeTime > 0)
+            freezeTime -= Time.deltaTime;
+
         if (Invulnerable)
         {
             HelmetTimer -= Time.deltaTime;
-            if(!tempInvulnerabilityPrefab)
-            tempInvulnerabilityPrefab = Instantiate(invulnerabilityPrefab, transform.position, Quaternion.identity);
+            if (!tempInvulnerabilityPrefab)
+                tempInvulnerabilityPrefab = Instantiate(invulnerabilityPrefab, transform.position, Quaternion.identity);
 
             tempInvulnerabilityPrefab.transform.position = transform.position;
         }
-        else if(tempInvulnerabilityPrefab)
+        else if (tempInvulnerabilityPrefab)
         {
             Destroy(tempInvulnerabilityPrefab);
             tempInvulnerabilityPrefab = null;
@@ -124,7 +135,7 @@ public class PlayerTank : MonoBehaviour, ITank
 
             if (bulletComponent != null)
             {
-                bulletComponent.CanDestroyConcrete = 
+                bulletComponent.CanDestroyConcrete =
                     (Characteristics.StarBonusLevel == 2 || Characteristics.HasGun);
                 bulletComponent.CanDestroyForest = Characteristics.HasGun;
                 bulletComponent.Direction = Direction;
@@ -133,7 +144,12 @@ public class PlayerTank : MonoBehaviour, ITank
                 bulletComponent.Owner = this;
             }
         }
-    }    
+    }
+
+    public void FreezeFor(float freezeTime)
+    {
+        this.freezeTime = freezeTime;
+    }
 
     public void Destroy()
     {

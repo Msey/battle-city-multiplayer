@@ -7,7 +7,7 @@ public class PickUp : MonoBehaviour
     public PickUpType Type;
 
     private int tankMask;
-    private Vector2 collisionSize 
+    private Vector2 collisionSize
         = new Vector2(CELL_SIZE, CELL_SIZE);
 
     private void Start()
@@ -104,9 +104,10 @@ public class PickUp : MonoBehaviour
             case PickUpType.Clock:
                 {
                     if (player)
-                        ClassicGameManager.s_Instance.EnemyTanksAISystem.SleepFor(10f);
+                        ClassicGameManager.s_Instance.EnemyTanksAISystem.FreezeFor(10f);
                     else
-                        print("Enemy take clock pickup");
+                        foreach (PlayerTank playerTank in ClassicGameManager.s_Instance.ActivePlayerTanks)
+                            playerTank.FreezeFor(10f);
                     break;
                 }
 

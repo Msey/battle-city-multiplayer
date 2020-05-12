@@ -5,8 +5,8 @@ using static GameConstants;
 
 public class EnemyTanksAISystem
 {
-    ClassicGameManager gameManager;
-    float sleepTime;
+    private ClassicGameManager gameManager;
+    private float freezeTime;
 
     float FrameScale
     {
@@ -30,19 +30,17 @@ public class EnemyTanksAISystem
         gameManager.StartCoroutine(UpdateSystem());
     }
 
-    public void SleepFor(float time)
-    {
-        sleepTime = time;
-    }
+    public void FreezeFor(float freezeTime) => this.freezeTime = freezeTime;
 
     IEnumerator UpdateSystem()
     {
         while (true)
         {
-            if (sleepTime > 0)
-                sleepTime -= Time.deltaTime;
-            if (sleepTime < 0)
-                sleepTime = 0;
+            if (freezeTime > 0)
+                freezeTime -= Time.deltaTime;
+
+            if (freezeTime < 0)
+                freezeTime = 0;
 
             foreach (EnemyTank tank in gameManager.ActiveEnemyTanks)
                 HandleTank(tank);
@@ -52,7 +50,7 @@ public class EnemyTanksAISystem
 
     void HandleTank(EnemyTank tank)
     {
-        if (sleepTime > 0)
+        if (freezeTime > 0)
         {
             tank.Stopped = true;
             return;
