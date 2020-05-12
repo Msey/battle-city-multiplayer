@@ -84,11 +84,5 @@ public class MapBuilder : PersistentSingleton<MapBuilder>
             default: return null;
         }
     }
-
-
-    //private Vector2 GetVectorBySide() // TODO: procedural build
-    //{
-    //    return Vector2.zero;
-    //}
 }
 

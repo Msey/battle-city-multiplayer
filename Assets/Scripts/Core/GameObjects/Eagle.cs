@@ -45,6 +45,8 @@ public class Eagle : MonoBehaviour, IBulletTarget
                 wallToggleTimer = 0;
                 MapBuilder.s_Instance.WrapEagle(transform, currentElementType);
             }
+            else
+                MapBuilder.s_Instance.WrapEagle(transform, MapElementType.Nothing);
         }
     }
     int test = 1;
