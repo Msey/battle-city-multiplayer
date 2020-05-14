@@ -16,7 +16,7 @@ public class Bullet : MonoBehaviour, IBullet
     public GameObject explosionPrefab;
 
     private CircleCollider2D circleCollider;
-    private int obstaclesMask = 0;
+    private int obstaclesMask;
     private bool needCreateExplosion = true;
 
     public float Radius

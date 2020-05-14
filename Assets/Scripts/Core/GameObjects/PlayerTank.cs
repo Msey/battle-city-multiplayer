@@ -42,7 +42,7 @@ public class PlayerTank : MonoBehaviour, ITank
     }
     public bool Stopped
     {
-        get => tankMovement.Stopped && CanMove;
+        get => tankMovement.Stopped;
         set => tankMovement.Stopped = value;
     }
 
@@ -98,7 +98,15 @@ public class PlayerTank : MonoBehaviour, ITank
             shootDelay -= Time.deltaTime;
 
         if (freezeTime > 0)
+        {           
             freezeTime -= Time.deltaTime;
+        }
+        else if (GetComponent<Blinking>())
+        {
+            tankMovement.Velocity = Characteristics.Velocity;
+            GetComponent<SpriteRenderer>().enabled = true;
+            Destroy(GetComponent<Blinking>());
+        }
 
         if (Invulnerable)
         {
@@ -146,6 +154,8 @@ public class PlayerTank : MonoBehaviour, ITank
 
     public void FreezeFor(float freezeTime)
     {
+        gameObject.AddComponent<Blinking>();
+        tankMovement.Velocity = 0;
         this.freezeTime = freezeTime;
     }
 
