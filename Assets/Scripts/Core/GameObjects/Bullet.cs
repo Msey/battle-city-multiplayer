@@ -39,7 +39,7 @@ public class Bullet : MonoBehaviour, IBullet
     void Start()
     {
         circleCollider = GetComponent<CircleCollider2D>();
-        obstaclesMask = LayerMask.GetMask("Brick", "Concrete", "LevelBorder", "Tank", "Bullet", "EagleFortress");
+        obstaclesMask = LayerMask.GetMask("Brick", "Concrete", "LevelBorder", "Tank", "Bullet", "EagleFortress", "Forest");
     }
 
     private void Update()
