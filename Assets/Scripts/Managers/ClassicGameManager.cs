@@ -17,18 +17,19 @@ public class ClassicGameLevelInfo
 
 public class ClassicGameManager : Singleton<ClassicGameManager>
 {
-    List<SpawnPoint> enemySpawnPoints = new List<SpawnPoint>();
-    List<SpawnPoint> playerSpawnPoints = new List<SpawnPoint>();
-    Queue<EnemyTankType> enemiesQueue = new Queue<EnemyTankType>();
+    private List<SpawnPoint> enemySpawnPoints = new List<SpawnPoint>();
+    private List<SpawnPoint> playerSpawnPoints = new List<SpawnPoint>();
+    private Queue<EnemyTankType> enemiesQueue = new Queue<EnemyTankType>();
+    private Lazy<Transform> tilemap;
 
     [SerializeField]
-    int createdEnemyTanksCount;
+    private int createdEnemyTanksCount;
     [SerializeField]
-    int livedEnemyTanksCount;
+    private int livedEnemyTanksCount;
     [SerializeField]
-    int enemyTanksOnCreatingCount;
+    private int enemyTanksOnCreatingCount;
     [SerializeField]
-    int levelEnemeyTanksCount;
+    private int levelEnemeyTanksCount;
 
     public int LevelEnemeyTanksCount { get => levelEnemeyTanksCount; }
 
@@ -39,12 +40,13 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     public GameObject enemyTankPrefab;
     public GameObject playerTankPrefab;
+    public Transform Tilemap => tilemap.Value;
 
     [SerializeField]
-    ClassicGameLevelInfo[] levels;
+    private ClassicGameLevelInfo[] levels;
 
-    bool[] playerTankCreating = new bool[MAX_PLAYERS] { false, false, false, false };
-    bool[] playerTankLiving = new bool[MAX_PLAYERS] { false, false, false, false };
+    private bool[] playerTankCreating = new bool[MAX_PLAYERS] { false, false, false, false };
+    private bool[] playerTankLiving = new bool[MAX_PLAYERS] { false, false, false, false };
 
     [SerializeField]
     GameState gameState = GameState.NotStarted;
@@ -159,6 +161,8 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         LoadLevel();
         GameState = GameState.Started;
         enemyTanksAISystem.Start();
+
+        tilemap = new Lazy<Transform>(() => GameObject.Find("Tilemap").transform);
     }
 
     void LoadLevel()

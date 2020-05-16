@@ -10,9 +10,15 @@ public class Eagle : MonoBehaviour, IBulletTarget
     public Sprite destroyedTexture;
     public GameObject explosionPrefab;
     public GroupType Group { get; set; }
-    static public event EventHandler EagleDestroyed;
+    public static event EventHandler EagleDestroyed;
     private SpriteRenderer spriteRenderer;
     private bool isDestroyed;
+    private  float wallTimer;
+    private float wallToggleTimer;
+
+    private bool switchTexture;
+    private MapElementType currentElementType = MapElementType.Concrete;
+
     void Awake()
     {
         Assert.IsNotNull(explosionPrefab);
@@ -23,6 +29,7 @@ public class Eagle : MonoBehaviour, IBulletTarget
     {
         if (isDestroyed)
             return false;
+
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         spriteRenderer.sprite = destroyedTexture;
         isDestroyed = true;
@@ -30,11 +37,7 @@ public class Eagle : MonoBehaviour, IBulletTarget
         return true;
     }
 
-    float wallTimer;
-    float wallToggleTimer;
 
-    bool switchTexture;
-    MapElementType currentElementType = MapElementType.Concrete;
     public void ActivateShowelEffect(bool positive = true)
     {
         if (!isDestroyed)
@@ -49,7 +52,6 @@ public class Eagle : MonoBehaviour, IBulletTarget
                 MapBuilder.s_Instance.WrapEagle(transform, MapElementType.Nothing);
         }
     }
-    int test = 1;
 
     private void Update()
     {
@@ -66,9 +68,7 @@ public class Eagle : MonoBehaviour, IBulletTarget
                 MapBuilder.s_Instance.WrapEagle(transform, currentElementType);
             }
             else if (wallToggleTimer > 0)
-            {
                 wallToggleTimer -= Time.deltaTime;
-            }
             else switchTexture = false;
         }
     }

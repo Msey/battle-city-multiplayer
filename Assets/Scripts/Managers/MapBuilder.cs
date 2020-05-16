@@ -16,7 +16,7 @@ public class MapBuilder : PersistentSingleton<MapBuilder>
     {
         Vector2 eagleLocalPoint = eagle.localPosition;
 
-        var Tilemap = GameObject.Find("Tilemap").transform;
+        var Tilemap = ClassicGameManager.s_Instance.Tilemap;
         var Level = Tilemap.parent;
 
         var material = GetMaterial(element);
