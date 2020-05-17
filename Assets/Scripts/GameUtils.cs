@@ -132,4 +132,101 @@ public static partial class GameUtils
         var r = new System.Random();
         return r.Next(min, max);
     }
+
+
+    public static Vector3 RandomPointInBounds3D(Bounds bounds)
+    {
+        return new Vector3(
+            UnityEngine.Random.Range(bounds.min.x, bounds.max.x),
+            UnityEngine.Random.Range(bounds.min.y, bounds.max.y),
+            UnityEngine.Random.Range(bounds.min.z, bounds.max.z)
+        );
+    }
+
+    public static Vector2 RandomPointInBounds2D(Bounds bounds)
+    {
+        return new Vector2(
+            UnityEngine.Random.Range(bounds.min.x, bounds.max.x),
+            UnityEngine.Random.Range(bounds.min.y, bounds.max.y)
+        );
+    }
+
+
+
+    public static Vector2 RandomPointInVectors2D(Vector2 left, Vector2 right, Vector2 top, Vector2 bottom)
+    {
+        return new Vector2(
+            UnityEngine.Random.Range(left.x, right.x),
+            UnityEngine.Random.Range(top.y, bottom.y)
+        );
+    }
+
+    public static Vector2 GetLeftVector2D(this Vector2[] bunch)
+    {
+        float maxLeft = float.PositiveInfinity;
+        int leftVectorIndex = -1;
+
+        for (int i = 0; i < bunch.Length; i++)
+        {
+            if (bunch[i].x < maxLeft)
+            {
+                maxLeft = bunch[i].x;
+                leftVectorIndex = i;
+            }
+        }
+
+        return bunch[leftVectorIndex];
+    }
+
+    public static Vector2 GetRightVector2D(this Vector2[] bunch)
+    {
+        float maxRight = float.NegativeInfinity;
+        int rightVectorIndex = -1;
+
+        for (int i = 0; i < bunch.Length; i++)
+        {
+            if (bunch[i].x > maxRight)
+            {
+                maxRight = bunch[i].x;
+                rightVectorIndex = i;
+            }
+        }
+
+        return bunch[rightVectorIndex];
+    }
+
+
+    public static Vector2 GetTopVector2D(this Vector2[] bunch)
+    {
+        float maxTop = float.NegativeInfinity;
+        int topVectorIndex = -1;
+
+        for (int i = 0; i < bunch.Length; i++)
+        {
+            if (bunch[i].y > maxTop)
+            {
+                maxTop = bunch[i].y;
+                topVectorIndex = i;
+            }
+        }
+
+        return bunch[topVectorIndex];
+    }
+
+    public static Vector2 GetBottomVector2D(this Vector2[] bunch)
+    {
+        float maxBottom = float.PositiveInfinity;
+        int bottomVectorIndex = -1;
+
+        for (int i = 0; i < bunch.Length; i++)
+        {
+            if (bunch[i].y < maxBottom)
+            {
+                maxBottom = bunch[i].y;
+                bottomVectorIndex = i;
+            }
+        }
+
+        return bunch[bottomVectorIndex];
+    }
 }

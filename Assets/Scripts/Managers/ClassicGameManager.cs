@@ -31,6 +31,8 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     [SerializeField]
     private int levelEnemeyTanksCount;
 
+    UnityEngine.Object TankBonus;
+
     public int LevelEnemeyTanksCount { get => levelEnemeyTanksCount; }
 
     public int MaxEnemyLivesTanksCount
@@ -132,6 +134,8 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         Assert.IsNotNull(enemyTankPrefab);
         Assert.IsNotNull(playerTankPrefab);
         enemyTanksAISystem = new EnemyTanksAISystem(this);
+        TankBonus = Resources.Load<GameObject>("Assets/Prefabs/PickUps/Tank");
+        print(TankBonus.name);
         base.Awake();
     }
     private void Start()
@@ -309,13 +313,14 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         if (LevelsManager.s_Instance.CurrentGameInfo.CurrentStage < 5)
             return 0;
 
-        return GameUtils.Rand(0, EnemyTank.MaxArmorLevel + 1);
+        return UnityEngine.Random.Range(0, EnemyTank.MaxArmorLevel + 1);
     }
 
     void StartListeningEvents()
     {
         EnemyTank.TankCreated += OnEnemyTankCreated;
         EnemyTank.TankDestroyed += OnEnemyTankDestroyed;
+        EnemyTank.BonusTankHit += OnBonusTankHit;
         PlayerTank.TankCreated += OnPlayerTankCreated;
         PlayerTank.TankDestroyed += OnPlayerTankDestroyed;
         Eagle.EagleDestroyed += OnEagleDestroyed;
@@ -325,6 +330,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     {
         EnemyTank.TankCreated -= OnEnemyTankCreated;
         EnemyTank.TankDestroyed -= OnEnemyTankDestroyed;
+        EnemyTank.BonusTankHit -= OnBonusTankHit;
         PlayerTank.TankCreated -= OnPlayerTankCreated;
         PlayerTank.TankDestroyed -= OnPlayerTankDestroyed;
         Eagle.EagleDestroyed -= OnEagleDestroyed;
@@ -425,6 +431,26 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         {
             PreFinishGame();
         }
+    }
+    Vector2[] levelBorderPositions;
+
+    void OnBonusTankHit(object sender, EventArgs e)
+    {
+        var borders = GameObject.FindObjectsOfType<LevelBorder>();
+
+        levelBorderPositions = new Vector2[borders.Length];
+
+        for (int i = 0; i < borders.Length; i++)
+            levelBorderPositions[i] = borders[i].transform.position;
+
+        var left = levelBorderPositions.GetLeftVector2D();
+        var right = levelBorderPositions.GetRightVector2D();
+        var top = levelBorderPositions.GetTopVector2D();
+        var bottom = levelBorderPositions.GetBottomVector2D();
+
+        Vector2 randomPoint = GameUtils.RandomPointInVectors2D(left, right, top, bottom);
+
+        Instantiate(TankBonus, randomPoint, Quaternion.identity);
     }
 
     private IEnumerator LoadLevelCoroutine()
