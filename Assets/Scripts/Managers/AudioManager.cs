@@ -1,13 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class AudioManager : PersistentSingleton<AudioManager>
 {
     [SerializeField]
-    private AudioSource amibientAudioSource;
-    [SerializeField]
-    private AudioSource fxAudioSource;
+    private AudioSource audioSource;
 
+    #region amibientClips
+    [SerializeField]
+    private AudioClip levelStartedSound;
+    [SerializeField]
+    private AudioClip playerForceedEngineSound;
+    [SerializeField]
+    private AudioClip playerStoppedEngineSound;
+    #endregion
+
+    #region fxClips
     [SerializeField]
     private AudioClip tankHitSound;
     [SerializeField]
@@ -28,9 +37,14 @@ public class AudioManager : PersistentSingleton<AudioManager>
     private AudioClip bonusTakenSound;
     [SerializeField]
     private AudioClip pauseSound;
+    #endregion
 
     public enum AudioClipType
     {
+        None,
+        LevelStarted,
+        PlayerForceedEngine,
+        PlayerStoppedEngine,
         TankHit,
         EnvironmentHit,
         TargetHit,
@@ -43,17 +57,40 @@ public class AudioManager : PersistentSingleton<AudioManager>
         Pause,
     };
 
+    public void PlayAmibientClip(AudioClipType type, bool loop)
+    {
+        if (type == AudioClipType.None)
+        {
+            audioSource.clip = null;
+            audioSource.Play();
+            return;
+        }
+
+        if (!audioSource.loop && audioSource.isPlaying)
+            return;
+
+        AudioClip newClip = GetClipByType(type);
+        if (newClip == audioSource.clip)
+            return;
+
+        audioSource.clip = newClip;
+        audioSource.loop = loop;
+        audioSource.Play();
+    }
+
     public void PlayFxClip(AudioClipType type)
     {
-        fxAudioSource.loop = false;
-        fxAudioSource.clip = GetClipByType(type);
-        fxAudioSource.Play();
+        AudioClip newClip = GetClipByType(type);
+        audioSource.PlayOneShot(newClip);
     }
 
     protected override void Awake()
     {
-        Assert.IsNotNull(amibientAudioSource);
-        Assert.IsNotNull(fxAudioSource);
+        audioSource = GetComponent<AudioSource>();
+
+        Assert.IsNotNull(levelStartedSound);
+        Assert.IsNotNull(playerForceedEngineSound);
+        Assert.IsNotNull(playerStoppedEngineSound);
 
         Assert.IsNotNull(tankHitSound);
         Assert.IsNotNull(environmentHitSound);
@@ -69,10 +106,30 @@ public class AudioManager : PersistentSingleton<AudioManager>
         base.Awake();
     }
 
+    private void PlayerClip(AudioSource audioSource, AudioClipType type)
+    {
+        if (audioSource == null)
+            return;
+
+        AudioClip newClip = GetClipByType(type);
+        if (newClip == audioSource.clip)
+            return;
+
+        audioSource.loop = false;
+        audioSource.clip = newClip;
+        audioSource.Play();
+    }
+
     private AudioClip GetClipByType(AudioClipType type)
     {
         switch (type)
         {
+            case AudioClipType.LevelStarted:
+                return levelStartedSound;
+            case AudioClipType.PlayerForceedEngine:
+                return playerForceedEngineSound;
+            case AudioClipType.PlayerStoppedEngine:
+                return playerStoppedEngineSound;
             case AudioClipType.TankHit:
                 return tankHitSound;
             case AudioClipType.EnvironmentHit:

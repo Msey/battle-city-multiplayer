@@ -12,6 +12,11 @@ public class PlayerTank : MonoBehaviour, ITank
 
 
     private TankMovement tankMovement;
+    public TankMovement TankMovement
+    {
+        get => tankMovement;
+    }
+
     private PlayerTankAnimator tankAnimator;
 
     public bool CanShoot

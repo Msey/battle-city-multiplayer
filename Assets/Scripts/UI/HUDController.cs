@@ -101,9 +101,6 @@ public class HUDController : MonoBehaviour
     public void OnPauseChanged(object sender, EventArgs e)
     {
         UpdateUIElementsVisibility();
-
-        if (ClassicGameManager.s_Instance.IsPaused)
-            AudioManager.s_Instance.PlayFxClip(AudioManager.AudioClipType.Pause);
     }
 
     private void LoadGameInfo()

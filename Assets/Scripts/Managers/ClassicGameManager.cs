@@ -63,6 +63,8 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
             isPaused = value;
             IsPausedChanged?.Invoke(this, EventArgs.Empty);
+            if (isPaused)
+                AudioManager.s_Instance.PlayFxClip(AudioManager.AudioClipType.Pause);
         }
     }
 
@@ -141,6 +143,39 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             LoadGame();
     }
 
+    private void Update()
+    {
+        if (GameState != GameState.NotStarted)
+            UpdateTanksSoundBackground();
+    }
+
+    private void UpdateTanksSoundBackground()
+    {
+        if (isPaused)
+        {
+            AudioManager.s_Instance.PlayAmibientClip(AudioManager.AudioClipType.None, false);
+            return;
+        }
+
+        foreach (PlayerTank playerTank in ClassicGameManager.s_Instance.ActivePlayerTanks)
+        {
+            if (!playerTank.TankMovement.Stopped)
+            {
+                AudioManager.s_Instance.PlayAmibientClip(AudioManager.AudioClipType.PlayerForceedEngine, true);
+                return;
+            }
+        }
+
+        if (!isAllEnemyTanksDestroyed && !isEagleDestroyed)
+        {
+            AudioManager.s_Instance.PlayAmibientClip(AudioManager.AudioClipType.PlayerStoppedEngine, true);
+        }
+        else if (GameState == GameState.PreFinished)
+        {
+            AudioManager.s_Instance.PlayAmibientClip(AudioManager.AudioClipType.None, false);
+        }
+    }
+
     protected override void OnDestroy() => StopListeningEvents();
 
     public event EventHandler GameStateChanged;
@@ -151,6 +186,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             return;
 
         GameState = GameState.Loading;
+        AudioManager.s_Instance.PlayAmibientClip(AudioManager.AudioClipType.LevelStarted, false);
         StartCoroutine(LoadLevelCoroutine());
     }
 
@@ -468,6 +504,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     private IEnumerator LoadLevelCoroutine()
     {
+        AudioManager.s_Instance.PlayFxClip(AudioManager.AudioClipType.LevelStarted);
         yield return new WaitForSeconds(2.0f);
         StartGame();
     }

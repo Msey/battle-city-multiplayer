@@ -5393,6 +5393,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   amibientAudioSource: {fileID: 1575498249}
   fxAudioSource: {fileID: 1575498248}
+  levelStartedSound: {fileID: 8300000, guid: 0dacc78a2bbe9754d978d988d65e08b7, type: 3}
+  playerForceedEngineSound: {fileID: 8300000, guid: 2640bfe512d79cd489fcc489abc7a5f2,
+    type: 3}
+  playerStoppedEngineSound: {fileID: 8300000, guid: 71783f8f0c4cdb24ea8273f40d283211,
+    type: 3}
   tankHitSound: {fileID: 8300000, guid: da487f9b96dd5674a89ae461fc593eac, type: 3}
   environmentHitSound: {fileID: 8300000, guid: 0ea9894eb16a59149b2a3f6a4fae36fb, type: 3}
   targetSound: {fileID: 8300000, guid: c9137b7c24f57e944a72b9711f4dbe84, type: 3}
