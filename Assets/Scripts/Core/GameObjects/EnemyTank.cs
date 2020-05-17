@@ -111,24 +111,24 @@ public class EnemyTank : MonoBehaviour, ITank
 
     public void Shoot()
     {
-        if (canShoot)
+        if (!canShoot)
+            return;
+
+        IBullet bulletComponent =
+            Instantiate(ResourceManager.s_Instance.BulletPrefab, transform.position, transform.rotation)
+            .GetComponent<IBullet>();
+
+        if (bulletComponent != null)
         {
-            IBullet bulletComponent =
-                Instantiate(ResourceManager.s_Instance.BulletPrefab, transform.position, transform.rotation)
-                .GetComponent<IBullet>();
-
-            if (bulletComponent != null)
-            {
-                bulletComponent.Direction = Direction;
-                bulletComponent.Group = this.Group;
-                bulletComponent.Owner = this;
-                bulletComponent.Velocity = 16.0f;
-                bulletComponent.CanDestroyConcrete = CanDestroyConcrete;
-                bulletComponent.CanDestroyForest = CanDestroyForest;
-            }
-
-            canShoot = false;
+            bulletComponent.Direction = Direction;
+            bulletComponent.Group = this.Group;
+            bulletComponent.Owner = this;
+            bulletComponent.Velocity = 16.0f;
+            bulletComponent.CanDestroyConcrete = CanDestroyConcrete;
+            bulletComponent.CanDestroyForest = CanDestroyForest;
         }
+
+        canShoot = false;
     }
 
     public void Destroy()
@@ -136,6 +136,7 @@ public class EnemyTank : MonoBehaviour, ITank
         if (IsDestroyed)
             return;
 
+        AudioManager.s_Instance.PlayFxClip(AudioManager.AudioClipType.EnemyExplosion);
         Instantiate(ResourceManager.s_Instance.BigExplosionPrefab, transform.position, Quaternion.identity);
         IsDestroyed = true;
     }
@@ -155,9 +156,14 @@ public class EnemyTank : MonoBehaviour, ITank
         }
 
         if (ArmorLevel == 0)
+        {
             Destroy();
+        }
         else
+        {
             ArmorLevel--;
+            AudioManager.s_Instance.PlayFxClip(AudioManager.AudioClipType.TankHit);
+        }
 
         return true;
     }

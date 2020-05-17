@@ -29,6 +29,7 @@ public class Eagle : MonoBehaviour, IBulletTarget
         if (isDestroyed)
             return false;
 
+        AudioManager.s_Instance.PlayFxClip(AudioManager.AudioClipType.PlayerExplosion);
         Instantiate(ResourceManager.s_Instance.BigExplosionPrefab, transform.position, Quaternion.identity);
         spriteRenderer.sprite = destroyedTexture;
         isDestroyed = true;

@@ -2,7 +2,7 @@
 using static GameConstants;
 
 [RequireComponent(typeof(Animator))]
-public class Brick : MonoBehaviour, IBulletTarget
+public class Brick : Environment
 {
     enum BrickState
     {
@@ -16,26 +16,15 @@ public class Brick : MonoBehaviour, IBulletTarget
     private BrickState brickState = BrickState.Full;
     private Animator animator;
 
-    public GroupType Group { get; set; }
     void Awake()
     {
         animator = GetComponent<Animator>();
     }
 
-    public void Die()
+    public override bool OnHit(IBullet bullet)
     {
-        Destroy(gameObject);
-    }
-    public bool OnHit(IBullet bullet)
-    {
-        if (bullet.CanDestroyConcrete)
-        {
-            Die();
-            return true;
-        }
-
-        if (brickState != BrickState.Full)
-            Die();
+        if (brickState != BrickState.Full || bullet.CanDestroyConcrete)
+            DieBy(bullet);
         else
         {
             switch (bullet.Direction)
@@ -53,6 +42,9 @@ public class Brick : MonoBehaviour, IBulletTarget
                     SetBrickState(BrickState.Right);
                     break;
             }
+
+            if (bullet.Group == GroupType.Players)
+                AudioManager.s_Instance.PlayFxClip(AudioManager.AudioClipType.TargetHit);
         }
 
         return true;

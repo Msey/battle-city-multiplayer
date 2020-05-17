@@ -129,25 +129,27 @@ public class PlayerTank : MonoBehaviour, ITank
 
     public void Shoot()
     {
-        if (CanShoot)
+        if (!CanShoot)
+            return;
+
+        ammoLeft--;
+        shootDelay = Characteristics.ShootDelay;
+
+        IBullet bulletComponent =
+            Instantiate(ResourceManager.s_Instance.BulletPrefab, transform.position, transform.rotation)
+            .GetComponent<IBullet>();
+
+        if (bulletComponent != null)
         {
-            ammoLeft--;
-            shootDelay = Characteristics.ShootDelay;
-
-            IBullet bulletComponent =
-                Instantiate(ResourceManager.s_Instance.BulletPrefab, transform.position, transform.rotation)
-                .GetComponent<IBullet>();
-
-            if (bulletComponent != null)
-            {
-                bulletComponent.CanDestroyConcrete = Characteristics.CanDestroyConcrete;
-                bulletComponent.CanDestroyForest = Characteristics.CanDestroyForest;
-                bulletComponent.Direction = Direction;
-                bulletComponent.Velocity = Characteristics.BulletVelocity;
-                bulletComponent.Group = this.Group;
-                bulletComponent.Owner = this;
-            }
+            bulletComponent.CanDestroyConcrete = Characteristics.CanDestroyConcrete;
+            bulletComponent.CanDestroyForest = Characteristics.CanDestroyForest;
+            bulletComponent.Direction = Direction;
+            bulletComponent.Velocity = Characteristics.BulletVelocity;
+            bulletComponent.Group = this.Group;
+            bulletComponent.Owner = this;
         }
+
+        AudioManager.s_Instance.PlayFxClip(AudioManager.AudioClipType.Shoot);
     }
 
     public void FreezeFor(float freezeTime)
@@ -162,6 +164,7 @@ public class PlayerTank : MonoBehaviour, ITank
         if (IsDestroyed)
             return;
 
+        AudioManager.s_Instance.PlayFxClip(AudioManager.AudioClipType.PlayerExplosion);
         Instantiate(ResourceManager.s_Instance.BigExplosionPrefab, transform.position, Quaternion.identity);
 
         if (tempInvulnerabilityPrefab)
@@ -184,6 +187,7 @@ public class PlayerTank : MonoBehaviour, ITank
                 Characteristics.HasGun = false;
                 Characteristics.StarBonusLevel = 1;
                 Characteristics.Recalculate();
+                AudioManager.s_Instance.PlayFxClip(AudioManager.AudioClipType.TankHit);
             }
             else Destroy();
         }

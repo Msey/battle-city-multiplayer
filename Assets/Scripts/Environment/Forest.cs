@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using static GameConstants;
 
-public class Forest : MonoBehaviour, IBulletTarget
+public class Forest : Environment
 {
-    public GroupType Group { get; set; }
-    private void Die() =>Destroy(gameObject);
-
-    public bool OnHit(IBullet bullet)
+    public override bool OnHit(IBullet bullet)
     {
-        if (bullet.CanDestroyForest) Die();
+        if (bullet.CanDestroyForest)
+            DieBy(bullet);
 
         return false;
     }
