@@ -21,6 +21,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     private List<SpawnPoint> playerSpawnPoints = new List<SpawnPoint>();
     private Queue<EnemyTankType> enemiesQueue = new Queue<EnemyTankType>();
     private Lazy<Transform> tilemap;
+    private Lazy<GameObject[]> bonuses;
 
     [SerializeField]
     private int createdEnemyTanksCount;
@@ -31,7 +32,6 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     [SerializeField]
     private int levelEnemeyTanksCount;
 
-    UnityEngine.Object TankBonus;
 
     public int LevelEnemeyTanksCount { get => levelEnemeyTanksCount; }
 
@@ -134,8 +134,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         Assert.IsNotNull(enemyTankPrefab);
         Assert.IsNotNull(playerTankPrefab);
         enemyTanksAISystem = new EnemyTanksAISystem(this);
-        TankBonus = Resources.Load<GameObject>("Assets/Prefabs/PickUps/Tank");
-        print(TankBonus.name);
+       // TankBonus = Resources.Load<GameObject>("PickUps/Tank");
         base.Awake();
     }
     private void Start()
@@ -436,22 +435,38 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     void OnBonusTankHit(object sender, EventArgs e)
     {
-        var borders = GameObject.FindObjectsOfType<LevelBorder>();
-
-        levelBorderPositions = new Vector2[borders.Length];
-
-        for (int i = 0; i < borders.Length; i++)
-            levelBorderPositions[i] = borders[i].transform.position;
+        var levelBorderPositions = FindObjectsOfType<LevelBorder>()
+            .ToGameObjects()
+            .ToVectors();
 
         var left = levelBorderPositions.GetLeftVector2D();
         var right = levelBorderPositions.GetRightVector2D();
         var top = levelBorderPositions.GetTopVector2D();
         var bottom = levelBorderPositions.GetBottomVector2D();
 
-        Vector2 randomPoint = GameUtils.RandomPointInVectors2D(left, right, top, bottom);
+        Vector2 randomPoint =
+            GameUtils.RandomPointInVectors2D(left, right, top, bottom, CELL_SIZE * 2, CELL_SIZE * 2);
 
-        Instantiate(TankBonus, randomPoint, Quaternion.identity);
+        if (SpawnedBonus)
+            Destroy(SpawnedBonus);
+
+        bonuses = new Lazy<GameObject[]>(
+            () => new GameObject[]
+        {
+            ResourceManager.s_Instance.TankBonusPrefab,
+            ResourceManager.s_Instance.StarBonusPrefab,
+            ResourceManager.s_Instance.ShovelBonusPrefab,
+            ResourceManager.s_Instance.HelmetBonusPrefab,
+            ResourceManager.s_Instance.PistolBonusPrefab,
+            ResourceManager.s_Instance.GrenadeBonusPrefab,
+            ResourceManager.s_Instance.ClockBonusPrefab
+        });
+
+        SpawnedBonus = Instantiate(bonuses.Value[GameUtils.Rand(0, bonuses.Value.Length)], randomPoint, Quaternion.identity);
+        Destroy(SpawnedBonus, 10);
     }
+
+    private GameObject SpawnedBonus;
 
     private IEnumerator LoadLevelCoroutine()
     {

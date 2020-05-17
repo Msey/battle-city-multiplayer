@@ -133,6 +133,26 @@ public static partial class GameUtils
         return r.Next(min, max);
     }
 
+    public static GameObject[] ToGameObjects(this MonoBehaviour[] objects)
+    {
+        var gameObjects = new GameObject[objects.Length];
+
+        for (int i = 0; i < objects.Length; i++)
+            gameObjects[i] = objects[i].gameObject;
+
+        return gameObjects;
+    }
+
+    public static Vector2[] ToVectors(this GameObject[] objects)
+    {
+        var vectors = new Vector2[objects.Length];
+
+        for (int i = 0; i < objects.Length; i++)
+            vectors[i] = objects[i].transform.position;
+
+        return vectors;
+    }
+
 
     public static Vector3 RandomPointInBounds3D(Bounds bounds)
     {
@@ -153,11 +173,15 @@ public static partial class GameUtils
 
 
 
-    public static Vector2 RandomPointInVectors2D(Vector2 left, Vector2 right, Vector2 top, Vector2 bottom)
+    public static Vector2 RandomPointInVectors2D(
+        Vector2 left, Vector2 right, 
+        Vector2 top, Vector2 bottom, 
+        float offsetFactorX = 0,
+        float offsetFactorY = 0)
     {
         return new Vector2(
-            UnityEngine.Random.Range(left.x, right.x),
-            UnityEngine.Random.Range(top.y, bottom.y)
+            UnityEngine.Random.Range(left.x + offsetFactorX, right.x - offsetFactorX),
+            UnityEngine.Random.Range(top.y - offsetFactorY, bottom.y + offsetFactorY)
         );
     }
 
