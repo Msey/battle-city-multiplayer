@@ -28,6 +28,12 @@ public class Brick : MonoBehaviour, IBulletTarget
     }
     public bool OnHit(IBullet bullet)
     {
+        if (bullet.CanDestroyConcrete)
+        {
+            Die();
+            return true;
+        }
+
         if (brickState != BrickState.Full)
             Die();
         else
