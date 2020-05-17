@@ -40,8 +40,6 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         get => 2 + LevelsManager.s_Instance.CurrentGameInfo.PlayersCount * 2;
     }
 
-    public GameObject enemyTankPrefab;
-    public GameObject playerTankPrefab;
     public Transform Tilemap => tilemap.Value;
 
     [SerializeField]
@@ -131,10 +129,10 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     override protected void Awake()
     {
-        Assert.IsNotNull(enemyTankPrefab);
-        Assert.IsNotNull(playerTankPrefab);
+        Assert.IsNotNull(ResourceManager.s_Instance.EnemyTankPrefab);
+        Assert.IsNotNull(ResourceManager.s_Instance.PlayerTankPrefab);
         enemyTanksAISystem = new EnemyTanksAISystem(this);
-       // TankBonus = Resources.Load<GameObject>("PickUps/Tank");
+
         base.Awake();
     }
     private void Start()
@@ -166,6 +164,17 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         enemyTanksAISystem.Start();
 
         tilemap = new Lazy<Transform>(() => GameObject.Find("Tilemap").transform);
+
+        bonuses = new Lazy<GameObject[]>(() => new GameObject[]
+        {
+            ResourceManager.s_Instance.TankBonusPrefab,
+            ResourceManager.s_Instance.StarBonusPrefab,
+            ResourceManager.s_Instance.ShovelBonusPrefab,
+            ResourceManager.s_Instance.HelmetBonusPrefab,
+            ResourceManager.s_Instance.PistolBonusPrefab,
+            ResourceManager.s_Instance.GrenadeBonusPrefab,
+            ResourceManager.s_Instance.ClockBonusPrefab
+        });
     }
 
     void LoadLevel()
@@ -207,7 +216,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         {
             playerTankCreating[playerIndex] = false;
             playerTankLiving[playerIndex] = true;
-            PlayerTank tank = Instantiate(playerTankPrefab, point.position, Quaternion.identity).GetComponent<PlayerTank>();
+            PlayerTank tank = Instantiate(ResourceManager.s_Instance.PlayerTankPrefab, point.position, Quaternion.identity).GetComponent<PlayerTank>();
             tank.PlayerIndex = playerIndex;
             tank.Direction = Direction.Up;
             tank.HelmetTimer = 3f;
@@ -287,11 +296,12 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         if (!Utils.Verify(enemiesQueue.Count != 0))
             return;
 
-        EnemyTank tank = Instantiate(enemyTankPrefab, spawnPoint.position, Quaternion.identity).GetComponent<EnemyTank>();
+        EnemyTank tank = Instantiate(ResourceManager.s_Instance.EnemyTankPrefab, spawnPoint.position, Quaternion.identity).GetComponent<EnemyTank>();
         tank.Direction = Direction.Down;
         tank.TankIndex = createdEnemyTanksCount;
         tank.TankType = enemiesQueue.Dequeue();
         tank.IsBounusTank = IsBonusEnemyTank(tank.TankIndex);
+
         if (!tank.IsBounusTank)
             tank.ArmorLevel = GenerateEnemyTankArmorLevel(tank.TankType);
     }
@@ -449,18 +459,6 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
         if (SpawnedBonus)
             Destroy(SpawnedBonus);
-
-        bonuses = new Lazy<GameObject[]>(
-            () => new GameObject[]
-        {
-            ResourceManager.s_Instance.TankBonusPrefab,
-            ResourceManager.s_Instance.StarBonusPrefab,
-            ResourceManager.s_Instance.ShovelBonusPrefab,
-            ResourceManager.s_Instance.HelmetBonusPrefab,
-            ResourceManager.s_Instance.PistolBonusPrefab,
-            ResourceManager.s_Instance.GrenadeBonusPrefab,
-            ResourceManager.s_Instance.ClockBonusPrefab
-        });
 
         SpawnedBonus = Instantiate(bonuses.Value[GameUtils.Rand(0, bonuses.Value.Length)], randomPoint, Quaternion.identity);
         Destroy(SpawnedBonus, 10);

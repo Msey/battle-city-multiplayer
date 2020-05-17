@@ -542,11 +542,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e05c31071fd4ccc4a8fb07e895ce2ec8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Concrete: {fileID: 56741159798910579, guid: 44f0b19e9a068044e97d084336d873d7, type: 3}
-  Forest: {fileID: 5187395085170027178, guid: efe0f0ee36237e8499f9660e3bce7a74, type: 3}
-  Brick: {fileID: 4530499783066822928, guid: 0b725c615c572cc4e8c4f5b87df04b24, type: 3}
-  Water: {fileID: 8632335372518868976, guid: 7c3f65258fdb946448434aaab2683911, type: 3}
-  Ice: {fileID: 8398664685909552917, guid: a49bff78c95924a48b563c916ea6badb, type: 3}
 --- !u!1 &125904924
 GameObject:
   m_ObjectHideFlags: 0
@@ -5188,6 +5183,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a2d7fdfca5545346b1bdb2ce53ab229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ImmortalityEffectPrefab: {fileID: 0}
+  SpawnPointPrefab: {fileID: 0}
+  TankBonusPrefab: {fileID: 0}
+  StarBonusPrefab: {fileID: 0}
+  ShovelBonusPrefab: {fileID: 0}
+  HelmetBonusPrefab: {fileID: 0}
+  PistolBonusPrefab: {fileID: 0}
+  GrenadeBonusPrefab: {fileID: 0}
+  ClockBonusPrefab: {fileID: 0}
+  BulletPrefab: {fileID: 0}
+  EnemyTankPrefab: {fileID: 0}
+  PlayerTankPrefab: {fileID: 0}
+  SmallExplosionPrefab: {fileID: 0}
+  BigExplosionPrefab: {fileID: 0}
+  BrickPrefab: {fileID: 0}
+  ConcretePrefab: {fileID: 0}
+  ForestPrefab: {fileID: 0}
+  WaterPrefab: {fileID: 0}
+  IcePrefab: {fileID: 0}
 --- !u!4 &1586014361
 Transform:
   m_ObjectHideFlags: 0
@@ -7234,6 +7248,26 @@ PrefabInstance:
       propertyPath: m_FontData.m_VerticalOverflow
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6584541067302488913, guid: e8c05ab6dce3ca54e88745bf0cd5fa71,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6584541067302488913, guid: e8c05ab6dce3ca54e88745bf0cd5fa71,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6584541067302488913, guid: e8c05ab6dce3ca54e88745bf0cd5fa71,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6584541067302488913, guid: e8c05ab6dce3ca54e88745bf0cd5fa71,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 0410ad49c91d744308a3357425d86f3a, type: 3}
     - target: {fileID: 6584541067393375530, guid: e8c05ab6dce3ca54e88745bf0cd5fa71,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -7314,6 +7348,16 @@ PrefabInstance:
     - target: {fileID: 6584541067485072036, guid: e8c05ab6dce3ca54e88745bf0cd5fa71,
         type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6584541067485072038, guid: e8c05ab6dce3ca54e88745bf0cd5fa71,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 6584541067485072038, guid: e8c05ab6dce3ca54e88745bf0cd5fa71,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6584541067547992389, guid: e8c05ab6dce3ca54e88745bf0cd5fa71,

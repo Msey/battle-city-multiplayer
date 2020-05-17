@@ -3,13 +3,6 @@ using static GameConstants;
 
 public class MapBuilder : PersistentSingleton<MapBuilder>
 {
-
-    public GameObject Concrete;
-    public GameObject Forest;
-    public GameObject Brick;
-    public GameObject Water;
-    public GameObject Ice;
-
     Vector2[] circleSide;
 
     public void WrapEagle(Transform eagle, MapElementType element/*, BuildSide side*/)
@@ -74,11 +67,11 @@ public class MapBuilder : PersistentSingleton<MapBuilder>
     {
         switch (element)
         {
-            case MapElementType.Brick: return Brick;
-            case MapElementType.Concrete: return Concrete;
-            case MapElementType.Forest: return Forest;
-            case MapElementType.Ice: return Ice;
-            case MapElementType.Water: return Water;
+            case MapElementType.Brick: return ResourceManager.s_Instance.BrickPrefab;
+            case MapElementType.Concrete: return ResourceManager.s_Instance.ConcretePrefab;
+            case MapElementType.Forest: return ResourceManager.s_Instance.ForestPrefab;
+            case MapElementType.Ice: return ResourceManager.s_Instance.IcePrefab;
+            case MapElementType.Water: return ResourceManager.s_Instance.WaterPrefab;
 
             case MapElementType.Nothing:
             default: return null;

@@ -20,9 +20,6 @@ public class EnemyTank : MonoBehaviour, ITank
 
     public readonly static int MaxArmorLevel = 3;
 
-    public GameObject bulletPrefab;
-    public GameObject explosionPrefab;
-
     private TankMovement tankMovement;
     public TankMovement TankMovement
     {
@@ -92,8 +89,8 @@ public class EnemyTank : MonoBehaviour, ITank
 
     private void Awake()
     {
-        Assert.IsNotNull(bulletPrefab);
-        Assert.IsNotNull(explosionPrefab);
+        Assert.IsNotNull(ResourceManager.s_Instance.BigExplosionPrefab);
+        Assert.IsNotNull(ResourceManager.s_Instance.BulletPrefab);
 
         Group = GroupType.Enemies;
         tankMovement = GetComponent<TankMovement>();
@@ -117,7 +114,7 @@ public class EnemyTank : MonoBehaviour, ITank
         if (canShoot)
         {
             IBullet bulletComponent =
-                Instantiate(bulletPrefab, transform.position, transform.rotation)
+                Instantiate(ResourceManager.s_Instance.BulletPrefab, transform.position, transform.rotation)
                 .GetComponent<IBullet>();
 
             if (bulletComponent != null)
@@ -139,7 +136,7 @@ public class EnemyTank : MonoBehaviour, ITank
         if (IsDestroyed)
             return;
 
-        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        Instantiate(ResourceManager.s_Instance.BigExplosionPrefab, transform.position, Quaternion.identity);
         IsDestroyed = true;
     }
 

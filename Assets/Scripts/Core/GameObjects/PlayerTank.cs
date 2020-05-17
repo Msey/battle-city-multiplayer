@@ -6,8 +6,6 @@ using static GameConstants;
 [RequireComponent(typeof(TankMovement), typeof(PlayerTankAnimator))]
 public class PlayerTank : MonoBehaviour, ITank
 {
-    public GameObject bulletPrefab;
-    public GameObject explosionPrefab;
     public GameObject invulnerabilityPrefab;
 
     private GameObject tempInvulnerabilityPrefab = null;
@@ -70,8 +68,8 @@ public class PlayerTank : MonoBehaviour, ITank
 
     void Awake()
     {
-        Assert.IsNotNull(bulletPrefab);
-        Assert.IsNotNull(explosionPrefab);
+        Assert.IsNotNull(ResourceManager.s_Instance.BulletPrefab);
+        Assert.IsNotNull(ResourceManager.s_Instance.BigExplosionPrefab);
         Assert.IsNotNull(invulnerabilityPrefab);
 
         tankMovement = GetComponent<TankMovement>();
@@ -137,7 +135,7 @@ public class PlayerTank : MonoBehaviour, ITank
             shootDelay = Characteristics.ShootDelay;
 
             IBullet bulletComponent =
-                Instantiate(bulletPrefab, transform.position, transform.rotation)
+                Instantiate(ResourceManager.s_Instance.BulletPrefab, transform.position, transform.rotation)
                 .GetComponent<IBullet>();
 
             if (bulletComponent != null)
@@ -163,7 +161,12 @@ public class PlayerTank : MonoBehaviour, ITank
     {
         if (IsDestroyed)
             return;
-        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+
+        Instantiate(ResourceManager.s_Instance.BigExplosionPrefab, transform.position, Quaternion.identity);
+
+        if (tempInvulnerabilityPrefab)
+            Destroy(tempInvulnerabilityPrefab);
+
         IsDestroyed = true;
     }
 

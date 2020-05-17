@@ -8,7 +8,6 @@ using static GameConstants;
 public class Eagle : MonoBehaviour, IBulletTarget
 {
     public Sprite destroyedTexture;
-    public GameObject explosionPrefab;
     public GroupType Group { get; set; }
     public static event EventHandler EagleDestroyed;
     private SpriteRenderer spriteRenderer;
@@ -21,7 +20,7 @@ public class Eagle : MonoBehaviour, IBulletTarget
 
     void Awake()
     {
-        Assert.IsNotNull(explosionPrefab);
+        Assert.IsNotNull(ResourceManager.s_Instance.BigExplosionPrefab);
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -30,7 +29,7 @@ public class Eagle : MonoBehaviour, IBulletTarget
         if (isDestroyed)
             return false;
 
-        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        Instantiate(ResourceManager.s_Instance.BigExplosionPrefab, transform.position, Quaternion.identity);
         spriteRenderer.sprite = destroyedTexture;
         isDestroyed = true;
         EagleDestroyed?.Invoke(this, EventArgs.Empty);

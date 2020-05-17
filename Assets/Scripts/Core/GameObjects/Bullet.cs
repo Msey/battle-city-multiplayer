@@ -13,8 +13,6 @@ public class Bullet : MonoBehaviour, IBullet
     public bool CanDestroyConcrete { get; set; }
     public bool CanDestroyForest { get; set; }
 
-    public GameObject explosionPrefab;
-
     private CircleCollider2D circleCollider;
     private int obstaclesMask;
     private bool needCreateExplosion = true;
@@ -33,7 +31,7 @@ public class Bullet : MonoBehaviour, IBullet
 
     void Awake()
     {
-        Assert.IsNotNull(explosionPrefab);
+        Assert.IsNotNull(ResourceManager.s_Instance.SmallExplosionPrefab);
     }
 
     void Start()
@@ -78,7 +76,7 @@ public class Bullet : MonoBehaviour, IBullet
     public void Die()
     {
         if (needCreateExplosion)
-            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+            Instantiate(ResourceManager.s_Instance.SmallExplosionPrefab, transform.position, Quaternion.identity);
         Owner?.OnMyBulletHit(this);
         Destroy(gameObject);
     }
