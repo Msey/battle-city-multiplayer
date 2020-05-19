@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1529277084776549667}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.04, y: -0.26, z: 0}
   m_LocalScale: {x: 16, y: 16, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -95,9 +95,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 380cdfac97ddfd44aa790e14c1b87001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: 5.4
-  explosionPrefab: {fileID: 7653243924865758667, guid: 39bf1dfd543a2b2419073f639bad8c24,
-    type: 3}
 --- !u!58 &1529277084776549695
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -111,6 +108,6 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.002}
   serializedVersion: 2
   m_Radius: 0.02
