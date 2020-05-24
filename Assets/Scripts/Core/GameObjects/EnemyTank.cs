@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using static GameConstants;
@@ -168,7 +169,7 @@ public class EnemyTank : MonoBehaviour, ITank
         return true;
     }
 
-    public void OnMyBulletHit(IBullet bullet)
+    public void OnMyBulletHit(IBullet bullet, List<IBulletTarget> targets)
     {
         canShoot = true;
     }

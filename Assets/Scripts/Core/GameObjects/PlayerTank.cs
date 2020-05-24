@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using static GameConstants;
@@ -67,9 +68,9 @@ public class PlayerTank : MonoBehaviour, ITank
     public bool Invulnerable => HelmetTimer > 0;
     public bool IsDestroyed { get; private set; }
 
-
     public static event EventHandler TankCreated;
     public static event EventHandler TankDestroyed;
+    public static event EventHandler EnemyTankDestroyed;
 
     void Awake()
     {
@@ -200,9 +201,32 @@ public class PlayerTank : MonoBehaviour, ITank
         return true;
     }
 
-    public void OnMyBulletHit(IBullet bullet)
+    public void OnMyBulletHit(IBullet bullet, List<IBulletTarget> targets)
     {
         ammoLeft++;
         shootDelay = 0;
+
+        if (targets == null)
+            return;
+
+        foreach (var target in targets)
+        {
+            if (target is EnemyTank)
+            {
+                EnemyTank enemyTank = target as EnemyTank;
+                if (enemyTank.IsDestroyed)
+                    EnemyTankDestroyed?.Invoke(this, new EnemyTankDestroyedEventArgs(enemyTank));
+            }
+        }
     }
+}
+
+public class EnemyTankDestroyedEventArgs : EventArgs
+{
+    public EnemyTankDestroyedEventArgs(EnemyTank enemyTank)
+    {
+        Tank = enemyTank;
+    }
+
+    public EnemyTank Tank { get; set; }
 }

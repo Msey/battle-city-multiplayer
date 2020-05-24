@@ -5,6 +5,11 @@ using System;
 using System.Collections;
 using static GameConstants;
 
+public class PlayerKillsStatistic
+{
+    public Dictionary<EnemyTankType, int> tanks = new Dictionary<EnemyTankType, int>();
+}
+
 [Serializable]
 public class ClassicGameLevelInfo
 {
@@ -47,6 +52,9 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     private bool[] playerTankCreating = new bool[MAX_PLAYERS] { false, false, false, false };
     private bool[] playerTankLiving = new bool[MAX_PLAYERS] { false, false, false, false };
+
+    private PlayerKillsStatistic[] playersStatistic = new PlayerKillsStatistic[MAX_PLAYERS] { new PlayerKillsStatistic(), new PlayerKillsStatistic(), new PlayerKillsStatistic(), new PlayerKillsStatistic() };
+    public PlayerKillsStatistic[] PlayersStatistic => playersStatistic;
 
     [SerializeField]
     GameState gameState = GameState.NotStarted;
@@ -127,7 +135,6 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     {
         return playerLives;
     }
-
 
     override protected void Awake()
     {
@@ -368,6 +375,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         EnemyTank.BonusTankHit += OnBonusTankHit;
         PlayerTank.TankCreated += OnPlayerTankCreated;
         PlayerTank.TankDestroyed += OnPlayerTankDestroyed;
+        PlayerTank.EnemyTankDestroyed += OnPlayerEnemyTankDestroyed;
         Eagle.EagleDestroyed += OnEagleDestroyed;
     }
 
@@ -378,6 +386,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         EnemyTank.BonusTankHit -= OnBonusTankHit;
         PlayerTank.TankCreated -= OnPlayerTankCreated;
         PlayerTank.TankDestroyed -= OnPlayerTankDestroyed;
+        PlayerTank.EnemyTankDestroyed -= OnPlayerEnemyTankDestroyed;
         Eagle.EagleDestroyed -= OnEagleDestroyed;
     }
 
@@ -477,7 +486,6 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             PreFinishGame();
         }
     }
-    Vector2[] levelBorderPositions;
 
     void OnBonusTankHit(object sender, EventArgs e)
     {
@@ -501,6 +509,30 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     }
 
     private GameObject SpawnedBonus;
+
+    private void OnPlayerEnemyTankDestroyed(object sender, EventArgs e)
+    {
+        PlayerTank tank = sender as PlayerTank;
+        if (tank == null)
+            return;
+
+        EnemyTankDestroyedEventArgs eventsArgs = e as EnemyTankDestroyedEventArgs;
+        if (eventsArgs == null)
+            return;
+
+        if (eventsArgs.Tank == null)
+            return;
+
+        if (!Utils.InRange(0, tank.PlayerIndex, MAX_PLAYERS))
+            return;
+
+        EnemyTankType destroyedTankType = eventsArgs.Tank.TankType;
+        PlayerKillsStatistic playerKillsStatistic = PlayersStatistic[tank.PlayerIndex];
+        if (playerKillsStatistic.tanks.ContainsKey(destroyedTankType))
+            playerKillsStatistic.tanks[destroyedTankType]++;
+        else
+            playerKillsStatistic.tanks.Add(destroyedTankType, 1);
+    }
 
     private IEnumerator LoadLevelCoroutine()
     {

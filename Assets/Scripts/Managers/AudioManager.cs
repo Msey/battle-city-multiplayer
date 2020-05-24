@@ -18,6 +18,8 @@ public class AudioManager : PersistentSingleton<AudioManager>
 
     #region fxClips
     [SerializeField]
+    private AudioClip scoreUpSound;
+    [SerializeField]
     private AudioClip tankHitSound;
     [SerializeField]
     private AudioClip environmentHitSound;
@@ -29,6 +31,8 @@ public class AudioManager : PersistentSingleton<AudioManager>
     private AudioClip shootSound;
     [SerializeField]
     private AudioClip enemyExplosionSound;
+    [SerializeField]
+    private AudioClip liveTakenSound;
     [SerializeField]
     private AudioClip playerExplosionSound;
     [SerializeField]
@@ -45,12 +49,14 @@ public class AudioManager : PersistentSingleton<AudioManager>
         LevelStarted,
         PlayerForceedEngine,
         PlayerStoppedEngine,
+        ScoreUp,
         TankHit,
         EnvironmentHit,
         TargetHit,
         Ice,
         Shoot,
         EnemyExplosion,
+        LiveTaken,
         PlayerExplosion,
         BonusAppearance,
         BonusTaken,
@@ -92,12 +98,14 @@ public class AudioManager : PersistentSingleton<AudioManager>
         Assert.IsNotNull(playerForceedEngineSound);
         Assert.IsNotNull(playerStoppedEngineSound);
 
+        Assert.IsNotNull(scoreUpSound);
         Assert.IsNotNull(tankHitSound);
         Assert.IsNotNull(environmentHitSound);
         Assert.IsNotNull(targetSound);
         Assert.IsNotNull(iceSound);
         Assert.IsNotNull(shootSound);
         Assert.IsNotNull(enemyExplosionSound);
+        Assert.IsNotNull(liveTakenSound);
         Assert.IsNotNull(playerExplosionSound);
         Assert.IsNotNull(bonusAppearanceSound);
         Assert.IsNotNull(bonusTakenSound);
@@ -130,6 +138,8 @@ public class AudioManager : PersistentSingleton<AudioManager>
                 return playerForceedEngineSound;
             case AudioClipType.PlayerStoppedEngine:
                 return playerStoppedEngineSound;
+            case AudioClipType.ScoreUp:
+                return scoreUpSound;
             case AudioClipType.TankHit:
                 return tankHitSound;
             case AudioClipType.EnvironmentHit:
@@ -142,6 +152,8 @@ public class AudioManager : PersistentSingleton<AudioManager>
                 return shootSound;
             case AudioClipType.EnemyExplosion:
                 return enemyExplosionSound;
+            case AudioClipType.LiveTaken:
+                return liveTakenSound;
             case AudioClipType.PlayerExplosion:
                 return playerExplosionSound;
             case AudioClipType.BonusAppearance:

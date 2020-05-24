@@ -25,6 +25,7 @@ public class HUDController : MonoBehaviour
     public LayoutGroup livesPanelLayout;
     public GameObject livesPanelPrefab;
     private List<GameObject> livesPanels;
+    public FinishedCanvasController finishedCanvasController;
 
     protected void Awake()
     {
@@ -46,6 +47,8 @@ public class HUDController : MonoBehaviour
         livesPanels = new List<GameObject>();
         Assert.IsNotNull(livesPanelLayout);
         Assert.IsNotNull(livesPanelPrefab);
+
+        Assert.IsNotNull(finishedCanvasController);
 
         SetStage(LevelsManager.s_Instance.CurrentGameInfo.CurrentStage);
         ClassicGameManager.s_Instance.GameStateChanged += OnGameStateChanged;
@@ -131,6 +134,7 @@ public class HUDController : MonoBehaviour
     {
         currentStageHUDText.text = (stage + 1).ToString();
         stageStartText.text = String.Format("STAGE {0}", stage + 1);
+        finishedCanvasController.SetStage(stage + 1);
     }
 
     public void SetEnemyTanksCount(int count)
@@ -242,8 +246,38 @@ public class HUDController : MonoBehaviour
 
     private IEnumerator FinishGameCoroutine()
     {
-        yield return new WaitForSeconds(2.0f);
         GameInfo currentGameInfo = LevelsManager.s_Instance.CurrentGameInfo;
+        finishedCanvasController.SetPlayerCount(currentGameInfo.PlayersCount);
+        PlayerKillsStatistic[] playersStatistic = ClassicGameManager.s_Instance.PlayersStatistic;
+
+        foreach (EnemyTankType tankType in Enum.GetValues(typeof(EnemyTankType)))
+        {
+            int tankKilledCount = 0;
+            while (true)
+            {
+                bool anyTankUpScore = false;
+                for (int playerIndex = 0; playerIndex < MAX_PLAYERS; ++playerIndex)
+                {
+                    PlayerKillsStatistic playerKillsStatistic = playersStatistic[playerIndex];
+                    int killedCount = 0;
+                    playerKillsStatistic.tanks.TryGetValue(tankType, out killedCount);
+                    if (killedCount > tankKilledCount)
+                    {
+                        anyTankUpScore = true;
+                        finishedCanvasController.ScoreColumn(playerIndex).SetTankCount(tankType, tankKilledCount + 1);
+                    }
+                }
+                if (!anyTankUpScore)
+                    break;
+
+                tankKilledCount++;
+                AudioManager.s_Instance.PlayFxClip(AudioManager.AudioClipType.ScoreUp);
+                yield return new WaitForSeconds(0.25f);
+            }
+            yield return new WaitForSeconds(0.25f);
+        }
+
+        yield return new WaitForSeconds(3.0f);
         if (currentGameInfo.IsGameOver)
         {
             LevelsManager.s_Instance.OpenMainMenu();

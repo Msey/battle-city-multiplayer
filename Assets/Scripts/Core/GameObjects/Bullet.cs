@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Assertions;
 using static GameConstants;
 
@@ -48,6 +49,7 @@ public class Bullet : MonoBehaviour, IBullet
         var obstacles = Physics2D.OverlapCircleAll(transform.position, Radius, ObstaclesMask);
 
         bool destroyCurrent = false;
+        List<IBulletTarget> targets = null;
 
         foreach (var obstacle in obstacles)
         {
@@ -63,28 +65,31 @@ public class Bullet : MonoBehaviour, IBullet
 
                 destroyCurrent = true;
 
+                if (targets == null)
+                    targets = new List<IBulletTarget>();
+                targets.Add(bulletTarget);
+
                 if (bulletTarget is ITank)
                     break;
             }
-            else continue;
         }
 
         if (destroyCurrent)
-            Die();
+            Die(targets);
     }
 
-    public void Die()
+    public void Die(List<IBulletTarget> targets)
     {
         if (needCreateExplosion)
             Instantiate(ResourceManager.s_Instance.SmallExplosionPrefab, transform.position, Quaternion.identity);
-        Owner?.OnMyBulletHit(this);
+        Owner?.OnMyBulletHit(this, targets);
         Destroy(gameObject);
     }
 
     public bool OnHit(IBullet bullet)
     {
         needCreateExplosion = false;
-        Die();
+        Die(new List<IBulletTarget>());
         return true;
     }
 }
