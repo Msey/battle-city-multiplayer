@@ -3287,6 +3287,12 @@ MonoBehaviour:
     armorTanksCount: 0
     levelPrefab: {fileID: 973252601460626924, guid: 1f4ee4fecda63304e9f9720c099969fd,
       type: 3}
+  - basicTanksCount: 14
+    fastTanksCount: 4
+    powerTanksCount: 0
+    armorTanksCount: 2
+    levelPrefab: {fileID: 973252601460626924, guid: 411b6f483430fbe4da3b8a6955f15d1c,
+      type: 3}
   gameState: 0
 --- !u!4 &1368127346
 Transform:
