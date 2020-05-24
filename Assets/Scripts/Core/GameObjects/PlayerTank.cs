@@ -186,7 +186,7 @@ public class PlayerTank : MonoBehaviour, ITank
 
     public bool OnHit(IBullet bullet)
     {
-        if (bullet.Owner.Group == GroupType.Enemies && !Invulnerable)
+        if (bullet.Group == GroupType.Enemies && !Invulnerable)
         {
             if (Characteristics.HasGun)
             {

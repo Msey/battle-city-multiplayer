@@ -78,6 +78,15 @@ public class Bullet : MonoBehaviour, IBullet
             Die(targets);
     }
 
+    private void LateUpdate()
+    {
+        if (Owner == null)
+            return;
+
+        if (Owner.IsDestroyed)
+            Owner = null;
+    }
+
     public void Die(List<IBulletTarget> targets)
     {
         if (needCreateExplosion)
