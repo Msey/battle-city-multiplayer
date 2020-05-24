@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using static PickUp;
 
+public class PlayerTankStaticCharacteristicSet
+{
+    public bool HasGun { get; set; }
+    public int StarBonusLevel { get; set; }
+}
+
 public class TankCharacteristicSet
 {
     public float Velocity { get; set; } 
@@ -21,8 +27,8 @@ public class TankCharacteristicSet
             int appendix = value ? 1 : -1;
             hasGun = value;
 
-            if (!(starBonusLevel == 2))
-                UpdateAmmo(appendix);
+            if (!(starBonusLevel == 2) && UpdateAmmo != null)
+                 UpdateAmmo(appendix);
 
             starBonusLevel = 0;
         }
@@ -53,7 +59,7 @@ public class TankCharacteristicSet
     {
         Velocity = 20f;//5.4f;
         BulletVelocity = 9f * (StarBonusLevel > 0 || HasGun ? 2 : 1);
-        ShootDelay = 0.2f;
+        ShootDelay = 0.1f;
 
         UpdateTankAppearance();
     }
@@ -81,6 +87,24 @@ public class TankCharacteristicSet
     public TankCharacteristicSet(PlayerTankAnimator animator)
     {
         Animator = animator;
+        Recalculate();
+    }
+
+    public PlayerTankStaticCharacteristicSet ExportStaticCharacteristic()
+    {
+        PlayerTankStaticCharacteristicSet set = new PlayerTankStaticCharacteristicSet();
+        set.HasGun = HasGun;
+        set.StarBonusLevel = StarBonusLevel;
+        return set;
+    }
+
+    public void LoadFrom(PlayerTankStaticCharacteristicSet set)
+    {
+        if (set == null)
+            return;
+
+        StarBonusLevel = set.StarBonusLevel;
+        HasGun = set.HasGun;
         Recalculate();
     }
 }

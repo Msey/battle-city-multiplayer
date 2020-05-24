@@ -8,7 +8,7 @@ public static partial class GameConstants
     public const float BUILD_THRESHOLD_MAX = 1.5f;
     public const float BUILD_THRESHOLD_MIN = 0.5f;
 
-    public const int CONCRETE_WALL_TIMER = 12;
+    public const int CONCRETE_WALL_TIMER = 20;
     public const float CONCRETE_WALL_BLINK_TIMER = 3.5f;
     public const float CONCRETE_WALL_CHANGE_TEXTURE_TIMER = 0.5f;
 

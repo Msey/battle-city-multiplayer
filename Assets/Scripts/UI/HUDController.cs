@@ -19,10 +19,10 @@ public class HUDController : MonoBehaviour
     public LayoutGroup tanksCountLayout;
     public GameObject tanksPrefab;
     public Curtain curtain;
+    public LivesPanel livesPanel;
     private List<GameObject> tanksIcons;
     private int enemyTanksCount = 0;
 
-    public LayoutGroup livesPanelLayout;
     public GameObject livesPanelPrefab;
     private List<GameObject> livesPanels;
     public FinishedCanvasController finishedCanvasController;
@@ -39,13 +39,13 @@ public class HUDController : MonoBehaviour
         Assert.IsNotNull(pauseText);
 
         Assert.IsNotNull(curtain);
+        Assert.IsNotNull(livesPanel);
 
         tanksIcons = new List<GameObject>();
         Assert.IsNotNull(tanksCountLayout);
         Assert.IsNotNull(tanksPrefab);
 
         livesPanels = new List<GameObject>();
-        Assert.IsNotNull(livesPanelLayout);
         Assert.IsNotNull(livesPanelPrefab);
 
         Assert.IsNotNull(finishedCanvasController);
@@ -53,6 +53,7 @@ public class HUDController : MonoBehaviour
         SetStage(LevelsManager.s_Instance.CurrentGameInfo.CurrentStage);
         ClassicGameManager.s_Instance.GameStateChanged += OnGameStateChanged;
         ClassicGameManager.s_Instance.IsPausedChanged += OnPauseChanged;
+        ClassicGameManager.s_Instance.TotalLivesChanged += OnPlayerLivesChanged;
         EnemyTank.TankCreated += OnEnemyTankCreated;
         UpdateUIElementsVisibility();
     }
@@ -66,6 +67,7 @@ public class HUDController : MonoBehaviour
     {
         ClassicGameManager.s_Instance.GameStateChanged -= OnGameStateChanged;
         ClassicGameManager.s_Instance.IsPausedChanged -= OnPauseChanged;
+        ClassicGameManager.s_Instance.TotalLivesChanged -= OnPlayerLivesChanged;
         EnemyTank.TankCreated -= OnEnemyTankCreated;
     }
 
@@ -106,14 +108,18 @@ public class HUDController : MonoBehaviour
         UpdateUIElementsVisibility();
     }
 
+    public void OnPlayerLivesChanged(object sender, EventArgs e)
+    {
+        livesPanel.SetLives(ClassicGameManager.s_Instance.GetTotalLives());
+    }
+
     private void LoadGameInfo()
     {
         if (ClassicGameManager.s_Instance != null)
             SetEnemyTanksCount(ClassicGameManager.s_Instance.LevelEnemeyTanksCount);
         else
             SetEnemyTanksCount(0);
-
-        SetLivesPanelCount(LevelsManager.s_Instance.CurrentGameInfo.PlayersCount);
+        livesPanel.SetLives(ClassicGameManager.s_Instance.GetTotalLives());
     }
 
     private void UpdateUIElementsVisibility()
@@ -155,30 +161,6 @@ public class HUDController : MonoBehaviour
             GameObject tankIcon = tanksIcons[0];
             Destroy(tankIcon);
             tanksIcons.RemoveAt(0);
-        }
-    }
-
-    public void SetLivesPanelCount(int count)
-    {
-        if (!Utils.Verify(count >= 0))
-            return;
-
-        while (livesPanels.Count < count)
-        {
-            GameObject livesPanelObject = Instantiate(livesPanelPrefab);
-            livesPanels.Add(livesPanelObject);
-            livesPanelObject.transform.SetParent(livesPanelLayout.transform, false);
-
-            var livesPanel = livesPanelObject.GetComponent<LivesPanel>();
-            if (!Utils.Verify(livesPanel))
-                continue;
-            livesPanel.SetPlayerNumber(livesPanels.Count);
-        }
-        while (livesPanels.Count > count)
-        {
-            GameObject livesPanel = livesPanels[0];
-            Destroy(livesPanel);
-            livesPanels.RemoveAt(0);
         }
     }
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using static GameConstants;
 
 public class GameInfo
 {
@@ -24,4 +21,9 @@ public class GameInfo
     public int PlayersCount { get; set; }
     public bool IsFirstGame { get; set; }
     public bool IsGameOver { get; set; }
+
+    public int LivesCount { get; set; }
+    public bool[] PrevLevelPlayerTankLiving = new bool[MAX_PLAYERS] { true, true, true, true };
+    public PlayerTankStaticCharacteristicSet[] PrevLevelPlayerTankCharacteristic = new PlayerTankStaticCharacteristicSet[MAX_PLAYERS];
+
 }

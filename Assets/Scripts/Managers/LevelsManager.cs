@@ -37,6 +37,7 @@ public class LevelsManager : PersistentSingleton<LevelsManager>
 
             CurrentGameInfo.IsFirstGame = true;
             CurrentGameInfo.CurrentStage = 0;
+            CurrentGameInfo.LivesCount = 3 * CurrentGameInfo.PlayersCount;
             OpenClassicGame();
         }
         else

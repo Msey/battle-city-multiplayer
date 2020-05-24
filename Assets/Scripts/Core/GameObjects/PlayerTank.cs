@@ -79,6 +79,7 @@ public class PlayerTank : MonoBehaviour, ITank
         Assert.IsNotNull(invulnerabilityPrefab);
 
         tankMovement = GetComponent<TankMovement>();
+        tankMovement.Direction = Direction.Down;
 
         Characteristics = new TankCharacteristicSet(GetComponent<PlayerTankAnimator>());
 

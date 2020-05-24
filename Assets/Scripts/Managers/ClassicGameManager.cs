@@ -129,9 +129,18 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     private int playerLives = 2;
 
-    public void AddLife() => ++playerLives;
-    public void TakeLife() => --playerLives;
+    public void AddLife()
+    {
+        ++playerLives;
+        TotalLivesChanged?.Invoke(this, EventArgs.Empty);
+    }
+    public void TakeLife()
+    {
+        --playerLives;
+        TotalLivesChanged?.Invoke(this, EventArgs.Empty);
+    }
 
+    public event EventHandler TotalLivesChanged;
     public int GetTotalLives()
     {
         return playerLives;
@@ -193,6 +202,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         if (!Utils.Verify(GameState == GameState.NotStarted))
             return;
 
+        playerLives = LevelsManager.s_Instance.CurrentGameInfo.LivesCount;
         GameState = GameState.Loading;
         AudioManager.s_Instance.PlayAmibientClip(AudioManager.AudioClipType.LevelStarted, false);
         StartCoroutine(LoadLevelCoroutine());
@@ -232,6 +242,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     void LoadLevel()
     {
+        playerLives = LevelsManager.s_Instance.CurrentGameInfo.LivesCount;
         StartListeningEvents();
         LoadLevelObjects();
         CreateEnemyQueue();
@@ -244,7 +255,10 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     {
         int playersCount = LevelsManager.s_Instance.CurrentGameInfo.PlayersCount;
         for (int playerIndex = 0; playerIndex < playersCount; ++playerIndex)
-            SpawnPlayerTank(playerIndex);
+        {
+            if (LevelsManager.s_Instance.CurrentGameInfo.PrevLevelPlayerTankLiving[playerIndex])
+                SpawnPlayerTank(playerIndex, LevelsManager.s_Instance.CurrentGameInfo.PrevLevelPlayerTankCharacteristic[playerIndex]);
+        }
     }
 
     public bool PlayerTankIsLiving(int playerIndex)
@@ -255,7 +269,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
         return playerTankLiving[playerIndex];
     }
 
-    private void SpawnPlayerTank(int playerIndex)
+    private void SpawnPlayerTank(int playerIndex, PlayerTankStaticCharacteristicSet characteristic = null)
     {
         if (!Utils.InRange(0, playerIndex, MAX_PLAYERS)
             || playerTankCreating[playerIndex]
@@ -273,6 +287,8 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             tank.PlayerIndex = playerIndex;
             tank.Direction = Direction.Up;
             tank.HelmetTimer = 3f;
+            if (characteristic != null)
+                tank.Characteristics.LoadFrom(characteristic);
         });
     }
 
@@ -422,7 +438,15 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     void FinishGame()
     {
-        LevelsManager.s_Instance.CurrentGameInfo.IsGameOver = isEagleDestroyed;
+        GameInfo currentGameInfo = LevelsManager.s_Instance.CurrentGameInfo;
+        playerTankLiving.CopyTo(currentGameInfo.PrevLevelPlayerTankLiving, 0);
+        currentGameInfo.PrevLevelPlayerTankCharacteristic = new PlayerTankStaticCharacteristicSet[MAX_PLAYERS];
+        currentGameInfo.LivesCount = playerLives;
+
+        foreach (PlayerTank playerTank in ClassicGameManager.s_Instance.ActivePlayerTanks)
+            currentGameInfo.PrevLevelPlayerTankCharacteristic[playerTank.PlayerIndex] = playerTank.Characteristics.ExportStaticCharacteristic();
+
+        currentGameInfo.IsGameOver = isEagleDestroyed || ActivePlayerTanks.Count == 0;
         GameState = GameState.Finished;
     }
 
@@ -486,6 +510,9 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
         ActivePlayerTanks.Remove(tank);
         playerTankLiving[tank.PlayerIndex] = false;
+
+        if (playerLives == 0)
+            PreFinishGame();
     }
 
     void OnEagleDestroyed(object sender, EventArgs e)

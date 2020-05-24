@@ -33,7 +33,23 @@ public class PlayerTankAnimator : MonoBehaviour
 {
     [SerializeField]
     PlayerTankAnimation[] playerTankAnimations;
-    public int AnimationColorIndex { get; set; }
+
+    private int animationColorIndex;
+    public int AnimationColorIndex
+    {
+        get
+        {
+            return animationColorIndex;
+        }
+        set
+        {
+            if (animationColorIndex == value)
+                return;
+
+            animationColorIndex = value;
+            ChangeAnimationClips();
+        }
+    }
 
     Animator animator;
     AnimatorOverrideController animatorOverrideController;
@@ -72,7 +88,7 @@ public class PlayerTankAnimator : MonoBehaviour
         }
     }
 
-    void Start()
+    void Awake()
     {
         animator = GetComponent<Animator>();
         animatorOverrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
