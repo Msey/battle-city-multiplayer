@@ -1378,7 +1378,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &333518466
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5792,7 +5792,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1438648776
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6567,12 +6567,14 @@ MonoBehaviour:
     type: 3}
   playerStoppedEngineSound: {fileID: 8300000, guid: 71783f8f0c4cdb24ea8273f40d283211,
     type: 3}
+  scoreUpSound: {fileID: 0}
   tankHitSound: {fileID: 8300000, guid: da487f9b96dd5674a89ae461fc593eac, type: 3}
   environmentHitSound: {fileID: 8300000, guid: 0ea9894eb16a59149b2a3f6a4fae36fb, type: 3}
   targetSound: {fileID: 8300000, guid: c9137b7c24f57e944a72b9711f4dbe84, type: 3}
   iceSound: {fileID: 8300000, guid: ded9546d89c5cf441be2c13df1482a63, type: 3}
   shootSound: {fileID: 8300000, guid: d1257388c588be6429083c90b2514b33, type: 3}
   enemyExplosionSound: {fileID: 8300000, guid: ac91771899dc9074c80ae13ad3c30435, type: 3}
+  liveTakenSound: {fileID: 0}
   playerExplosionSound: {fileID: 8300000, guid: 6f987fdcbd320114a9faf4eed2e1eb08,
     type: 3}
   bonusAppearanceSound: {fileID: 8300000, guid: add8cd11744b1b743a229a8a68c3617d,
@@ -8753,7 +8755,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 45, y: -200}
+  m_AnchoredPosition: {x: 45, y: -150}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6584541066547666249
@@ -8856,7 +8858,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 148}
+  m_AnchoredPosition: {x: 0, y: 200}
   m_SizeDelta: {x: 780, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6584541066547666254
