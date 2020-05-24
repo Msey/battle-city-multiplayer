@@ -183,7 +183,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             }
         }
 
-        if (!isAllEnemyTanksDestroyed && !isEagleDestroyed)
+        if (!isAllEnemyTanksDestroyed && !(isEagleDestroyed || ActivePlayerTanks.Count == 0))
         {
             AudioManager.s_Instance.PlayAmibientClip(AudioManager.AudioClipType.PlayerStoppedEngine, true);
         }
