@@ -185,6 +185,14 @@ public static partial class GameUtils
         );
     }
 
+    public static Vector2 RandomPointInRect(Rect rect, float roundFactor, float offsetFactorX = 0, float offsetFactorY = 0)
+    {
+        return new Vector2(
+             Utils.RoundByFactor(UnityEngine.Random.Range(rect.xMin + offsetFactorX, rect.xMax - offsetFactorX), roundFactor),
+             Utils.RoundByFactor(UnityEngine.Random.Range(rect.yMin + offsetFactorY, rect.yMax - offsetFactorY), roundFactor)
+        );
+    }
+
     public static Vector2 GetLeftVector2D(this Vector2[] bunch)
     {
         float maxLeft = float.PositiveInfinity;
@@ -252,5 +260,33 @@ public static partial class GameUtils
         }
 
         return bunch[bottomVectorIndex];
+    }
+
+    public static Rect ComputeOverlapRect(this Vector2[] bunch)
+    {
+        float xMax = float.NegativeInfinity;
+        float yMax = float.NegativeInfinity;
+        float xMin = float.PositiveInfinity;
+        float yMin = float.PositiveInfinity;
+
+        foreach (Vector2 point in bunch)
+        {
+            if (point.x < xMin)
+                xMin = point.x;
+            else if (point.x > xMax)
+                xMax = point.x;
+
+            if (point.y < yMin)
+                yMin = point.y;
+            else if (point.y > yMax)
+                yMax = point.y;
+        }
+
+        Rect overlapRect = new Rect();
+        overlapRect.xMax = xMax;
+        overlapRect.yMax = yMax;
+        overlapRect.xMin = xMin;
+        overlapRect.yMin = yMin;
+        return overlapRect;
     }
 }

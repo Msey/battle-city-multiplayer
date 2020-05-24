@@ -25,7 +25,10 @@ public class PickUp : MonoBehaviour
         EnemyTank enemyTank = tank.GetComponent<EnemyTank>();
 
         HandleAnyTankPickup(playerTank, enemyTank);
-        AudioManager.s_Instance.PlayFxClip(AudioManager.AudioClipType.BonusTaken);
+        if (Type == PickUpType.Tank)
+            AudioManager.s_Instance.PlayFxClip(AudioManager.AudioClipType.LiveTaken);
+        else
+            AudioManager.s_Instance.PlayFxClip(AudioManager.AudioClipType.BonusTaken);
         Destroy(gameObject);
     }
 

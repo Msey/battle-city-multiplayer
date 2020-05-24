@@ -27,6 +27,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     private Queue<EnemyTankType> enemiesQueue = new Queue<EnemyTankType>();
     private Lazy<Transform> tilemap;
     private Lazy<GameObject[]> bonuses;
+    private Lazy<Rect> levelBorderRect;
 
     [SerializeField]
     private int createdEnemyTanksCount;
@@ -217,6 +218,15 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
             ResourceManager.s_Instance.PistolBonusPrefab,
             ResourceManager.s_Instance.GrenadeBonusPrefab,
             ResourceManager.s_Instance.ClockBonusPrefab
+        });
+
+        levelBorderRect = new Lazy<Rect>(() => 
+        {
+            var levelBorderPositions = FindObjectsOfType<LevelBorder>()
+                .ToGameObjects()
+                .ToVectors();
+
+            return levelBorderPositions.ComputeOverlapRect();
         });
     }
 
@@ -489,23 +499,13 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     void OnBonusTankHit(object sender, EventArgs e)
     {
-        var levelBorderPositions = FindObjectsOfType<LevelBorder>()
-            .ToGameObjects()
-            .ToVectors();
-
-        var left = levelBorderPositions.GetLeftVector2D();
-        var right = levelBorderPositions.GetRightVector2D();
-        var top = levelBorderPositions.GetTopVector2D();
-        var bottom = levelBorderPositions.GetBottomVector2D();
-
         Vector2 randomPoint =
-            GameUtils.RandomPointInVectors2D(left, right, top, bottom, CELL_SIZE * 2, CELL_SIZE * 2);
+            GameUtils.RandomPointInRect(levelBorderRect.Value, CELL_SIZE, 2 * CELL_SIZE, 2 * CELL_SIZE);
 
         if (SpawnedBonus)
             Destroy(SpawnedBonus);
 
         SpawnedBonus = Instantiate(bonuses.Value[GameUtils.Rand(0, bonuses.Value.Length)], randomPoint, Quaternion.identity);
-        Destroy(SpawnedBonus, 10);
     }
 
     private GameObject SpawnedBonus;
