@@ -158,7 +158,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
 
     private void UpdateTanksSoundBackground()
     {
-        if (isPaused)
+        if (isPaused || GameState == GameState.Finished)
         {
             AudioManager.s_Instance.PlayAmibientClip(AudioManager.AudioClipType.None, false);
             return;
