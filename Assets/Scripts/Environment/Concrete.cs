@@ -7,8 +7,7 @@ public class Concrete : Environment
     {
         if (bullet.CanDestroyConcrete)
         {
-            AudioManager.s_Instance.PlayFxClip(AudioManager.AudioClipType.TankHit);
-            Die();
+            DieBy(bullet);
         }
         else
         {
