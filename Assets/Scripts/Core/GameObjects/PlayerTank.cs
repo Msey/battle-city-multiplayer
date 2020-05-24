@@ -105,10 +105,10 @@ public class PlayerTank : MonoBehaviour, ITank
         {           
             freezeTime -= Time.deltaTime;
         }
-        else if (GetComponent<Blinking>())
+        else if (tankMovement.BlockMovement)
         {
-            tankMovement.Velocity = Characteristics.Velocity;
             GetComponent<SpriteRenderer>().enabled = true;
+            tankMovement.BlockMovement = false;
             Destroy(GetComponent<Blinking>());
         }
 
@@ -160,9 +160,12 @@ public class PlayerTank : MonoBehaviour, ITank
 
     public void FreezeFor(float freezeTime)
     {
-        gameObject.AddComponent<Blinking>();
-        tankMovement.Velocity = 0;
         this.freezeTime = freezeTime;
+        if (!tankMovement.BlockMovement)
+        {
+            gameObject.AddComponent<Blinking>();
+            tankMovement.BlockMovement = true;
+        }
     }
 
     public void Destroy()

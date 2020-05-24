@@ -22,7 +22,23 @@ public class EnemyTankAnimator : MonoBehaviour
 {
     [SerializeField]
     EnemyTankAnimation[] enemyTankAnimations;
-    public int tankIndex = 0;
+    private int tankIndex = 0;
+    public int TankIndex
+    {
+        get
+        {
+            return tankIndex;
+        }
+        set
+        {
+            if (tankIndex == value)
+                return;
+
+            tankIndex = value;
+            ChangeAnimationClips();
+            UpdateArmorColorByBlinkState();
+        }
+    }
 
     [SerializeField]
     public bool inBlinkFrameState = false;
@@ -94,10 +110,7 @@ public class EnemyTankAnimator : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-    }
 
-    void Start()
-    {
         animatorOverrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
         animator.runtimeAnimatorController = animatorOverrideController;
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static GameConstants;
@@ -38,6 +39,7 @@ public class TankMovement : MonoBehaviour
                 direction = value;
                 if (animator)
                     animator.SetInteger("Direction", (int)direction);
+                UpdateAnimator();
             }
         }
     }
@@ -53,11 +55,12 @@ public class TankMovement : MonoBehaviour
         {
             if (stopped != value)
             {
-                if (!stopped)
+                stopped = value;
+                if (stopped)
                     animator.SetFloat("Velocity", 0.0f);
                 else
                     animator.SetFloat("Velocity", Velocity);
-                stopped = value;
+                UpdateAnimator();
             }
         }
     }
@@ -68,6 +71,8 @@ public class TankMovement : MonoBehaviour
         get => hasBarrier;
     }
     public float Velocity { get; set; } = 0.0f;
+
+    public bool BlockMovement { get; set; } = false;
 
     [SerializeField]
     private bool TransparentForTanks = true;
@@ -108,7 +113,7 @@ public class TankMovement : MonoBehaviour
                 TankMovement obstacleTankMovement = obstacle.GetComponent<TankMovement>();
                 if (obstacleTankMovement != null)
                 {
-                    //obstacleTankMovement.TransparentForTanks = true;
+                    obstacleTankMovement.TransparentForTanks = true;
                     obstacleTankMovement.hasBarrier = true;
                 }
                 else
@@ -128,12 +133,25 @@ public class TankMovement : MonoBehaviour
         if (obstacles.Length <= 1 && TransparentForTanks)
             TransparentForTanks = false;
 
-        if (!makeMovement)
+        if (!makeMovement || BlockMovement)
         {
             transform.position = oldCellPosition;
             UpdateColliderPosition();
             hasBarrier = true;
         }
+    }
+
+    private void UpdateAnimator()
+    {
+        if (animator == null)
+            return;
+
+        animator.SetFloat("Velocity", 1.0f);
+        animator.Update(1.0f);
+        if (stopped)
+            animator.SetFloat("Velocity", 0.0f);
+        else
+            animator.SetFloat("Velocity", Velocity);
     }
 
     float ColliderScaledRadius()

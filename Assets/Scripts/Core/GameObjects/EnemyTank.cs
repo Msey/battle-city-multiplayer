@@ -15,7 +15,7 @@ public class EnemyTank : MonoBehaviour, ITank
         set
         {
             tankType = value;
-            tankAnimator.tankIndex = (int)tankType;
+            tankAnimator.TankIndex = (int)tankType;
         }
     }
 
