@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using static GameConstants;
 
@@ -62,14 +61,10 @@ public class EnemyTanksAISystem
         }
         else if (tank.TankMovement.HasBarrier && BooleanRand(0.25f))
         {
-            if (TankIsOnCellPosition(tank))
-            {
-                ChangeTankDirection(tank);
-            }
-            else
-            {
+            if (BooleanRand(0.7f))
                 tank.Direction = GameUtils.InvertDirection(tank.Direction);
-            }
+            else
+                ChangeTankDirection(tank);
         }
 
         if (BooleanRand(0.03125f))
@@ -113,7 +108,7 @@ public class EnemyTanksAISystem
 
     bool BooleanRand(float probability)
     {
-        return GameUtils.Rand() < probability * 1.0f; //FrameScale;
+        return Random.Range(0.0f, 1.0f) < probability * 1.0f; //FrameScale;
     }
 
     bool TankIsOnCellPosition(EnemyTank tank)
@@ -128,7 +123,7 @@ public class EnemyTanksAISystem
 
     Direction ComputeRandomDirection(Direction oldDirection)
     {
-        float randValue = GameUtils.Rand();
+        float randValue = Random.Range(0.0f, 1.0f);
         Direction newDirection = oldDirection;
         if (randValue < 0.25f)
             newDirection = Direction.Down;

@@ -120,13 +120,6 @@ public static partial class GameUtils
         }
     }
 
-    public static float Rand()
-    {
-        var r = new System.Random();
-        float value = (float)r.NextDouble();
-        return value;
-    }
-
     public static int Rand(int min, int max)
     {
         var r = new System.Random();
