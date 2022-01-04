@@ -138,10 +138,10 @@ namespace InControl
 			"InControl.XboxOneWinProfile",
 			"InControl.XiamoiMacProfile",
 			"InControl.XiamoiWinProfile",
-			"InControl.XTR_G2_MacUnityProfile",
-			"InControl.XTR_G2_WindowsUnityProfile",
 			"InControl.XTR55_G2_MacUnityProfile",
 			"InControl.XTR55_G2_WindowsUnityProfile",
+			"InControl.XTR_G2_MacUnityProfile",
+			"InControl.XTR_G2_WindowsUnityProfile",
 		};
 	}
 }
