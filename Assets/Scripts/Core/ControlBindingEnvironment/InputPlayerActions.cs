@@ -65,6 +65,22 @@ public class InputPlayerActions : PlayerActionSet
         return actions;
     }
 
+    public static InputPlayerActions CreateWithGamepadBindings()
+    {
+        var actions = GetDefaultBindingSettings();
+
+        actions.Up.AddDefaultBinding(InputControlType.LeftStickUp);
+        actions.Down.AddDefaultBinding(InputControlType.LeftStickDown);
+        actions.Left.AddDefaultBinding(InputControlType.LeftStickLeft);
+        actions.Right.AddDefaultBinding(InputControlType.LeftStickRight);
+
+        actions.Fire.AddDefaultBinding(InputControlType.Action2);
+        actions.FireA.AddDefaultBinding(InputControlType.Action1);
+        actions.Start.AddDefaultBinding(InputControlType.Start);
+
+        return actions;
+    }
+
     public static InputPlayerActions CreateWithEmptyBindings()
     {
         var actions = GetDefaultBindingSettings();

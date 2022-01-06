@@ -57,7 +57,7 @@ public class TankCharacteristicSet
 
     public void Recalculate()
     {
-        Velocity = 20f;//5.4f;
+        Velocity = 5.4f;
         BulletVelocity = 9f * (StarBonusLevel > 0 || HasGun ? 2 : 1);
         ShootDelay = 0.1f;
 

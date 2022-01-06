@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
 using System.Collections;
+using InControl;
 using static GameConstants;
 
 public class HUDController : MonoBehaviour
@@ -128,6 +129,7 @@ public class HUDController : MonoBehaviour
 
         notStartedCanvas.SetActive(gameState == GameState.NotStarted || gameState == GameState.Loading);
         inGameCanvas.SetActive(gameState == GameState.Started || gameState == GameState.PreFinished);
+        TouchManager.Instance.controlsEnabled = inGameCanvas.activeSelf;
         finishedCanvas.SetActive(gameState == GameState.Finished);
         pauseText.SetActive(ClassicGameManager.s_Instance.IsPaused);
     }

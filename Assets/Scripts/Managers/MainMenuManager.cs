@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using UnityEngine.Assertions;
+using InControl;
 
 public class MainMenuManager : Singleton<MainMenuManager>
 {
@@ -14,6 +12,11 @@ public class MainMenuManager : Singleton<MainMenuManager>
         base.Awake();
         Assert.IsNotNull(mainMenuCanvas);
         Assert.IsNotNull(settingCanvas);
+    }
+
+    private void Start()
+    {
+        OpenMainMenu();
     }
 
     public void OnePlayerGameClicked()
@@ -58,5 +61,6 @@ public class MainMenuManager : Singleton<MainMenuManager>
     {
         settingCanvas.SetActive(false);
         mainMenuCanvas.SetActive(false);
+        TouchManager.Instance.controlsEnabled = false;
     }
 }

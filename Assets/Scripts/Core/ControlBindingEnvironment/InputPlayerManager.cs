@@ -23,13 +23,12 @@ public class InputPlayerManager : PersistentSingleton<InputPlayerManager>
             var inputPlayer = new InputPlayer();
 
             inputPlayer.PlayerActionSet = (i == 0)
-                ? InputPlayerActions.CreateWithKeyboardBindings()
+                ? InputPlayerActions.CreateWithGamepadBindings()
                 : InputPlayerActions.CreateWithEmptyBindings();
 
             inputPlayers[i] = inputPlayer;
         }
 
-        LoadBindings();
         WireTankEvents();
     }
 
