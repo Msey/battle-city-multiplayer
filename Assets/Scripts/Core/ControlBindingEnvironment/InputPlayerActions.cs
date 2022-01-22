@@ -76,7 +76,8 @@ public class InputPlayerActions : PlayerActionSet
 
         actions.Fire.AddDefaultBinding(InputControlType.Action2);
         actions.FireA.AddDefaultBinding(InputControlType.Action1);
-        actions.Start.AddDefaultBinding(InputControlType.Start);
+        //actions.Start.AddDefaultBinding(InputControlType.Start);
+        actions.Start.AddDefaultBinding(Key.Space);
 
         return actions;
     }
