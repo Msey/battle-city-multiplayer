@@ -4,14 +4,19 @@ using InControl;
 
 public class MainMenuManager : Singleton<MainMenuManager>
 {
-    public GameObject mainMenuCanvas;
-    public GameObject settingCanvas;
+    [SerializeField]
+    private GameObject _mainMenuCanvas;
+    [SerializeField]
+    private GameObject _settingCanvas;
+    [SerializeField]
+    private SelectLevelPanel _selectLevelPanel;
 
     override protected void Awake()
     {
         base.Awake();
-        Assert.IsNotNull(mainMenuCanvas);
-        Assert.IsNotNull(settingCanvas);
+        Assert.IsNotNull(_mainMenuCanvas);
+        Assert.IsNotNull(_settingCanvas);
+        Assert.IsNotNull(_selectLevelPanel);
     }
 
     private void Start()
@@ -45,22 +50,34 @@ public class MainMenuManager : Singleton<MainMenuManager>
         LevelsManager.s_Instance.StartGame();
     }
 
+    public void OnStartGameClicked()
+    {
+        OpenSelectLevelPanel();
+    }
+
     public void OpenSettings()
     {
         HideAllCanvases();
-        settingCanvas.SetActive(true);
+        _settingCanvas.SetActive(true);
     }
 
     public void OpenMainMenu()
     {
         HideAllCanvases();
-        mainMenuCanvas.SetActive(true);
+        _mainMenuCanvas.SetActive(true);
+    }
+
+    public void OpenSelectLevelPanel()
+    {
+        HideAllCanvases();
+        _selectLevelPanel.Open();
     }
 
     private void HideAllCanvases()
     {
-        settingCanvas.SetActive(false);
-        mainMenuCanvas.SetActive(false);
+        _settingCanvas.SetActive(false);
+        _mainMenuCanvas.SetActive(false);
+        _selectLevelPanel.Close();
         TouchManager.Instance.controlsEnabled = false;
     }
 }
