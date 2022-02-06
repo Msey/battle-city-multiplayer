@@ -11,6 +11,13 @@ public class MainMenuManager : Singleton<MainMenuManager>
     [SerializeField]
     private SelectLevelPanel _selectLevelPanel;
 
+    private enum CanvasType
+    { 
+        MainMenu,
+        SelectLevel,
+    };
+    CanvasType _currentCanvas;
+
     override protected void Awake()
     {
         base.Awake();
@@ -22,6 +29,14 @@ public class MainMenuManager : Singleton<MainMenuManager>
     private void Start()
     {
         OpenMainMenu();
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            OnBackButtonClicked();
+        }
     }
 
     public void OnePlayerGameClicked()
@@ -50,6 +65,19 @@ public class MainMenuManager : Singleton<MainMenuManager>
         LevelsManager.s_Instance.StartGame();
     }
 
+    public void OnBackButtonClicked()
+    {
+        switch (_currentCanvas)
+        {
+            case CanvasType.MainMenu:
+                Application.Quit();
+                break;
+            case CanvasType.SelectLevel:
+                OpenMainMenu();
+                break;
+        }
+    }
+
     public void OnStartGameClicked()
     {
         OpenSelectLevelPanel();
@@ -65,12 +93,14 @@ public class MainMenuManager : Singleton<MainMenuManager>
     {
         HideAllCanvases();
         _mainMenuCanvas.SetActive(true);
+        _currentCanvas = CanvasType.MainMenu;
     }
 
     public void OpenSelectLevelPanel()
     {
         HideAllCanvases();
         _selectLevelPanel.Open();
+        _currentCanvas = CanvasType.SelectLevel;
     }
 
     private void HideAllCanvases()
