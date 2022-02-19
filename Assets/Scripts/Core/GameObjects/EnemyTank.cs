@@ -101,7 +101,7 @@ public class EnemyTank : MonoBehaviour, ITank
     void Start()
     {
         TankCreated?.Invoke(this, EventArgs.Empty);
-        tankMovement.Velocity = 5.4f;
+        tankMovement.Velocity = (tankType == EnemyTankType.Fast ? 10.8f : 5.4f);
     }
 
     void LateUpdate()
@@ -124,7 +124,7 @@ public class EnemyTank : MonoBehaviour, ITank
             bulletComponent.Direction = Direction;
             bulletComponent.Group = this.Group;
             bulletComponent.Owner = this;
-            bulletComponent.Velocity = 16.0f;
+            bulletComponent.Velocity = (tankType == EnemyTankType.Power ? 32.0f : 16.0f);
             bulletComponent.CanDestroyConcrete = CanDestroyConcrete;
             bulletComponent.CanDestroyForest = CanDestroyForest;
         }

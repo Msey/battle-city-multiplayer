@@ -76,8 +76,18 @@ public class InputPlayerActions : PlayerActionSet
 
         actions.Fire.AddDefaultBinding(InputControlType.Action2);
         actions.FireA.AddDefaultBinding(InputControlType.Action1);
-        //actions.Start.AddDefaultBinding(InputControlType.Start);
-        actions.Start.AddDefaultBinding(Key.Space);
+        actions.Start.AddDefaultBinding(InputControlType.Start);
+
+#if UNITY_EDITOR
+        actions.Up.AddDefaultBinding(Key.W);
+        actions.Down.AddDefaultBinding(Key.S);
+        actions.Left.AddDefaultBinding(Key.A);
+        actions.Right.AddDefaultBinding(Key.D);
+
+        actions.Fire.AddDefaultBinding(Key.Space);
+        actions.FireA.AddDefaultBinding(Key.LeftControl);
+        actions.Start.AddDefaultBinding(Key.Return);
+#endif
 
         return actions;
     }
