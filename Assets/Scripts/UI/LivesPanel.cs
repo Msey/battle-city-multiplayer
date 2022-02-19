@@ -1,21 +1,15 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 using UnityEngine.Assertions;
 
 public class LivesPanel : MonoBehaviour
 {
-    public Text playerNumberText;
-    public Text livesText;
+    [SerializeField]
+    private TextMeshProUGUI livesText;
 
     protected void Awake()
     {
-        Assert.IsNotNull(playerNumberText);
-        Assert.IsNotNull(playerNumberText);
-    }
-
-    public void SetPlayerNumber(int number)
-    {
-        playerNumberText.text = Utils.ToRoman(number) + "P";
+        Assert.IsNotNull(livesText);
     }
 
     public void SetLives(int lives)

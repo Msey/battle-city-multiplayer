@@ -12,11 +12,6 @@ public class LevelsManager : PersistentSingleton<LevelsManager>
     [SerializeField]
     protected string classicGameSceneName = "Scenes/Game/Classic";
 
-    public int LevelsCount
-    {
-        get { return 56 * 3; }
-    }
-
     public GameInfo CurrentGameInfo { get; set; } = new GameInfo();
     override protected void Awake()
     {

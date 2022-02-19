@@ -22,7 +22,7 @@ public class SelectLevelPanel : MonoBehaviour
         {
             if (LevelsManager.s_InstanceExists)
             {
-                return LevelsManager.s_Instance.LevelsCount / _pageButtonsCount;
+                return GameConstants.LEVELS_COUNT / _pageButtonsCount;
             }
             else
             {
@@ -81,7 +81,7 @@ public class SelectLevelPanel : MonoBehaviour
         for (int buttonIndex = 0; buttonIndex < _pageButtonsCount; ++buttonIndex)
         {
             int levelIndex = buttonIndex + _currentPage * _pageButtonsCount;
-            if (levelIndex >= LevelsManager.s_Instance.LevelsCount)
+            if (levelIndex >= GameConstants.LEVELS_COUNT)
                 break;
 
             LevelButton currentButton = Instantiate(_levelButtonPrefab, _levelButtonsLayout).GetComponent<LevelButton>();

@@ -342,7 +342,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
                 playerSpawnPoints.Add(spawnPoint);
         }
 
-        Assert.AreEqual(playerSpawnPoints.Count, MAX_PLAYERS);
+       // Assert.AreEqual(playerSpawnPoints.Count, MAX_PLAYERS);
     }
 
     IEnumerator GenerateEnemyTank()

@@ -1,10 +1,10 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Assertions;
 
-[RequireComponent(typeof(Animator))]
 public class Curtain : MonoBehaviour
 {
-    Animator animator;
+    [SerializeField]
+    private Animator animator;
 
     public void Open()
     {
@@ -13,6 +13,6 @@ public class Curtain : MonoBehaviour
 
     protected void Awake()
     {
-        animator = GetComponent<Animator>();
+        Assert.IsNotNull(animator);
     }
 }

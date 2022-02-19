@@ -4,6 +4,7 @@ public static partial class GameConstants
 {
     public const float CELL_SIZE = 1.28f;
     public const int MAX_PLAYERS = 4;
+    public const int LEVELS_COUNT = 168;
 
     public const float BUILD_THRESHOLD_MAX = 1.5f;
     public const float BUILD_THRESHOLD_MIN = 0.5f;
