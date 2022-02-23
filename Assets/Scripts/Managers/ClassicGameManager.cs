@@ -156,8 +156,7 @@ public class ClassicGameManager : Singleton<ClassicGameManager>
     }
     private void Start()
     {
-        if (!LevelsManager.s_Instance.CurrentGameInfo.IsFirstGame)
-            LoadGame();
+        LoadGame();
     }
 
     private void Update()

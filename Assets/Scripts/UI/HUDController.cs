@@ -18,10 +18,9 @@ public class HUDController : MonoBehaviour
     private TextMeshProUGUI[] currentStageHUDTexts;
     [SerializeField]
     private TextMeshProUGUI[] enemyTanksCountTexts;
-    public Text stageStartText;
+    public TextMeshProUGUI stageStartText;
     public GameObject gameOverText;
     public GameObject pauseText;
-    public LayoutGroup tanksCountLayout;
     public GameObject tanksPrefab;
     public Curtain curtain;
     private List<GameObject> tanksIcons;
@@ -46,11 +45,8 @@ public class HUDController : MonoBehaviour
         Assert.IsNotNull(curtain);
 
         tanksIcons = new List<GameObject>();
-       // Assert.IsNotNull(tanksCountLayout);
         Assert.IsNotNull(tanksPrefab);
-
         Assert.IsNotNull(livesPanels);
-
         Assert.IsNotNull(finishedCanvasController);
 
         SetStage(LevelsManager.s_Instance.CurrentGameInfo.CurrentStage);
