@@ -20,7 +20,7 @@ public class HUDController : MonoBehaviour
     private TextMeshProUGUI[] enemyTanksCountTexts;
     public TextMeshProUGUI stageStartText;
     public GameObject gameOverText;
-    public GameObject pauseText;
+    public GameObject pausePanel;
     public GameObject tanksPrefab;
     public Curtain curtain;
     private List<GameObject> tanksIcons;
@@ -40,7 +40,7 @@ public class HUDController : MonoBehaviour
         Assert.IsNotNull(enemyTanksCountTexts);
         Assert.IsNotNull(stageStartText);
         Assert.IsNotNull(gameOverText);
-        Assert.IsNotNull(pauseText);
+        Assert.IsNotNull(pausePanel);
 
         Assert.IsNotNull(curtain);
 
@@ -72,6 +72,10 @@ public class HUDController : MonoBehaviour
 
     public void OnBackToMenuClicked()
     {
+        if (ClassicGameManager.s_Instance.IsPaused)
+        {
+            ClassicGameManager.s_Instance.PauseGame();
+        }
         LevelsManager.s_Instance.OpenMainMenu();
     }
 
@@ -129,7 +133,7 @@ public class HUDController : MonoBehaviour
         inGameCanvas.SetActive(gameState == GameState.Started || gameState == GameState.PreFinished);
         TouchManager.Instance.controlsEnabled = inGameCanvas.activeSelf;
         finishedCanvas.SetActive(gameState == GameState.Finished);
-        pauseText.SetActive(ClassicGameManager.s_Instance.IsPaused);
+        pausePanel.SetActive(ClassicGameManager.s_Instance.IsPaused);
     }
     private void OnEnemyTankCreated(object sender, EventArgs e)
     {
